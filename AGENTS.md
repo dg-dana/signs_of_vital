@@ -72,6 +72,61 @@ Answers:
 
 > Why were important technical choices made?
 
+## Session handoff protocol
+
+The repository must be sufficient for a completely new session — a new Claude
+Code session, a new ChatGPT session, or a different agent entirely — to
+reconstruct where the project stopped by reading GitHub. Dana should not need
+to paste previous conversations, resend screenshots or measurements whose
+findings are already documented, re-explain past architectural decisions, or
+remind an agent which milestone the project has reached.
+
+### At the start of a new session
+
+Before asking Dana for project context or proposing work:
+
+1. Read:
+   - `docs/CURRENT_STATE.md`
+   - `docs/DECISIONS.md`
+   - `TODO.md`
+   - `docs/ARCHITECTURE.md` when present/relevant
+2. Inspect the repository itself.
+3. When GitHub information is available, inspect relevant:
+   - active branch
+   - recent commits
+   - open PRs
+   - current implementation state
+4. Reconstruct:
+   - what is confirmed
+   - what is still assumed/unverified
+   - current milestone
+   - current blocker
+   - last completed work
+   - exact next action/decision
+5. Do not ask Dana to repeat information already documented in the repository.
+6. Do not ask Dana to resend screenshots or measurements when their relevant
+   findings have already been recorded as confirmed project evidence.
+7. Ask Dana for old information only when:
+   - the repository explicitly says it is missing/unverified, or
+   - the original artifact is genuinely required for a new verification.
+
+### At the end of meaningful work
+
+Update project memory before considering the work cycle complete.
+
+`docs/CURRENT_STATE.md` must leave enough information for a completely new
+session to continue. It should identify, when applicable:
+
+- last completed work
+- current milestone
+- current branch / PR
+- blocker
+- next architect decision or next implementation action
+- important prohibitions / things not yet authorized
+
+Keep `CURRENT_STATE.md` concise. It is a checkpoint, not a changelog. Git
+history and pull requests remain the historical record.
+
 ## General agent behavior
 
 - Prefer small, verifiable changes.

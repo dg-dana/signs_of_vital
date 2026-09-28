@@ -28,3 +28,7 @@ Read skills must not mutate project state.
 - new actionable work being discovered.
 
 The underlying file format and project-state rules are defined in `AGENTS.md`.
+
+Claude must follow the **Session handoff protocol** in `AGENTS.md` at the
+start and end of every meaningful work session, so a new session can
+reconstruct project state from GitHub alone.

@@ -35,6 +35,32 @@ No verified way to build and install a Swift/CoreBluetooth app on Dana's iPhone
 Choose the Apple build/deploy path: Mac + Xcode, another Apple dev environment,
 or cloud macOS + TestFlight.
 
+## Handoff
+
+Last completed:
+- OpenH59 research completed.
+- M0 passive GATT probe designed/documented.
+- Project-memory documentation prepared.
+
+Current working branch:
+- `claude/signs-vital-m0-docs-mipn5o`
+
+Current milestone:
+- M0 — passive BLE/GATT discovery.
+
+Do NOT:
+- start M1
+- send proprietary H59 commands
+- ask Dana to repeat BLE screenshots/findings already documented
+- treat provisional UUID transcription as confirmed
+
+Current blocker:
+- no verified Apple build/deploy path for running the CoreBluetooth probe on
+  Dana's iPhone.
+
+Next architect action:
+- choose the Apple build/deploy path for M0.
+
 ## Important files
 
 - `AGENTS.md`, `CLAUDE.md` — agent instructions
