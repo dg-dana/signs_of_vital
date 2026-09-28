@@ -1,0 +1,51 @@
+# Signs of Vital — ignore rules
+# Principle: never commit health data, device identifiers, credentials,
+# or signing material. Keep shared project configuration committed.
+
+# --- BLE captures, probe logs, raw device output (may contain device IDs / health data)
+captures/
+logs/
+*.log
+*.pcap
+*.pcapng
+*.btsnoop
+btsnoop_hci.log
+*.snoop
+exports/
+
+# --- Secrets / credentials (includes QWatch/Bionny account credentials)
+.env
+.env.*
+!.env.example
+secrets/
+*.secret
+*.secrets
+credentials.json
+
+# --- Apple signing / provisioning material
+*.p12
+*.cer
+*.certSigningRequest
+*.mobileprovision
+*.provisionprofile
+AuthKey_*.p8
+*.p8
+
+# --- Xcode user-specific data (shared schemes and project files stay committed)
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+DerivedData/
+build/
+*.ipa
+*.dSYM.zip
+*.dSYM/
+
+# --- Swift Package Manager local state
+.build/
+.swiftpm/xcode/xcuserdata/
+
+# --- OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
