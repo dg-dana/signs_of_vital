@@ -1,32 +1,69 @@
 # Current State
 
-This file is the concise technical checkpoint for the project.
+Concise technical checkpoint. Experimental research project — wearable readings are
+**not** medically validated.
 
-Update it when the actual state of the project changes significantly.
+## Device
 
-## Current implementation
+- Product: Bionny 4.0 health armband.
+- Hardware revision: `H59B_V1.0` (Device Information, nRF Connect).
+- Firmware revision: `H59B_1.00.00_260402` (Device Information, nRF Connect).
+- Connectable over BLE; exposes UART-style and proprietary services (exact UUIDs provisional).
 
-- Project has been initialized from the `start_project` template.
-- No project-specific implementation has been documented yet.
+## Research state
 
-## Working
+- OpenH59 (H59_V2.0 reference) reviewed: [`docs/research/openh59.md`](research/openh59.md).
+- Protocol compatibility with H59B: strongly suggested, **not proven**.
+- GATT evidence levels: [`docs/protocol/GATT_MAP.md`](protocol/GATT_MAP.md).
 
-- Repository-level agent memory structure exists.
-- Shared agent instructions are defined in `AGENTS.md`.
-- TODO workflow is available through `TODO.md`.
+## Implementation
 
-## Known issues / limitations
+- No app code yet. Repository contains documentation and agent tooling only.
 
-- Replace this section with real project limitations.
+## Current milestone
 
-## Important files / components
+**M0 — passive BLE/GATT discovery.** Design: [`docs/protocol/M0_PROBE.md`](protocol/M0_PROBE.md).
+M1+ not authorized.
 
-- `AGENTS.md` — shared agent instructions
-- `CLAUDE.md` — Claude-specific entry point
-- `TODO.md` — unfinished work
-- `docs/ARCHITECTURE.md` — system structure
-- `docs/DECISIONS.md` — important technical decisions
+## Current blocker
 
-## Next milestone
+No verified way to build and install a Swift/CoreBluetooth app on Dana's iPhone
+(Dana works from iPhone + GitHub; no confirmed Mac/Xcode).
 
-Replace this text with the project's next meaningful milestone.
+## Next architectural decision
+
+Choose the Apple build/deploy path: Mac + Xcode, another Apple dev environment,
+or cloud macOS + TestFlight.
+
+## Handoff
+
+Last completed:
+- OpenH59 research completed.
+- M0 passive GATT probe designed/documented.
+- Project-memory documentation prepared.
+
+Current working branch:
+- `claude/signs-vital-m0-docs-mipn5o`
+
+Current milestone:
+- M0 — passive BLE/GATT discovery.
+
+Do NOT:
+- start M1
+- send proprietary H59 commands
+- ask Dana to repeat BLE screenshots/findings already documented
+- treat provisional UUID transcription as confirmed
+
+Current blocker:
+- no verified Apple build/deploy path for running the CoreBluetooth probe on
+  Dana's iPhone.
+
+Next architect action:
+- choose the Apple build/deploy path for M0.
+
+## Important files
+
+- `AGENTS.md`, `CLAUDE.md` — agent instructions
+- `TODO.md` — roadmap / unfinished work
+- `docs/DECISIONS.md` — ADR-001..004
+- `docs/protocol/`, `docs/research/` — protocol evidence and research
