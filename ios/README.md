@@ -3,7 +3,8 @@
 `SignsOfVital-M0.swiftpm/` is a Swift Playgrounds app project (SwiftUI + CoreBluetooth)
 implementing [`docs/protocol/M0_PROBE.md`](../docs/protocol/M0_PROBE.md). Passive only.
 
-**Do not run it against the Bionny until the architect has approved the PR.**
+Architect-approved passive-only boundary (PR #2). Any change that adds BLE behavior
+needs a new architect review before it runs against the Bionny.
 
 ## Open on the iPad
 
