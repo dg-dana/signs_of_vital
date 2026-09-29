@@ -43,7 +43,7 @@ Last completed:
   M0_PROBE.md, this file's branch reference.
 
 Current working branch / PR:
-- `claude/m0-swift-playground-probe` — PR open for architect review, **not merged**.
+- `claude/m0-swift-playground-probe` — PR #2 open for architect review, **not merged**.
 
 Current blocker:
 - Architect review of the PR for passive-only BLE behavior.

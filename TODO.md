@@ -2,7 +2,7 @@
 
 ## M0 — Passive BLE/GATT discovery (current)
 
-- [ ] Architect: review M0 probe PR (branch `claude/m0-swift-playground-probe`) for passive-only BLE behavior.
+- [ ] Architect: review M0 probe PR #2 (branch `claude/m0-swift-playground-probe`) for passive-only BLE behavior.
   Do not run against the Bionny before approval.
 - [ ] Dana: pull `main` in Working Copy, open `ios/SignsOfVital-M0.swiftpm` in Swift Playgrounds, confirm it compiles/runs.
 - [ ] Run probe on the iPad against the Bionny (cancel + log any pairing prompt); paste "Copy GATT map" output into `GATT_MAP.md` section A; re-confirm HW/FW strings.
