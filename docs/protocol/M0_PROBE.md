@@ -1,6 +1,8 @@
 # M0 — Passive CoreBluetooth GATT Probe
 
-Status: **design approved by architect; not implemented** (no verified Apple build path yet).
+Status: **implemented, awaiting architect review** — Swift Playgrounds app project
+[`ios/SignsOfVital-M0.swiftpm/`](../../ios/SignsOfVital-M0.swiftpm/). It must not be
+run against the Bionny until the architect approves the PR.
 
 ## Purpose
 
@@ -14,7 +16,8 @@ without sending any application-level data to the band.
 - `scanForPeripherals(withServices: nil)` — intentionally unfiltered.
 - Show per discovered peripheral: advertised/local name, iOS peripheral identifier,
   RSSI, advertised service UUIDs, manufacturer data as hex.
-- Let Dana select the Bionny → `stopScan()` → `connect`.
+- Let Dana select the Bionny → `stopScan()` → `connect`. The app never connects
+  on its own (no auto-connect by name/identifier, no auto-reconnect).
 - `discoverServices(nil)`; `discoverCharacteristics(nil, for:)` for every service.
 - Record per characteristic: exact `uuid.uuidString`, flags `read`, `write`,
   `writeWithoutResponse`, `notify`, `indicate`, and the raw property bitmask.
@@ -29,6 +32,21 @@ without sending any application-level data to the band.
 - Any H59 command (including battery `0x03`, set time `0x01`, realtime, HR logging).
 - Authenticating to or sending anything on the "bc" (`DE5BF72x`) channel.
 - Changing any device setting; sending arbitrary packets.
+
+## Pairing / bonding prompt rule
+
+The probe never asks for pairing, but iOS may show a system pairing dialog by itself
+when a read or subscribe hits a characteristic that requires encryption.
+
+- Dana **must tap Cancel**. Never accept pairing or bonding in M0.
+- Dana then taps **"Log pairing prompt (I tapped Cancel)"** in the app, so the
+  event appears in the on-screen log with a timestamp.
+- The probe also flags ATT errors `insufficientAuthentication`,
+  `insufficientEncryption` and `insufficientEncryptionKeySize` as
+  "SECURITY REQUIRED" in the log. It does **not** retry the operation.
+- Record in the M0 findings which characteristic(s) triggered the prompt.
+- If the Bionny ever appears under iOS Settings → Bluetooth → My Devices as
+  paired, choose "Forget This Device" and record that it happened.
 
 ## Expected output (displayed on screen)
 
@@ -61,7 +79,10 @@ UTF-8 is shown only when the bytes decode to printable text.
 6. `GATT_MAP.md` updated: probe-captured UUIDs promoted to CONFIRMED; no serial or identifiers committed.
 7. Confirmed zero application-level writes were issued.
 
-## Blocker
+## Build path and passive check
 
-No verified way yet to build and install a Swift app on Dana's iPhone
-(no confirmed Mac/Xcode or cloud macOS path). Architect decision pending.
+- Built and run with Swift Playgrounds on Dana's iPad (ADR-005); repo synced via
+  Working Copy. See [`ios/README.md`](../../ios/README.md).
+- Static guard: `sh ios/scripts/check_m0_passive.sh` fails if the project uses any
+  write, descriptor, L2CAP, identifier-based retrieval, state-restoration or
+  file-persistence API, or has more than one `connect` call.

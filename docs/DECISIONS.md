@@ -38,7 +38,7 @@ Use this structure:
 
 **Alternatives considered:** Python + bleak (as used by OpenH59) — faster to prototype on a desktop, but throwaway for an iOS product.
 
-**Consequences:** Every BLE experiment, including M0, needs a working Apple build/install path. That path is not yet chosen (see `docs/CURRENT_STATE.md`).
+**Consequences:** Every BLE experiment, including M0, needs a working Apple build/install path (resolved by ADR-005).
 
 ## ADR-002 — M0 is passive GATT discovery before any protocol command
 
@@ -63,3 +63,13 @@ Use this structure:
 **Reason:** Subscribing is standard BLE client behavior (CoreBluetooth writes the CCCD internally) and does not send application data or change device settings.
 
 **Consequences:** M0 can observe spontaneous notifications. Any code path calling `writeValue` is out of M0 scope.
+
+## ADR-005 — M0 build path: Swift Playgrounds on iPad, synced via Working Copy
+
+**Decision:** The M0 probe is a Swift Playgrounds app project (`ios/SignsOfVital-M0.swiftpm/`) built and run on Dana's iPad. The repository reaches the iPad through Working Copy (HTTPS clone). GitHub is the single source of truth; Swift code is never hand-copied.
+
+**Reason:** No Mac/Xcode is available. Swift Playgrounds supports SwiftUI app projects with the Bluetooth capability, so CoreBluetooth code (ADR-001) can run on real Apple hardware without Xcode.
+
+**Alternatives considered:** Mac + Xcode (no Mac available); cloud macOS + TestFlight (more setup, slower loop).
+
+**Consequences:** The probe runs on the iPad, not the iPhone. Agents cannot compile the project; the first compile is on the iPad. Swift Playgrounds may rewrite `Package.swift` when App Settings change. Moving to a full Xcode project remains possible later.

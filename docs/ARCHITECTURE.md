@@ -1,60 +1,42 @@
 # Architecture
 
-This file describes the high-level structure of the project.
-
-Keep it useful to a developer or coding agent entering the repository with no previous conversation context.
-
 ## Overview
 
-Replace this section with a short description of what the project does.
+Signs of Vital is an experimental iOS research project to read data from a
+Bionny 4.0 (H59B) health armband over Bluetooth LE. Readings are not medically
+validated. Current stage: M0 passive GATT discovery (see `docs/CURRENT_STATE.md`).
 
 ## Main components
 
-Describe the major parts of the system.
-
-Example:
-
 ```text
-Client
-  ↓
-Application
-  ↓
-API / services
-  ↓
-Database
+Bionny H59B (BLE peripheral)
+  ↑ scan / connect / discover / read / notify  (no writes in M0)
+M0 probe app — SwiftUI + CoreBluetooth, Swift Playgrounds, runs on iPad
+  ├─ ProbeModel.swift    CBCentralManager/CBPeripheral delegate, in-memory state + log
+  ├─ ContentView.swift   scan list, GATT tree, event log
+  └─ Hex.swift           hex / printable-UTF-8 / property formatting
 ```
 
 ## Repository structure
 
-Document the important directories and what belongs in them.
-
 ```text
-src/
-tests/
-docs/
-...
+ios/SignsOfVital-M0.swiftpm/   M0 Swift Playgrounds app project
+ios/scripts/                   check_m0_passive.sh (static passive-only guard)
+docs/protocol/                 M0 probe design, GATT map by evidence level
+docs/research/                 OpenH59 reference notes (reference only, ADR-003)
+docs/                          CURRENT_STATE, DECISIONS, ARCHITECTURE, AGENT_WORKFLOW
+.claude/skills/                TODO skills
 ```
 
 ## Data flow
 
-Describe how important data moves through the system.
-
-## External services
-
-List important third-party services, APIs, infrastructure, or hosted systems.
-
-Do not place secrets or credentials in this file.
-
-## Important dependencies
-
-List only dependencies that materially affect the architecture.
+BLE values → CoreBluetooth delegate callbacks → in-memory `@Published` state →
+on-screen display as raw hex. Nothing is persisted. Only UUIDs/properties
+(via "Copy GATT map") are meant to reach the repository.
 
 ## Architectural constraints
 
-Document constraints that future agents must understand, such as:
-
-- deployment limitations;
-- compatibility requirements;
-- security boundaries;
-- performance requirements;
-- required platforms.
+- CoreBluetooth only (ADR-001); built with Swift Playgrounds on iPad (ADR-005).
+- M0 is passive: no application writes, no descriptor writes, no commands (ADR-002/004).
+- No OpenH59 source reuse (ADR-003).
+- Never commit serial numbers, per-device identifiers, health data or credentials.

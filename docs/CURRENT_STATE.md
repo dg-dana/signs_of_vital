@@ -18,52 +18,54 @@ Concise technical checkpoint. Experimental research project — wearable reading
 
 ## Implementation
 
-- No app code yet. Repository contains documentation and agent tooling only.
+- M0 passive probe implemented as a Swift Playgrounds app project:
+  `ios/SignsOfVital-M0.swiftpm/` (SwiftUI + CoreBluetooth). **Not yet reviewed,
+  not yet run against the Bionny.**
+- Passive-only static guard: `sh ios/scripts/check_m0_passive.sh`.
+- Not compiled in CI (no macOS/iOS toolchain in the agent environment); first
+  compile happens in Swift Playgrounds on the iPad.
 
 ## Current milestone
 
 **M0 — passive BLE/GATT discovery.** Design: [`docs/protocol/M0_PROBE.md`](protocol/M0_PROBE.md).
 M1+ not authorized.
 
-## Current blocker
+## Build path (resolved — ADR-005)
 
-No verified way to build and install a Swift/CoreBluetooth app on Dana's iPhone
-(Dana works from iPhone + GitHub; no confirmed Mac/Xcode).
-
-## Next architectural decision
-
-Choose the Apple build/deploy path: Mac + Xcode, another Apple dev environment,
-or cloud macOS + TestFlight.
+Swift Playgrounds on Dana's iPad; repository synced via Working Copy (HTTPS clone).
+GitHub is the single source of truth; no manual copy/paste of Swift code.
 
 ## Handoff
 
 Last completed:
-- OpenH59 research completed.
-- M0 passive GATT probe designed/documented.
-- Project-memory documentation prepared.
+- M0 probe implemented (`ios/SignsOfVital-M0.swiftpm/`).
+- Docs corrected: GATT_MAP section B transcription status, pairing-prompt rule in
+  M0_PROBE.md, this file's branch reference.
 
-Current working branch:
-- `claude/signs-vital-m0-docs-mipn5o`
-
-Current milestone:
-- M0 — passive BLE/GATT discovery.
-
-Do NOT:
-- start M1
-- send proprietary H59 commands
-- ask Dana to repeat BLE screenshots/findings already documented
-- treat provisional UUID transcription as confirmed
+Current working branch / PR:
+- `claude/m0-swift-playground-probe` — PR open for architect review, **not merged**.
 
 Current blocker:
-- no verified Apple build/deploy path for running the CoreBluetooth probe on
-  Dana's iPhone.
+- Architect review of the PR for passive-only BLE behavior.
 
-Next architect action:
-- choose the Apple build/deploy path for M0.
+Next action:
+1. Architect reviews/merges the PR.
+2. Dana pulls `main` in Working Copy, opens the project in Swift Playgrounds,
+   confirms it compiles and runs.
+3. Only after approval: run the probe against the Bionny per M0_PROBE.md.
+
+Do NOT:
+- run the probe against the Bionny before the architect approves the PR
+- accept an iOS pairing/bonding prompt (tap Cancel, log it)
+- start M1 or send proprietary H59 commands
+- add any write call to the M0 project
+- ask Dana to repeat BLE screenshots/findings already documented
+- treat provisional UUID transcriptions as confirmed
 
 ## Important files
 
 - `AGENTS.md`, `CLAUDE.md` — agent instructions
 - `TODO.md` — roadmap / unfinished work
-- `docs/DECISIONS.md` — ADR-001..004
+- `docs/DECISIONS.md` — ADR-001..005
+- `ios/` — M0 Swift Playgrounds project and passive guard script
 - `docs/protocol/`, `docs/research/` — protocol evidence and research

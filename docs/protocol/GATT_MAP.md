@@ -31,7 +31,7 @@ CoreBluetooth probe must independently re-confirm the two revision strings above
 
 ## B. MANUALLY OBSERVED / TRANSCRIPTION NOT YET VERIFIED
 
-Dana observed these in nRF Connect; exact UUIDs were transcribed by hand and are
+Dana observed these in nRF Connect. Exact UUIDs were transcribed by hand and are
 **provisional**.
 
 | Observation | Status |
@@ -40,8 +40,15 @@ Dana observed these in nRF Connect; exact UUIDs were transcribed by hand and are
 | A UART-style service with a write and a notify characteristic | Observed; exact UUIDs provisional |
 | A proprietary service resembling the OpenH59 `DE5BF72x` channel | Observed; exact UUIDs provisional |
 
-> TODO(M0): paste the exact provisional UUID transcriptions here if still
-> available, labeled as transcriptions, then replace with probe output.
+Provisional transcription status (updated 2026-09-29):
+
+- The exact hand-transcribed UUID strings were **never committed** to this
+  repository. Do not reconstruct them from memory, from OpenH59, or from old
+  screenshots.
+- They are no longer needed: the M0 probe (`ios/SignsOfVital-M0.swiftpm/`) shows
+  exact `uuid.uuidString` values and has a "Copy GATT map" button (UUIDs +
+  properties only). That copied output replaces section B and goes straight into
+  section A — no manual typing.
 
 ## C. REFERENCE FROM OPENH59
 

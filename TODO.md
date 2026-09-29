@@ -2,11 +2,10 @@
 
 ## M0 — Passive BLE/GATT discovery (current)
 
-- [ ] Architect: choose Apple build/deploy path (Mac + Xcode / other Apple env / cloud macOS + TestFlight).
-  Blocks everything below. See `docs/CURRENT_STATE.md`.
-- [ ] Record Dana's provisional UUID transcriptions in `docs/protocol/GATT_MAP.md` section B (labeled provisional).
-- [ ] Implement minimal passive probe per `docs/protocol/M0_PROBE.md` (only once a build path is verified).
-- [ ] Run probe on Dana's iPhone; promote captured UUIDs to CONFIRMED in `GATT_MAP.md`; re-confirm HW/FW strings.
+- [ ] Architect: review M0 probe PR (branch `claude/m0-swift-playground-probe`) for passive-only BLE behavior.
+  Do not run against the Bionny before approval.
+- [ ] Dana: pull `main` in Working Copy, open `ios/SignsOfVital-M0.swiftpm` in Swift Playgrounds, confirm it compiles/runs.
+- [ ] Run probe on the iPad against the Bionny (cancel + log any pairing prompt); paste "Copy GATT map" output into `GATT_MAP.md` section A; re-confirm HW/FW strings.
 
 ## M1 — Battery command proof (NOT YET AUTHORIZED)
 
