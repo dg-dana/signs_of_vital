@@ -19,7 +19,8 @@ Concise technical checkpoint. Experimental research project — wearable reading
 ## Implementation
 
 - M0 passive probe implemented as a Swift Playgrounds app project:
-  `ios/SignsOfVital-M0.swiftpm/` (SwiftUI + CoreBluetooth). **Not yet reviewed,
+  `ios/SignsOfVital-M0.swiftpm/` (SwiftUI + CoreBluetooth). Passive-only boundary
+  approved by the architect; merged via PR #2. **Not yet compiled on the iPad,
   not yet run against the Bionny.**
 - Passive-only static guard: `sh ios/scripts/check_m0_passive.sh`.
 - Not compiled in CI (no macOS/iOS toolchain in the agent environment); first
@@ -38,24 +39,23 @@ GitHub is the single source of truth; no manual copy/paste of Swift code.
 ## Handoff
 
 Last completed:
-- M0 probe implemented (`ios/SignsOfVital-M0.swiftpm/`).
+- M0 probe implemented and merged (PR #2, architect-approved passive-only boundary).
 - Docs corrected: GATT_MAP section B transcription status, pairing-prompt rule in
   M0_PROBE.md, this file's branch reference.
 
 Current working branch / PR:
-- `claude/m0-swift-playground-probe` — PR #2 open for architect review, **not merged**.
+- None open for M0 code. PR #2 (`claude/m0-swift-playground-probe`) merged into `main`.
 
 Current blocker:
-- Architect review of the PR for passive-only BLE behavior.
+- None known. First compile in Swift Playgrounds on the iPad is still unverified.
 
 Next action:
-1. Architect reviews/merges the PR.
-2. Dana pulls `main` in Working Copy, opens the project in Swift Playgrounds,
-   confirms it compiles and runs.
-3. Only after approval: run the probe against the Bionny per M0_PROBE.md.
+1. Dana pulls `main` in Working Copy, opens `ios/SignsOfVital-M0.swiftpm` in
+   Swift Playgrounds, confirms it compiles and runs (report any compile errors).
+2. Run the probe against the Bionny per M0_PROBE.md (cancel + log any pairing prompt).
+3. Paste "Copy GATT map" output into `GATT_MAP.md` section A; re-confirm HW/FW strings.
 
 Do NOT:
-- run the probe against the Bionny before the architect approves the PR
 - accept an iOS pairing/bonding prompt (tap Cancel, log it)
 - start M1 or send proprietary H59 commands
 - add any write call to the M0 project

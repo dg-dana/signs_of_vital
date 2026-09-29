@@ -1,8 +1,8 @@
 # M0 — Passive CoreBluetooth GATT Probe
 
-Status: **implemented, awaiting architect review** — Swift Playgrounds app project
-[`ios/SignsOfVital-M0.swiftpm/`](../../ios/SignsOfVital-M0.swiftpm/). It must not be
-run against the Bionny until the architect approves the PR.
+Status: **implemented; passive-only boundary approved by architect (PR #2, merged)** —
+Swift Playgrounds app project [`ios/SignsOfVital-M0.swiftpm/`](../../ios/SignsOfVital-M0.swiftpm/).
+Not yet compiled on the iPad or run against the Bionny.
 
 ## Purpose
 
