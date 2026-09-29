@@ -49,3 +49,6 @@ build/
 .DS_Store
 Thumbs.db
 *.swp
+
+# --- Swift Playgrounds local project state (inside *.swiftpm packages)
+**/*.swiftpm/.swiftpm/
