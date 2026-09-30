@@ -6,30 +6,41 @@ Concise technical checkpoint. Experimental research project — wearable reading
 ## Device
 
 - Product: Bionny 4.0 health armband.
-- Hardware revision: `H59B_V1.0` (Device Information, nRF Connect).
-- Firmware revision: `H59B_1.00.00_260402` (Device Information, nRF Connect).
-- Connectable over BLE; exposes UART-style and proprietary services (exact UUIDs provisional).
+- Hardware revision: `H59B_V1.0` (Device Information; nRF Connect, re-confirmed by M0 CoreBluetooth probe).
+- Firmware revision: `H59B_1.00.00_260402` (Device Information; nRF Connect, re-confirmed by M0 CoreBluetooth probe).
+- Connectable over BLE. M0 probe confirmed 4 GATT services: UART-style `6E40FFF0-…`,
+  proprietary `DE5BF728-…` (holds `DE5BF72A`/`DE5BF729`), Device Information `180A`,
+  and `FEE7`. Full map: [`GATT_MAP.md`](protocol/GATT_MAP.md) section A.
 
 ## Research state
 
 - OpenH59 (H59_V2.0 reference) reviewed: [`docs/research/openh59.md`](research/openh59.md).
-- Protocol compatibility with H59B: strongly suggested, **not proven**.
+- Protocol compatibility with H59B: strongly suggested (matching UUIDs), **not proven**.
+- The Bionny measurement protocol is **not decoded**. We know the GATT topology and some
+  observed behavior only; characteristic semantics are unknown.
 - GATT evidence levels: [`docs/protocol/GATT_MAP.md`](protocol/GATT_MAP.md).
 
 ## Implementation
 
-- M0 passive probe implemented as a Swift Playgrounds app project:
-  `ios/SignsOfVital-M0.swiftpm/` (SwiftUI + CoreBluetooth). Passive-only boundary
-  approved by the architect; merged via PR #2. **Not yet compiled on the iPad,
-  not yet run against the Bionny.**
+- **M0 passive probe successfully executed on physical hardware on 2026-09-30**
+  (iPad, Swift Playgrounds; `ios/SignsOfVital-M0.swiftpm/`, merged via PR #2). Compiled,
+  Bluetooth powered on, Bionny 4.0 discovered and connected, GATT discovered, passive
+  reads/subscriptions done, sanitized capture recorded. No application-level writes.
+- Observed: `FEA1` notify and `FEA2` indicate subscriptions succeeded; reading `FEC9`
+  returned `The attribute could not be found.` (this device/firmware only, not proof it is
+  universally unreadable).
 - Passive-only static guard: `sh ios/scripts/check_m0_passive.sh`.
-- Not compiled in CI (no macOS/iOS toolchain in the agent environment); first
-  compile happens in Swift Playgrounds on the iPad.
+- Not compiled in CI (no macOS/iOS toolchain in the agent environment).
 
 ## Current milestone
 
-**M0 — passive BLE/GATT discovery.** Design: [`docs/protocol/M0_PROBE.md`](protocol/M0_PROBE.md).
-M1+ not authorized.
+```text
+M0 = SUCCESSFUL (2026-09-30)
+M1 = NOT STARTED / NOT AUTHORIZED
+```
+
+M0 design/result: [`docs/protocol/M0_PROBE.md`](protocol/M0_PROBE.md). The next milestone
+remains subject to architect review.
 
 ## Build path (resolved — ADR-005)
 
@@ -39,28 +50,29 @@ GitHub is the single source of truth; no manual copy/paste of Swift code.
 ## Handoff
 
 Last completed:
-- M0 probe implemented and merged (PR #2, architect-approved passive-only boundary).
-- Docs corrected: GATT_MAP section B transcription status, pairing-prompt rule in
-  M0_PROBE.md, this file's branch reference.
+- M0 passive probe run on physical hardware (2026-09-30); results recorded in
+  `GATT_MAP.md` section A and `M0_PROBE.md` (docs-only PR from
+  `claude/m0-probe-documentation-ayh4z0`).
 
 Current working branch / PR:
-- None open for M0 code. PR #2 (`claude/m0-swift-playground-probe`) merged into `main`.
+- `claude/m0-probe-documentation-ayh4z0` — M0 results documentation PR, awaiting
+  architect review (not merged by the implementer).
 
 Current blocker:
-- None known. First compile in Swift Playgrounds on the iPad is still unverified.
+- Architect review of the M0 results and decision on the next milestone.
 
 Next action:
-1. Dana pulls `main` in Working Copy, opens `ios/SignsOfVital-M0.swiftpm` in
-   Swift Playgrounds, confirms it compiles and runs (report any compile errors).
-2. Run the probe against the Bionny per M0_PROBE.md (cancel + log any pairing prompt).
-3. Paste "Copy GATT map" output into `GATT_MAP.md` section A; re-confirm HW/FW strings.
+- Architect reviews/merges the docs PR and decides whether and how M1 is scoped.
+  No implementation work until then.
 
 Do NOT:
-- accept an iOS pairing/bonding prompt (tap Cancel, log it)
-- start M1 or send proprietary H59 commands
-- add any write call to the M0 project
+- start M1 or send any proprietary H59 command (including battery `0x03`)
+- write to any characteristic merely because it is writable
+- add any write call to the M0 project, or guess/fuzz/brute-force packets
+- implement pairing/bonding (tap Cancel on any iOS pairing prompt)
+- commit peripheral identifiers, manufacturer data, serial/System ID, raw values or health data
+- claim the measurement protocol is decoded
 - ask Dana to repeat BLE screenshots/findings already documented
-- treat provisional UUID transcriptions as confirmed
 
 ## Important files
 

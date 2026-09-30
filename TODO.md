@@ -1,13 +1,14 @@
 # TODO
 
-## M0 — Passive BLE/GATT discovery (current)
+## Next — architect review (current)
 
-- [ ] Dana: pull `main` in Working Copy, open `ios/SignsOfVital-M0.swiftpm` in Swift Playgrounds, confirm it compiles/runs.
-- [ ] Run probe on the iPad against the Bionny (cancel + log any pairing prompt); paste "Copy GATT map" output into `GATT_MAP.md` section A; re-confirm HW/FW strings.
+- [ ] Architect: review the M0 results PR and decide whether/how to scope M1. No BLE protocol work until then.
+- [ ] Open question for review: `FEE7` service (`FEA1`/`FEC9`/`FEA2`) is not covered by OpenH59 notes; decide whether it needs research before any M1 design. Do not write to it.
 
 ## M1 — Battery command proof (NOT YET AUTHORIZED)
 
 - [ ] Send battery `0x03` only; verify response framing against our own understanding.
+  Requires explicit architect authorization; M0 shows the GATT topology only.
 
 ## M2 — Minimal protocol layer (NOT YET AUTHORIZED)
 
