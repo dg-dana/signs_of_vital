@@ -35,3 +35,15 @@ sh ios/scripts/check_m0_passive.sh
 
 Fails on any write/descriptor/L2CAP/identifier-retrieval/state-restoration/file API,
 or if there is not exactly one (user-initiated) `connect` call.
+
+## M1 battery query (prepared — NOT AUTHORIZED TO RUN)
+
+`SignsOfVital-M1.swiftpm/` can send one gated battery query; see
+[`docs/protocol/M1_BATTERY_EXPERIMENT.md`](../docs/protocol/M1_BATTERY_EXPERIMENT.md).
+**Do not run it against the Bionny until the architect gives an explicit GO.**
+
+```sh
+sh ios/scripts/check_m1_gate.sh        # static guard: one gated write, nothing else
+python3 ios/scripts/check_m1_vectors.py  # device-free vector cross-check
+swift test --package-path ios/SignsOfVital-M1Tests  # needs a Swift toolchain
+```

@@ -73,3 +73,13 @@ Use this structure:
 **Alternatives considered:** Mac + Xcode (no Mac available); cloud macOS + TestFlight (more setup, slower loop).
 
 **Consequences:** The probe runs on the iPad, not the iPhone. Agents cannot compile the project; the first compile is on the iPad. Swift Playgrounds may rewrite `Package.swift` when App Settings change. Moving to a full Xcode project remains possible later.
+
+## ADR-006 — M1 is a separate app with one gated write; M0 stays passive
+
+**Decision:** The single battery-query experiment lives in its own Swift Playgrounds project (`ios/SignsOfVital-M1.swiftpm/`). Exactly one `writeValue` exists, sending a fixed 16-byte frame to `6E400002` from an explicit two-step operator confirmation, behind a pure send gate and a one-shot latch that lasts for the app run. It discovers only the UART service; no retries; security/pairing errors abort.
+
+**Reason:** ADR-004 forbids writes in M0, and the M0 static guard enforces it. A separate project keeps M0 provably passive and makes the M1 write surface small enough to audit with `ios/scripts/check_m1_gate.sh`.
+
+**Alternatives considered:** Adding the write to the M0 project (weakens the passive guarantee); write-without-response (no ATT feedback on errors).
+
+**Consequences:** Implementation is prepared only; the physical run needs explicit architect GO. Any additional command, channel or retry needs a new architect decision.
