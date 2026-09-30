@@ -1,8 +1,30 @@
 # M0 — Passive CoreBluetooth GATT Probe
 
-Status: **implemented; passive-only boundary approved by architect (PR #2, merged)** —
-Swift Playgrounds app project [`ios/SignsOfVital-M0.swiftpm/`](../../ios/SignsOfVital-M0.swiftpm/).
-Not yet compiled on the iPad or run against the Bionny.
+Status: **EXECUTED SUCCESSFULLY on physical hardware, 2026-09-30.** Passive-only boundary
+approved by architect (PR #2, merged) — Swift Playgrounds app project
+[`ios/SignsOfVital-M0.swiftpm/`](../../ios/SignsOfVital-M0.swiftpm/).
+
+## Execution result (2026-09-30)
+
+Run on Dana's iPad against the Bionny 4.0:
+
+- Package opened from Working Copy in Swift Playgrounds and **compiled successfully**.
+- CoreBluetooth initialized; Bluetooth reported `powered on`.
+- Bionny 4.0 was discovered by the unfiltered scan; connection succeeded.
+- GATT discovery succeeded: 4 services, sanitized UUID/property map captured
+  (recorded in [`GATT_MAP.md`](GATT_MAP.md) section A).
+- Permitted passive operations performed: reads of read-only characteristics and
+  notify/indicate subscriptions (`FEA1` notify and `FEA2` indicate succeeded; a read
+  of `FEC9` returned `The attribute could not be found.` — observation for this
+  device/firmware only).
+- Hardware `H59B_V1.0` and firmware `H59B_1.00.00_260402` independently re-confirmed
+  by CoreBluetooth.
+- **No application-level BLE command write was issued.**
+- M0 achieved its intended passive-discovery goal. **M0 = successful.**
+
+This is GATT topology only. It does not decode the Bionny measurement protocol, and
+writable characteristics in the map are not authorization to write. Nothing beyond M0
+is authorized; M1 is subject to architect review.
 
 ## Purpose
 
@@ -71,13 +93,18 @@ UTF-8 is shown only when the bytes decode to printable text.
 
 ## Success criteria
 
-1. Bionny found by unfiltered scan and connected.
-2. Complete service + characteristic list captured with exact UUIDs and properties.
-3. Hardware `H59B_V1.0` and firmware `H59B_1.00.00_260402` re-confirmed via CoreBluetooth reads.
-4. Notify/indicate subscriptions succeed (or failures recorded).
-5. Any spontaneous notifications recorded (hex only).
-6. `GATT_MAP.md` updated: probe-captured UUIDs promoted to CONFIRMED; no serial or identifiers committed.
-7. Confirmed zero application-level writes were issued.
+Outcome of the 2026-09-30 run:
+
+1. Bionny found by unfiltered scan and connected. — **Met**
+2. Complete service + characteristic list captured with exact UUIDs and properties. — **Met** (4 services)
+3. Hardware `H59B_V1.0` and firmware `H59B_1.00.00_260402` re-confirmed via CoreBluetooth reads. — **Met**
+4. Notify/indicate subscriptions succeed (or failures recorded). — **Met** (`FEA1` notify, `FEA2` indicate succeeded)
+5. Any spontaneous notifications recorded (hex only). — **Not recorded**: no payloads were supplied or committed; raw values stay out of the repo.
+6. `GATT_MAP.md` updated: probe-captured UUIDs promoted to CONFIRMED; no serial or identifiers committed. — **Met** by this documentation update
+7. Confirmed zero application-level writes were issued. — **Met** (none issued; static guard also enforces this)
+
+Pairing prompt: none was reported in the M0 results supplied to this update; the
+pairing-prompt rule above remains in force for any future run.
 
 ## Build path and passive check
 
