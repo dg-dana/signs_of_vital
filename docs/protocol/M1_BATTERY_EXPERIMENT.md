@@ -4,6 +4,11 @@ Status: **EXECUTED ONCE ON 2026-10-03 — transport/framing proof SUCCEEDED** (s
 [Results](#results-2026-10-03)). Battery payload semantics are **NOT proven**. No further
 runs, commands or decoding are authorized without a new architect decision.
 
+> **Note (M1.1 preparation):** the display was later narrowed for M1.1 (no hex; payload by
+> position only for framing-compatible `0x03` responses). The send path is unchanged. The code
+> exactly as run in M1 is at merge commit `63de169` (PR #5). See
+> [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](M1_1_BATTERY_SEMANTICS_EXPERIMENT.md).
+
 Implementation: [`ios/SignsOfVital-M1.swiftpm/`](../../ios/SignsOfVital-M1.swiftpm/) (separate
 Swift Playgrounds app; the M0 project stays passive and untouched — ADR-006).
 Experimental and **non-medical**.
