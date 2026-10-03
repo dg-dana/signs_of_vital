@@ -67,6 +67,11 @@ final class BatteryProbeModel: NSObject, ObservableObject {
 
     var gateDecision: GateDecision { BatteryQueryGate.evaluate(preconditions) }
 
+    /// Framing-compatible 0x03 notifications after our query. M1.1 expects exactly 1; more is an anomaly.
+    var queryResponseCount: Int {
+        observations.filter { $0.afterQuery && $0.observation.framingCompatibleWithHypothesis }.count
+    }
+
     // MARK: - Operator actions
 
     func startScan() {
