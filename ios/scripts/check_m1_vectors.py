@@ -38,4 +38,12 @@ for data, want in ((bytes([0xFF] * 15), 0xF1), (bytes([0xFF, 0x02]), 0x01)):
     print(("OK   " if good else "FAIL ") + f"checksum truncation -> {want:02X}")
     ok &= good
 
+# M1.1: payload positions are bytes 1..14 only (never command byte 0 or checksum byte 15).
+frame = build(0x03, bytes([1, 2]))
+positions = {i: frame[i] for i in range(1, 15)}
+good = (list(positions) == list(range(1, 15)) and positions[1] == 1 and positions[2] == 2
+        and "PayloadPositionTests" in swift and "Array(1...14)" in swift)
+print(("OK   " if good else "FAIL ") + "payload positions 1..14 (M1.1)")
+ok &= good
+
 sys.exit(0 if ok else 1)

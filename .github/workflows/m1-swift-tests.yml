@@ -1,0 +1,21 @@
+# Device-free XCTest run for the pure M1/M1.1 protocol logic (framing, checksum, send gate,
+# payload positions). Compiles and tests the SwiftPM package only: no Bluetooth, no device,
+# no secrets, and nothing here can send any command.
+name: M1 Swift Tests
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  swift-test:
+    runs-on: macos-15
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Swift version
+        run: swift --version
+      - name: Run M1 XCTest package
+        run: swift test --package-path ios/SignsOfVital-M1Tests

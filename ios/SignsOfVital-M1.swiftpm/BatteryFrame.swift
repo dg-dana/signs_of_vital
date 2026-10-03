@@ -43,14 +43,26 @@ enum Hex {
     }
 }
 
+/// One payload byte of a framing-compatible 0x03 response, by position (M1.1).
+/// Position and value only — no meaning is assigned (docs/protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md).
+struct PayloadByte: Equatable, Identifiable {
+    let index: Int                  // 1...14; bytes 0 (command) and 15 (checksum) are excluded
+    let value: UInt8
+    var id: Int { index }
+}
+
 /// What we can honestly say about a received notification. It is NOT decoded data.
 struct ResponseObservation: Equatable {
+    static let payloadRange = 1...14
+
     let length: Int
     let hex: String
     let lengthIs16: Bool
     let commandByteIs03: Bool?      // nil when the notification is empty
     let checksumValid: Bool?        // nil unless the length is 16
     let expectedChecksum: UInt8?    // computed by our rule; nil unless the length is 16
+    /// Bytes 1...14 by position, only when the framing is compatible; otherwise nil (never shown).
+    let payload: [PayloadByte]?
 
     /// True only if all three hypothesis checks pass. Says nothing about the payload's meaning.
     var framingCompatibleWithHypothesis: Bool {
@@ -76,13 +88,16 @@ struct ResponseObservation: Equatable {
             expected = e
             checksumValid = (bytes[Frame16.checksumIndex] == e)
         }
+        let commandIs03 = bytes.first.map { $0 == BatteryRequest.commandByte }
+        let compatible = is16 && commandIs03 == true && checksumValid == true
         return ResponseObservation(
             length: bytes.count,
             hex: Hex.string(bytes),
             lengthIs16: is16,
-            commandByteIs03: bytes.first.map { $0 == BatteryRequest.commandByte },
+            commandByteIs03: commandIs03,
             checksumValid: checksumValid,
-            expectedChecksum: expected
+            expectedChecksum: expected,
+            payload: compatible ? payloadRange.map { PayloadByte(index: $0, value: bytes[$0]) } : nil
         )
     }
 }

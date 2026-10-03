@@ -4,7 +4,7 @@
 
 Signs of Vital is an experimental iOS research project to read data from a
 Bionny 4.0 (H59B) health armband over Bluetooth LE. Readings are not medically
-validated. Current stage: M0 and M1 complete; next milestone awaits architect decision (see `docs/CURRENT_STATE.md`).
+validated. Current stage: M0 and M1 complete; M1.1 (battery payload semantics) designed, not executed (see `docs/CURRENT_STATE.md`).
 
 ## Main components
 
@@ -21,6 +21,8 @@ M1 (run once on 2026-10-03; further runs not authorized) is a separate app, `ios
 `BatteryFrame.swift` + `BatteryQueryGate.swift` (pure, Foundation-only, unit-tested),
 `BatteryProbeModel.swift` (CoreBluetooth; the only transmit call, behind the gate and a
 two-step operator confirmation), `ContentView.swift`. See `docs/protocol/M1_BATTERY_EXPERIMENT.md`.
+M1.1 reuses this app unchanged on the send path; it only shows `0x03` payload bytes by position
+(no hex). See `docs/protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`.
 
 ## Repository structure
 
@@ -29,6 +31,7 @@ ios/SignsOfVital-M0.swiftpm/   M0 Swift Playgrounds app project
 ios/SignsOfVital-M1.swiftpm/   M1 single-battery-query app (run once, 2026-10-03)
 ios/SignsOfVital-M1Tests/      device-free SwiftPM tests (symlinked pure sources)
 ios/scripts/                   check_m0_passive.sh, check_m1_gate.sh, check_m1_vectors.py
+.github/workflows/             m1-swift-tests.yml: device-free M1 XCTest package on PRs (macOS runner)
 docs/protocol/                 M0 probe design, GATT map by evidence level
 docs/research/                 OpenH59 reference notes (reference only, ADR-003)
 docs/                          CURRENT_STATE, DECISIONS, ARCHITECTURE, AGENT_WORKFLOW

@@ -25,7 +25,7 @@ struct ContentView: View {
 
     private var bannerSection: some View {
         Section {
-            Text("EXPERIMENTAL — NON-MEDICAL. Sends at most ONE 16-byte battery query, only after two explicit taps. A response is shown as raw bytes and framing checks only; it is not decoded data.")
+            Text("EXPERIMENTAL — NON-MEDICAL. Sends at most ONE 16-byte battery query, only after two explicit taps. A response is shown as framing checks and payload bytes by position only; it is not decoded data and has no battery meaning.")
                 .font(.footnote.bold())
                 .foregroundStyle(.orange)
         }
@@ -133,20 +133,31 @@ struct ContentView: View {
             if model.observations.isEmpty {
                 Text("No notification received yet.").foregroundStyle(.secondary)
             }
+            if model.queryResponseCount > 1 {
+                Text("ANOMALY: \(model.queryResponseCount) framing-compatible 0x03 responses after one query. Stop and report; do not use this observation.")
+                    .font(.footnote.bold())
+                    .foregroundStyle(.red)
+            }
             ForEach(model.observations.reversed()) { o in
                 VStack(alignment: .leading, spacing: 2) {
                     Text(o.afterQuery ? "After query" : "Unsolicited (before query)").font(.caption.bold())
                     Text("length: \(o.observation.length)")
-                    Text("hex: \(o.observation.hex)")
                     Text(o.observation.summary)
+                    // Only a framing-compatible 0x03 response after our query is shown by position.
+                    // Anything else (including unsolicited notifications) shows no byte values.
+                    if o.afterQuery, let payload = o.observation.payload {
+                        Text("Payload by position (no meaning assigned):")
+                        ForEach(payload) { b in
+                            Text("byte \(b.index): \(b.value)")
+                        }
+                    }
                 }
                 .font(.system(.caption, design: .monospaced))
-                .textSelection(.enabled)
             }
         } header: {
-            Text("Notifications observed (raw, on screen only)")
+            Text("Notifications observed (on screen only)")
         } footer: {
-            Text("Never saved. Do not commit or share screenshots of raw values.")
+            Text("Never saved. Do not screenshot, copy or commit these values; transcribe only what the M1.1 protocol asks for into the private worksheet.")
         }
     }
 

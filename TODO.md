@@ -1,12 +1,12 @@
 # TODO
 
-## Next — architect review (current)
+## Next — M1.1 final review / GO (current)
 
-- [ ] Architect: decide the next milestone after M1 (PR #5 merged). No further device commands until then.
-- [ ] Architect decision: whether to design a separate experiment to establish battery payload
-  semantics (meaning/scale currently UNKNOWN; no decoder or "Battery %" UI).
-- [ ] Run `swift test --package-path ios/SignsOfVital-M1Tests` on a Mac/Linux Swift toolchain
-  (not runnable in the agent environment).
+- [ ] Architect: final review of PR #7 (`claude/m1-1-battery-semantics`; design review already
+  APPROVED, decisions in `docs/protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md` §15) and explicit
+  GO. XCTest passes in CI (`.github/workflows/m1-swift-tests.yml`). Physical execution NOT
+  AUTHORIZED until then; no device command is authorized.
+- [ ] After GO only: execute M1.1 per its §7–§8, then record sanitized results in its §14.
 - [ ] Open question (unsolicited UART notifications with a different command/type byte): decide
   whether/when to study them. Do not decode or act on them until authorized.
 - [ ] Open question: `FEE7` service (`FEA1`/`FEC9`/`FEA2`) is not covered by OpenH59 notes; decide

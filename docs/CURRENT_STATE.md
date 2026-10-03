@@ -17,7 +17,9 @@ Concise technical checkpoint. Experimental research project — wearable reading
 - OpenH59 (H59_V2.0 reference) reviewed: [`docs/research/openh59.md`](research/openh59.md).
 - Protocol compatibility with H59B: **supported for the `0x03` request/response** by M1
   (16-byte framing, command byte echo, checksum rule all held). Not proven for any other command.
-- Battery payload semantics: **NOT proven** (no byte is accepted as battery %).
+- Battery payload semantics: **NOT proven** (no byte is accepted as battery %). M1.1 is designed
+  to test this: [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
+  (design review **APPROVED**; **NOT EXECUTED**).
 - The Bionny measurement protocol is **not decoded**. Unsolicited UART notifications with a
   different command/type byte were seen; their meaning is unknown.
 - GATT evidence levels: [`docs/protocol/GATT_MAP.md`](protocol/GATT_MAP.md).
@@ -38,9 +40,14 @@ Concise technical checkpoint. Experimental research project — wearable reading
   passed our checksum rule. No pairing prompt, security error, retry, `FEE7` or `DE5BF72x`
   interaction. Raw response bytes are not recorded. Details:
   [`M1_BATTERY_EXPERIMENT.md`](protocol/M1_BATTERY_EXPERIMENT.md#results-2026-10-03).
-- Device-free checks: `ios/SignsOfVital-M1Tests/` (XCTest, not yet run on a Swift toolchain),
+- M1.1 preparation (display-only, send path unchanged): the M1 app shows `0x03` payload bytes 1–14
+  by position, with no hex. The guard was strengthened (fixed `0x03` only, no decoder/percent UI, no
+  raw bytes in the log/UI/clipboard). The code as run in M1 is at merge commit `63de169`.
+- Device-free checks: `ios/SignsOfVital-M1Tests/` (XCTest: **20 tests, 0 failures** in GitHub Actions
+  workflow "M1 Swift Tests", `.github/workflows/m1-swift-tests.yml`; CI run [37152212233](https://github.com/dg-dana/signs_of_vital/actions/runs/37152212233), PR head `156b44f`, macos-15, Apple Swift 6.1.2),
   `ios/scripts/check_m1_vectors.py`, static guard `ios/scripts/check_m1_gate.sh`.
-- Not compiled in CI or by agents (no macOS/iOS/Swift toolchain in the agent environment).
+- The iOS apps are not compiled in CI or by agents (no Apple app toolchain); only the device-free
+  SwiftPM package is built and tested in CI. Agents themselves have no Swift toolchain.
 
 ## Current milestone
 
@@ -50,6 +57,8 @@ M0.5 = COMPLETE
 M1 physical experiment = COMPLETE / SUCCESSFUL (2026-10-03)
   Transport + framing hypothesis supported on H59B (0x03 only)
   Battery payload semantics = NOT YET PROVEN
+M1.1 battery payload semantics = DESIGN REVIEW APPROVED (PR #7 open)
+  Physical execution = NOT AUTHORIZED; no device command authorized
 M2+  = NOT AUTHORIZED
 ```
 
@@ -64,22 +73,23 @@ GitHub is the single source of truth; no manual copy/paste of Swift code.
 ## Handoff
 
 Last completed:
-- M1 physical run (2026-10-03): one gated `0x03` query, framing/checksum hypothesis held.
-  M1 app, design and results (summary only, no raw bytes) merged to `main` via PR #5
-  (architect-approved, 2026-10-03).
+- M1 physical run (2026-10-03), merged via PR #5 (handoff PR #6).
+- M1.1 design + preparation on branch `claude/m1-1-battery-semantics` (PR #7): experiment doc,
+  display-only app change, stronger guards, tests. **Design review APPROVED** by the architect;
+  decisions recorded in the experiment doc §15.
 
 Current working branch / PR:
-- None open for M1. `main` contains the M1 code exactly as run on the device.
+- `claude/m1-1-battery-semantics`, PR #7 (open, not merged).
 
 Current blocker:
-- Architect decision on the next milestone (M2+ not authorized).
+- No technical pre-GO blocker remains: the XCTest suite passed in CI (20 tests, 0 failures).
+- Waiting on the architect's final review of PR #7 and an explicit GO.
 
 Next action:
-- Architect decides what (if anything) follows M1, e.g. whether a separate experiment to
-  establish battery payload semantics is warranted. No device commands until then.
+- Architect performs final review of PR #7 and decides on a **separate explicit GO**. PR #7 stays open and is not merged by agents. M2+ remains NOT AUTHORIZED.
 
 Do NOT:
-- send another battery query, or any other H59 command, without a new explicit architect GO
+- run M1.1, send another battery query, or any other H59 command, without that explicit GO
 - claim any response byte is battery % or add a battery decoder/UI
 - decode, act on or record the unsolicited UART notifications
 - start M2+ (protocol layer, HR/BP/SpO2/HRV/stress/sleep/steps)
@@ -95,5 +105,5 @@ Do NOT:
 - `AGENTS.md`, `CLAUDE.md` — agent instructions
 - `TODO.md` — roadmap / unfinished work
 - `docs/DECISIONS.md` — ADR-001..006
-- `ios/` — M0 passive probe, M1 battery-query app (unrun), tests and guard scripts
+- `ios/` — M0 passive probe, M1 battery-query app (run once; M1.1-prepared), tests and guard scripts
 - `docs/protocol/`, `docs/research/` — protocol evidence and research

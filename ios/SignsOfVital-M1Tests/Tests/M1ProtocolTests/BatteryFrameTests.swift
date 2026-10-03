@@ -88,6 +88,38 @@ final class ResponseObservationTests: XCTestCase {
     }
 }
 
+// M1.1: payload bytes are exposed by position only for framing-compatible 0x03 frames.
+// Synthetic vectors; they are not device captures and assign no meaning to any byte.
+final class PayloadPositionTests: XCTestCase {
+    func testCompatibleFrameExposesBytes1Through14ByPosition() {
+        let f = Frame16.build(command: 0x03, payload: [0x01, 0x02])!   // 03 01 02 00 … 00 06
+        let payload = ResponseObservation.observe(f).payload
+        XCTAssertEqual(payload?.map(\.index), Array(1...14))
+        XCTAssertEqual(payload?.first, PayloadByte(index: 1, value: 0x01))
+        XCTAssertEqual(payload?[1], PayloadByte(index: 2, value: 0x02))
+        XCTAssertTrue(payload?.dropFirst(2).allSatisfy { $0.value == 0 } == true)
+    }
+
+    func testCommandAndChecksumBytesAreNeverInPayload() {
+        let payload = ResponseObservation.observe(BatteryRequest.bytes).payload ?? []
+        XCTAssertFalse(payload.contains { $0.index == 0 || $0.index == 15 })
+    }
+
+    func testNoPayloadForIncompatibleFrames() {
+        var badChecksum = BatteryRequest.bytes
+        badChecksum[15] = 0x04
+        let otherCommand = Frame16.build(command: 0x04)!
+        for bytes in [[], [0x03, 0x00, 0x03], BatteryRequest.bytes + [0x00], badChecksum, otherCommand] {
+            XCTAssertNil(ResponseObservation.observe(bytes).payload, Hex.string(bytes))
+        }
+    }
+
+    func testOnlyCommandByteIs03() {
+        XCTAssertEqual(BatteryRequest.commandByte, 0x03)
+        XCTAssertEqual(BatteryRequest.bytes.first, 0x03)
+    }
+}
+
 final class BatteryQueryGateTests: XCTestCase {
     private func ready() -> BatteryQueryPreconditions {
         BatteryQueryPreconditions(uartServiceDiscovered: true, writeCharacteristicDiscovered: true,
