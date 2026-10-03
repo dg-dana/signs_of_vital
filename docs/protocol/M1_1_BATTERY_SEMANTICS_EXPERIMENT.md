@@ -1,8 +1,8 @@
 # M1.1 — Battery Payload Semantics Experiment
 
 Status: **DESIGN REVIEW APPROVED by the architect (decisions in §15) — NOT EXECUTED.**
-Physical execution is **NOT AUTHORIZED**. It requires the XCTest suite to pass on a Swift
-toolchain and then a **separate explicit architect GO**. Until then, no `0x03` (or any other)
+Physical execution is **NOT AUTHORIZED**. The XCTest suite has passed in CI (§13); a final
+architect review and a **separate explicit architect GO** are still required. Until then, no `0x03` (or any other)
 transmission is authorized.
 
 Experimental and **non-medical**. This is **not** M2: no protocol layer, no decoder, no
@@ -234,7 +234,7 @@ The experiment is stopped (no retry, no workaround) and reported to the architec
 |---|---|
 | `sh ios/scripts/check_m1_gate.sh` | Exactly one `writeValue` (fixed request, write characteristic, inside `confirmAndSendBatteryQuery`, single caller = confirmation button); gate + latch wired; single user-initiated `connect`; no prohibited APIs/channels (`FEE7`, `DE5BF72x`, reads, descriptors, persistence, timers). **M1.1 additions:** exactly one frame build, `Frame16.build(command: commandByte)` with no payload, and `commandByte` = `0x03`; no alternative command byte; at most one `asyncAfter` and no loops/other schedulers; no battery decoder or "Battery:"/percent UI; notification bytes never in the event log; no hex rendered in the UI; no copy/share/export APIs. |
 | `python3 ios/scripts/check_m1_vectors.py` | Request/checksum vectors, plus the payload-position rule (bytes 1–14 only). |
-| `swift test --package-path ios/SignsOfVital-M1Tests` | Existing frame/gate tests plus `PayloadPositionTests`: positions 1–14 only for compatible frames; never bytes 0/15; nothing for short, long, bad-checksum or non-`0x03` frames; command byte is `0x03`. **Not run by agents (no Swift toolchain); must be run before GO.** |
+| `swift test --package-path ios/SignsOfVital-M1Tests` | Existing frame/gate tests plus `PayloadPositionTests`: positions 1–14 only for compatible frames; never bytes 0/15; nothing for short, long, bad-checksum or non-`0x03` frames; command byte is `0x03`. **PASSED: 20 tests, 0 failures** (CI run [37152212233](https://github.com/dg-dana/signs_of_vital/actions/runs/37152212233), PR head `156b44f`, macos-15, Apple Swift 6.1.2; workflow `M1 Swift Tests`). |
 | `sh ios/scripts/check_m0_passive.sh` | M0 remains passive and unchanged. |
 
 The guard was mutation-tested in the agent environment: 13 injected violations (alternative
@@ -273,5 +273,5 @@ M1.1; changing any of them needs a new architect decision before further observa
 5. **Vendor-app disconnect:** APPROVED. Turning Bluetooth off on the phone is acceptable, and
    Dana must confirm the vendor app reconnects afterwards (§6 step 4).
 
-Remaining before any GO: `swift test --package-path ios/SignsOfVital-M1Tests` must be run on a
-Swift toolchain and pass, followed by a final architect review and an explicit GO.
+XCTest pre-GO condition: **met** (20 tests, 0 failures in CI, §13). Remaining before any
+physical execution: the architect's final review and an explicit GO.

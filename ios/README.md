@@ -49,5 +49,5 @@ M1.1 is **NOT EXECUTED and NOT AUTHORIZED**.
 ```sh
 sh ios/scripts/check_m1_gate.sh        # static guard: one gated write, nothing else
 python3 ios/scripts/check_m1_vectors.py  # device-free vector cross-check
-swift test --package-path ios/SignsOfVital-M1Tests  # needs a Swift toolchain
+swift test --package-path ios/SignsOfVital-M1Tests  # needs a Swift toolchain; runs in CI on PRs
 ```

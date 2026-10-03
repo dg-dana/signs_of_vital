@@ -110,8 +110,8 @@ outcome is recorded in the repository.
 - `swift test --package-path ios/SignsOfVital-M1Tests` — XCTest for frame construction,
   command-byte placement, zero payload, checksum and 8-bit truncation, malformed
   length/checksum/command-byte flags, and every send-gate condition. Needs a Swift toolchain
-  (the sources are symlinks to the app files, so there is one copy of the logic). **Not run
-  in the agent environment (no Swift toolchain); run on a Mac before GO.**
+  (the sources are symlinks to the app files, so there is one copy of the logic). **Passed
+  in CI on 2026-10-03** (workflow `M1 Swift Tests`; CI run [37152212233](https://github.com/dg-dana/signs_of_vital/actions/runs/37152212233), PR head `156b44f`, macos-15, Apple Swift 6.1.2).
 - `sh ios/scripts/check_m1_gate.sh` — static guard: exactly one `writeValue`, inside the
   confirm-and-send method with the fixed request, one caller (the confirmation button),
   single `connect`, no prohibited channels/APIs, no logging calls.
@@ -170,4 +170,3 @@ on `6E400002`; spontaneous notifications do occur on `6E400003`. Still unknown:
 - Response layout: which byte, if any, is the battery level, and its scale.
 - Meaning of the unsolicited notifications (different command/type byte) on `6E400003`.
 - Whether framing/checksum hold for any other command (none authorized).
-- Whether the XCTest suite passes (`swift test` not yet run on a Swift toolchain).

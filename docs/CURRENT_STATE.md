@@ -43,9 +43,11 @@ Concise technical checkpoint. Experimental research project — wearable reading
 - M1.1 preparation (display-only, send path unchanged): the M1 app shows `0x03` payload bytes 1–14
   by position, with no hex. The guard was strengthened (fixed `0x03` only, no decoder/percent UI, no
   raw bytes in the log/UI/clipboard). The code as run in M1 is at merge commit `63de169`.
-- Device-free checks: `ios/SignsOfVital-M1Tests/` (XCTest, not yet run on a Swift toolchain),
+- Device-free checks: `ios/SignsOfVital-M1Tests/` (XCTest: **20 tests, 0 failures** in GitHub Actions
+  workflow "M1 Swift Tests", `.github/workflows/m1-swift-tests.yml`; CI run [37152212233](https://github.com/dg-dana/signs_of_vital/actions/runs/37152212233), PR head `156b44f`, macos-15, Apple Swift 6.1.2),
   `ios/scripts/check_m1_vectors.py`, static guard `ios/scripts/check_m1_gate.sh`.
-- Not compiled in CI or by agents (no macOS/iOS/Swift toolchain in the agent environment).
+- The iOS apps are not compiled in CI or by agents (no Apple app toolchain); only the device-free
+  SwiftPM package is built and tested in CI. Agents themselves have no Swift toolchain.
 
 ## Current milestone
 
@@ -80,12 +82,11 @@ Current working branch / PR:
 - `claude/m1-1-battery-semantics`, PR #7 (open, not merged).
 
 Current blocker:
-- Remaining pre-GO blocker: the XCTest suite (`swift test --package-path ios/SignsOfVital-M1Tests`)
-  has not been run on a Swift toolchain (none available to agents).
+- No technical pre-GO blocker remains: the XCTest suite passed in CI (20 tests, 0 failures).
+- Waiting on the architect's final review of PR #7 and an explicit GO.
 
 Next action:
-- Run the XCTest suite on a Swift toolchain; then final architect review and a **separate explicit
-  GO**. PR #7 stays open and is not merged by agents. M2+ remains NOT AUTHORIZED.
+- Architect performs final review of PR #7 and decides on a **separate explicit GO**. PR #7 stays open and is not merged by agents. M2+ remains NOT AUTHORIZED.
 
 Do NOT:
 - run M1.1, send another battery query, or any other H59 command, without that explicit GO

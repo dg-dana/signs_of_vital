@@ -1,12 +1,11 @@
 # TODO
 
-## Next — M1.1 pre-GO (current)
+## Next — M1.1 final review / GO (current)
 
-- [ ] Run `swift test --package-path ios/SignsOfVital-M1Tests` on a Mac/Linux Swift toolchain
-  (not runnable in the agent environment). This is the remaining pre-GO blocker for M1.1.
 - [ ] Architect: final review of PR #7 (`claude/m1-1-battery-semantics`; design review already
   APPROVED, decisions in `docs/protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md` §15) and explicit
-  GO. Physical execution NOT AUTHORIZED until then; no device command is authorized.
+  GO. XCTest passes in CI (`.github/workflows/m1-swift-tests.yml`). Physical execution NOT
+  AUTHORIZED until then; no device command is authorized.
 - [ ] After GO only: execute M1.1 per its §7–§8, then record sanitized results in its §14.
 - [ ] Open question (unsolicited UART notifications with a different command/type byte): decide
   whether/when to study them. Do not decode or act on them until authorized.

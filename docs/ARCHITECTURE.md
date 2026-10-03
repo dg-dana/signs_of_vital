@@ -31,6 +31,7 @@ ios/SignsOfVital-M0.swiftpm/   M0 Swift Playgrounds app project
 ios/SignsOfVital-M1.swiftpm/   M1 single-battery-query app (run once, 2026-10-03)
 ios/SignsOfVital-M1Tests/      device-free SwiftPM tests (symlinked pure sources)
 ios/scripts/                   check_m0_passive.sh, check_m1_gate.sh, check_m1_vectors.py
+.github/workflows/             m1-swift-tests.yml: device-free M1 XCTest package on PRs (macOS runner)
 docs/protocol/                 M0 probe design, GATT map by evidence level
 docs/research/                 OpenH59 reference notes (reference only, ADR-003)
 docs/                          CURRENT_STATE, DECISIONS, ARCHITECTURE, AGENT_WORKFLOW
