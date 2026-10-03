@@ -1,8 +1,9 @@
 # M1.1 — Battery Payload Semantics Experiment
 
-Status: **DESIGN / PREPARATION ONLY — NOT EXECUTED.** Physical execution requires a
-**separate explicit architect GO** after this design has been reviewed. Until then, no `0x03`
-(or any other) transmission is authorized.
+Status: **DESIGN REVIEW APPROVED by the architect (decisions in §15) — NOT EXECUTED.**
+Physical execution is **NOT AUTHORIZED**. It requires the XCTest suite to pass on a Swift
+toolchain and then a **separate explicit architect GO**. Until then, no `0x03` (or any other)
+transmission is authorized.
 
 Experimental and **non-medical**. This is **not** M2: no protocol layer, no decoder, no
 "Battery %" feature.
@@ -89,8 +90,8 @@ Bracketing procedure, all within **15 minutes**:
 2. Make sure the vendor app is **no longer connected** to the band (e.g. turn Bluetooth off on
    that phone), so our app is not competing for the connection.
 3. Take the M1.1 observation (§7).
-4. Turn the phone's Bluetooth back on, let the vendor app reconnect and refresh, then read
-   **Reference B**.
+4. Turn the phone's Bluetooth back on, **confirm the vendor app has reconnected** to the band
+   and refreshed, then read **Reference B**. If it does not reconnect, abort (§12).
 
 Reference for the observation = mean of A and B. If |A − B| > 5 points (or the bar count
 differs), the observation is **invalid**: it is recorded and counted, but not used for H1.
@@ -194,10 +195,11 @@ Any change needs a new document revision approved before further observations.
   PR/issue**. Contents per row: observation number, date and hour only, reference A/B and
   display form, minutes off charger, framing checks OK yes/no, and the 14 payload values. No
   byte 0/15, no hex, no screenshots. It is deleted once the architect accepts the M1.1 result.
-  *(Requires architect confirmation: §15 Q1.)*
-- **Committed results (sanitized):** the per-position classification (§4); for the
-  candidate index only, the per-observation reference vs candidate value; validity flags;
-  counts; and the verdict. No other byte values. *(Requires architect confirmation: §15 Q2.)*
+  *(Architect decision 1: approved as specified.)*
+- **Committed results (sanitized):** per observation, **only** the candidate byte's value and
+  the vendor reference, plus validity flags, counts, the per-position class labels (§4, labels
+  only) and the verdict. All 14 payload values are **never** committed; no byte value other
+  than the candidate's appears in the repository. *(Architect decision 2.)*
 
 ## 11. Manual gating (unchanged from M1, guarded)
 
@@ -210,7 +212,7 @@ Any change needs a new document revision approved before further observations.
 - Rapid repeats are hard to do by accident: two taps plus a relaunch per request, a 30-minute
   procedural minimum spacing, a numbered worksheet row before each Send, and the hard cap of 8.
 - A cross-launch counter or cooldown would need on-device persistence, which the guard
-  forbids. It is not added (§15 Q3).
+  forbids. It is not added; counting and spacing stay procedural (architect decision 3).
 
 ## 12. Abort conditions
 
@@ -254,19 +256,22 @@ an architect GO and execution, using the sanitized format in §10.
 | Candidate index | — |
 | Verdict (SUPPORTED / INCONCLUSIVE / REJECTED) | — |
 
-## 15. Open questions for the architect (before GO)
+## 15. Architect decisions (design review, approved)
 
-1. **Private worksheet:** approve keeping per-observation payload values (bytes 1–14) in an
-   off-repository private worksheet until the result is accepted? Without it, multi-session
-   comparison is impossible.
-2. **Committed evidence:** may the candidate byte's per-observation values (next to the
-   reference) be committed as sanitized results? A battery value is not an identifier or
-   health data. The alternative is committing only the verdict and aggregate deviations,
-   which is weaker evidence for later reviewers.
-3. **Cross-launch counter/cooldown:** keep the cap and spacing procedural (current design),
-   or authorize a persisted, non-BLE send counter? That would relax the "no persistence"
-   guard.
-4. **Thresholds:** confirm ±5 tolerance, ≥ 40-point spread, 5 valid observations and the cap
-   of 8 transmissions.
-5. **Vendor app disconnect:** is turning off Bluetooth on the phone acceptable, given the
-   vendor app's own behavior on reconnect is outside our control?
+The architect reviewed this design and approved it with these decisions. They are binding for
+M1.1; changing any of them needs a new architect decision before further observations.
+
+1. **Private worksheet:** APPROVED exactly as specified in §10 (off-repository; payload bytes
+   1–14 only; deleted once the architect accepts the result).
+2. **Committed evidence:** APPROVED for the candidate byte's value + the vendor reference per
+   observation **only**. All 14 payload values are not committed.
+3. **Cross-launch counter / cooldown:** stays **PROCEDURAL** (numbered worksheet rows, 30-minute
+   spacing, cap of 8). No persistence is added to the app.
+4. **Thresholds:** APPROVED unchanged: ±5 points; reference spread ≥ 40 points; ≥ 5 valid
+   observations; ≥ 3 distinct levels; same-state repeat; upward/recharge observation; at most
+   8 transmissions.
+5. **Vendor-app disconnect:** APPROVED. Turning Bluetooth off on the phone is acceptable, and
+   Dana must confirm the vendor app reconnects afterwards (§6 step 4).
+
+Remaining before any GO: `swift test --package-path ios/SignsOfVital-M1Tests` must be run on a
+Swift toolchain and pass, followed by a final architect review and an explicit GO.

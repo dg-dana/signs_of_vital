@@ -19,7 +19,7 @@ Concise technical checkpoint. Experimental research project — wearable reading
   (16-byte framing, command byte echo, checksum rule all held). Not proven for any other command.
 - Battery payload semantics: **NOT proven** (no byte is accepted as battery %). M1.1 is designed
   to test this: [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
-  (**NOT EXECUTED**).
+  (design review **APPROVED**; **NOT EXECUTED**).
 - The Bionny measurement protocol is **not decoded**. Unsolicited UART notifications with a
   different command/type byte were seen; their meaning is unknown.
 - GATT evidence levels: [`docs/protocol/GATT_MAP.md`](protocol/GATT_MAP.md).
@@ -55,8 +55,8 @@ M0.5 = COMPLETE
 M1 physical experiment = COMPLETE / SUCCESSFUL (2026-10-03)
   Transport + framing hypothesis supported on H59B (0x03 only)
   Battery payload semantics = NOT YET PROVEN
-M1.1 battery payload semantics = DESIGNED / READY FOR ARCHITECT REVIEW
-  NOT physically executed; no device command authorized
+M1.1 battery payload semantics = DESIGN REVIEW APPROVED (PR #7 open)
+  Physical execution = NOT AUTHORIZED; no device command authorized
 M2+  = NOT AUTHORIZED
 ```
 
@@ -72,19 +72,20 @@ GitHub is the single source of truth; no manual copy/paste of Swift code.
 
 Last completed:
 - M1 physical run (2026-10-03), merged via PR #5 (handoff PR #6).
-- M1.1 design + preparation on branch `claude/m1-1-battery-semantics` (PR #7, open for architect
-  review): experiment doc, display-only app change, stronger guards, tests.
+- M1.1 design + preparation on branch `claude/m1-1-battery-semantics` (PR #7): experiment doc,
+  display-only app change, stronger guards, tests. **Design review APPROVED** by the architect;
+  decisions recorded in the experiment doc §15.
 
 Current working branch / PR:
 - `claude/m1-1-battery-semantics`, PR #7 (open, not merged).
 
 Current blocker:
-- Architect review of the M1.1 design, including its open questions (§15: private worksheet,
-  committed evidence format, counter/cooldown, thresholds, vendor-app disconnect).
-- `swift test` has not been run (no Swift toolchain for agents); it must pass before any GO.
+- Remaining pre-GO blocker: the XCTest suite (`swift test --package-path ios/SignsOfVital-M1Tests`)
+  has not been run on a Swift toolchain (none available to agents).
 
 Next action:
-- Architect reviews PR #7 (M1.1). Physical execution needs a **separate explicit GO** after review.
+- Run the XCTest suite on a Swift toolchain; then final architect review and a **separate explicit
+  GO**. PR #7 stays open and is not merged by agents. M2+ remains NOT AUTHORIZED.
 
 Do NOT:
 - run M1.1, send another battery query, or any other H59 command, without that explicit GO
