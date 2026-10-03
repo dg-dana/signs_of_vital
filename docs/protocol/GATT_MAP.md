@@ -78,6 +78,13 @@ Other observed behavior (this device/firmware, 2026-09-30):
   observation from this device/firmware only; it is **not** proof that `FEC9` is
   universally unreadable.
 
+Observed on the UART channel by the M1 experiment (2026-10-03, details:
+[`M1_BATTERY_EXPERIMENT.md`](M1_BATTERY_EXPERIMENT.md#results-2026-10-03)):
+
+- `6E400002-…` accepted one ATT write-with-response (acknowledged), with no pairing prompt.
+- `6E400003-…` delivered a 16-byte notification immediately after that write, plus
+  unsolicited notifications before and after it. (Raw values not recorded.)
+
 **A characteristic being writable does NOT authorize writing to it.** Properties
 tell us what the GATT table permits, not what any characteristic means or what is
 safe to send. The UUID/property map alone does not establish protocol semantics.
@@ -119,12 +126,19 @@ Answered by the M0 probe (see section A): full service list (4 services), full
 characteristic list with properties, UART service UUID, RX/TX UUIDs, parent
 service of `DE5BF72x`, and which Device Information characteristics are present.
 
+Protocol hypotheses **supported** by M1 (one command only, this device/firmware):
+
+- 16-byte UART frames with byte 0 = command and byte 15 = sum(bytes 0–14) mod 256:
+  the `0x03` response matched all three checks.
+
 Still unknown (hypotheses, not facts):
 
 - Semantics of every characteristic, including all of `FEE7` (`FEA1`, `FEC9`,
   `FEA2`). Nothing is inferred from UUID/properties.
-- Whether H59B speaks the OpenH59 (H59_V2.0) command protocol: strongly suggested by
-  matching UUIDs, **not proven**. The measurement protocol is **not decoded**.
+- Whether H59B speaks the OpenH59 (H59_V2.0) command protocol beyond `0x03`: supported
+  for `0x03` framing only, **not proven** in general. The measurement protocol is **not decoded**.
+- Meaning/scale of the `0x03` response payload (battery level is **not** established).
+- Meaning of the unsolicited `6E400003` notifications (different command/type byte).
 - Whether the `DE5BF72x` channel requires login/authentication on H59B.
 - Whether any characteristic requires pairing/encryption (no pairing prompt was
   reported with the M0 results; not otherwise verified).

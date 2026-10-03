@@ -1,0 +1,1 @@
+../../../SignsOfVital-M1.swiftpm/BatteryQueryGate.swift

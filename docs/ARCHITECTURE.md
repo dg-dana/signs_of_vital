@@ -4,7 +4,7 @@
 
 Signs of Vital is an experimental iOS research project to read data from a
 Bionny 4.0 (H59B) health armband over Bluetooth LE. Readings are not medically
-validated. Current stage: M0 passive GATT discovery (see `docs/CURRENT_STATE.md`).
+validated. Current stage: M0 and M1 complete; next milestone awaits architect decision (see `docs/CURRENT_STATE.md`).
 
 ## Main components
 
@@ -17,11 +17,18 @@ M0 probe app — SwiftUI + CoreBluetooth, Swift Playgrounds, runs on iPad
   └─ Hex.swift           hex / printable-UTF-8 / property formatting
 ```
 
+M1 (run once on 2026-10-03; further runs not authorized) is a separate app, `ios/SignsOfVital-M1.swiftpm/`:
+`BatteryFrame.swift` + `BatteryQueryGate.swift` (pure, Foundation-only, unit-tested),
+`BatteryProbeModel.swift` (CoreBluetooth; the only transmit call, behind the gate and a
+two-step operator confirmation), `ContentView.swift`. See `docs/protocol/M1_BATTERY_EXPERIMENT.md`.
+
 ## Repository structure
 
 ```text
 ios/SignsOfVital-M0.swiftpm/   M0 Swift Playgrounds app project
-ios/scripts/                   check_m0_passive.sh (static passive-only guard)
+ios/SignsOfVital-M1.swiftpm/   M1 single-battery-query app (run once, 2026-10-03)
+ios/SignsOfVital-M1Tests/      device-free SwiftPM tests (symlinked pure sources)
+ios/scripts/                   check_m0_passive.sh, check_m1_gate.sh, check_m1_vectors.py
 docs/protocol/                 M0 probe design, GATT map by evidence level
 docs/research/                 OpenH59 reference notes (reference only, ADR-003)
 docs/                          CURRENT_STATE, DECISIONS, ARCHITECTURE, AGENT_WORKFLOW
@@ -38,5 +45,6 @@ on-screen display as raw hex. Nothing is persisted. Only UUIDs/properties
 
 - CoreBluetooth only (ADR-001); built with Swift Playgrounds on iPad (ADR-005).
 - M0 is passive: no application writes, no descriptor writes, no commands (ADR-002/004).
+- M1 app: at most one gated battery write, nothing automatic, no other channels (ADR-006).
 - No OpenH59 source reuse (ADR-003).
 - Never commit serial numbers, per-device identifiers, health data or credentials.

@@ -52,7 +52,7 @@ See [`docs/protocol/GATT_MAP.md`](../protocol/GATT_MAP.md) section C.
 | `0x43` | Steps / calories / distance |
 | `0x69` / `0x6A` | Start / stop realtime measurement |
 
-> None of these are authorized to be sent. M0 sends no commands. M1 (battery `0x03`) is not yet authorized.
+> None of these are authorized to be sent. M1 sent `0x03` exactly once (2026-10-03); no further sends are authorized.
 
 ## Second "bc" channel
 
@@ -74,8 +74,10 @@ staged sleep, on-demand blood pressure. **UNKNOWN** which of these H59B supports
 - **FACT (manual observation, unverified UUIDs):** Our device exposes a UART-style
   service and a proprietary service resembling `DE5BF72x`.
 - **INFERENCE:** Protocol compatibility is strongly suggested.
-- **UNKNOWN:** Whether UUIDs, framing, checksum, and command set actually match.
-  Not proven until M0 (GATT) and M1 (one command) evidence exists.
+- **FACT (M0, 2026-09-30):** UART and `DE5BF72x` UUIDs match upstream on our device.
+- **FACT (M1, 2026-10-03):** Our independently built `0x03` request got a 16-byte `0x03`
+  response that passed the sum-mod-256 checksum on H59B.
+- **UNKNOWN:** Battery payload meaning, and whether the rest of the command set matches.
 
 ## Differences from our device
 
