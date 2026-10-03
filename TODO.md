@@ -2,8 +2,7 @@
 
 ## Next — architect review (current)
 
-- [ ] Architect: review/merge PR #5 (M1 app, design and 2026-10-03 results) and decide the next
-  milestone. No further device commands until then.
+- [ ] Architect: decide the next milestone after M1 (PR #5 merged). No further device commands until then.
 - [ ] Architect decision: whether to design a separate experiment to establish battery payload
   semantics (meaning/scale currently UNKNOWN; no decoder or "Battery %" UI).
 - [ ] Run `swift test --package-path ios/SignsOfVital-M1Tests` on a Mac/Linux Swift toolchain

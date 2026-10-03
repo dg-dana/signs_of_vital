@@ -65,14 +65,14 @@ GitHub is the single source of truth; no manual copy/paste of Swift code.
 
 Last completed:
 - M1 physical run (2026-10-03): one gated `0x03` query, framing/checksum hypothesis held.
-  Results documented on the PR #5 branch (summary only, no raw bytes).
+  M1 app, design and results (summary only, no raw bytes) merged to `main` via PR #5
+  (architect-approved, 2026-10-03).
 
 Current working branch / PR:
-- `claude/m0-5-m1-battery-prep` — PR #5 (M1 app + design + results), open, awaiting
-  architect review. Not merged by the implementer.
+- None open for M1. `main` contains the M1 code exactly as run on the device.
 
 Current blocker:
-- Architect review/merge of PR #5 and a decision on the next milestone.
+- Architect decision on the next milestone (M2+ not authorized).
 
 Next action:
 - Architect decides what (if anything) follows M1, e.g. whether a separate experiment to
