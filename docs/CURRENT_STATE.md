@@ -15,9 +15,11 @@ Concise technical checkpoint. Experimental research project — wearable reading
 ## Research state
 
 - OpenH59 (H59_V2.0 reference) reviewed: [`docs/research/openh59.md`](research/openh59.md).
-- Protocol compatibility with H59B: strongly suggested (matching UUIDs), **not proven**.
-- The Bionny measurement protocol is **not decoded**. We know the GATT topology and some
-  observed behavior only; characteristic semantics are unknown.
+- Protocol compatibility with H59B: **supported for the `0x03` request/response** by M1
+  (16-byte framing, command byte echo, checksum rule all held). Not proven for any other command.
+- Battery payload semantics: **NOT proven** (no byte is accepted as battery %).
+- The Bionny measurement protocol is **not decoded**. Unsolicited UART notifications with a
+  different command/type byte were seen; their meaning is unknown.
 - GATT evidence levels: [`docs/protocol/GATT_MAP.md`](protocol/GATT_MAP.md).
 
 ## Implementation
@@ -30,21 +32,28 @@ Concise technical checkpoint. Experimental research project — wearable reading
   returned `The attribute could not be found.` (this device/firmware only, not proof it is
   universally unreadable).
 - Passive-only static guard: `sh ios/scripts/check_m0_passive.sh`.
-- **M1 preparation (not yet run, not authorized):** `ios/SignsOfVital-M1.swiftpm/` is a
-  separate app that can send exactly one gated battery query (`03 00…00 03`) on the UART
-  channel. Pure framing/gate logic has device-free tests (`ios/SignsOfVital-M1Tests/`,
-  `ios/scripts/check_m1_vectors.py`, static guard `ios/scripts/check_m1_gate.sh`).
+- **M1 executed successfully on physical hardware on 2026-10-03** (iPad, Swift Playgrounds;
+  `ios/SignsOfVital-M1.swiftpm/`, PR #5). Exactly one gated `0x03` battery query sent by
+  explicit operator action; ATT write acknowledged; a 16-byte `0x03` notification arrived and
+  passed our checksum rule. No pairing prompt, security error, retry, `FEE7` or `DE5BF72x`
+  interaction. Raw response bytes are not recorded. Details:
+  [`M1_BATTERY_EXPERIMENT.md`](protocol/M1_BATTERY_EXPERIMENT.md#results-2026-10-03).
+- Device-free checks: `ios/SignsOfVital-M1Tests/` (XCTest, not yet run on a Swift toolchain),
+  `ios/scripts/check_m1_vectors.py`, static guard `ios/scripts/check_m1_gate.sh`.
 - Not compiled in CI or by agents (no macOS/iOS/Swift toolchain in the agent environment).
 
 ## Current milestone
 
 ```text
 M0   = COMPLETE / SUCCESSFUL (2026-09-30)
-M0.5 = M1 DESIGN / IMPLEMENTATION PREPARATION
-M1 physical experiment = NOT YET AUTHORIZED
+M0.5 = COMPLETE
+M1 physical experiment = COMPLETE / SUCCESSFUL (2026-10-03)
+  Transport + framing hypothesis supported on H59B (0x03 only)
+  Battery payload semantics = NOT YET PROVEN
+M2+  = NOT AUTHORIZED
 ```
 
-M0 design/result: [`docs/protocol/M0_PROBE.md`](protocol/M0_PROBE.md). M1 design:
+M0 design/result: [`docs/protocol/M0_PROBE.md`](protocol/M0_PROBE.md). M1 design/result:
 [`docs/protocol/M1_BATTERY_EXPERIMENT.md`](protocol/M1_BATTERY_EXPERIMENT.md).
 
 ## Build path (resolved — ADR-005)
@@ -55,29 +64,30 @@ GitHub is the single source of truth; no manual copy/paste of Swift code.
 ## Handoff
 
 Last completed:
-- PR #4 merged: M0 results recorded (M0 successful).
-- M1 preparation implemented for architect review (branch `claude/m0-5-m1-battery-prep`,
-  PR opened, not merged by the implementer).
+- M1 physical run (2026-10-03): one gated `0x03` query, framing/checksum hypothesis held.
+  Results documented on the PR #5 branch (summary only, no raw bytes).
 
 Current working branch / PR:
-- `claude/m0-5-m1-battery-prep` — M1 preparation PR, awaiting architect review.
+- `claude/m0-5-m1-battery-prep` — PR #5 (M1 app + design + results), open, awaiting
+  architect review. Not merged by the implementer.
 
 Current blocker:
-- Architect final review of the M1 preparation, then an explicit GO for the physical run.
+- Architect review/merge of PR #5 and a decision on the next milestone.
 
 Next action:
-- Architect reviews design + implementation. Only after an explicit GO may Dana run the
-  M1 battery query. Also run `swift test` for `ios/SignsOfVital-M1Tests` on a Mac if available.
+- Architect decides what (if anything) follows M1, e.g. whether a separate experiment to
+  establish battery payload semantics is warranted. No device commands until then.
 
 Do NOT:
-- run the M1 physical battery query or instruct Dana to, before explicit architect GO
-- send any command other than the single M1 battery `0x03`, or more than one per deliberate action
+- send another battery query, or any other H59 command, without a new explicit architect GO
+- claim any response byte is battery % or add a battery decoder/UI
+- decode, act on or record the unsolicited UART notifications
+- start M2+ (protocol layer, HR/BP/SpO2/HRV/stress/sleep/steps)
 - retry automatically, fuzz, or brute-force packets
 - write to `FEE7` (`FEA1`/`FEC9`/`FEA2`) or authenticate/write on `DE5BF72x`
 - add any write call to the M0 project
 - implement pairing/bonding workarounds (tap Cancel on any iOS pairing prompt)
-- commit peripheral identifiers, manufacturer data, serial/System ID, raw values or health data
-- treat any response byte as a trusted battery value or claim the protocol is decoded
+- commit raw BLE bytes, peripheral identifiers, manufacturer data, serial/System ID or health data
 - ask Dana to repeat BLE screenshots/findings already documented
 
 ## Important files

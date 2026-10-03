@@ -2,17 +2,16 @@
 
 ## Next — architect review (current)
 
-- [ ] Architect: final review of the M1 preparation PR (`docs/protocol/M1_BATTERY_EXPERIMENT.md`,
-  `ios/SignsOfVital-M1.swiftpm/`) and explicit GO/NO-GO for the physical run. Dana must not run it before GO.
+- [ ] Architect: review/merge PR #5 (M1 app, design and 2026-10-03 results) and decide the next
+  milestone. No further device commands until then.
+- [ ] Architect decision: whether to design a separate experiment to establish battery payload
+  semantics (meaning/scale currently UNKNOWN; no decoder or "Battery %" UI).
 - [ ] Run `swift test --package-path ios/SignsOfVital-M1Tests` on a Mac/Linux Swift toolchain
-  (not runnable in the agent environment) and confirm the M1 app compiles on the iPad.
+  (not runnable in the agent environment).
+- [ ] Open question (unsolicited UART notifications with a different command/type byte): decide
+  whether/when to study them. Do not decode or act on them until authorized.
 - [ ] Open question: `FEE7` service (`FEA1`/`FEC9`/`FEA2`) is not covered by OpenH59 notes; decide
   whether it needs research. Do not write to it.
-
-## M1 — Battery command proof (PREPARED, NOT YET AUTHORIZED)
-
-- [ ] Physical run: one gated battery `0x03` query on `6E400002`/`6E400003`; record only the
-  summarized outcome (never raw bytes). Blocked on architect GO.
 
 ## M2 — Minimal protocol layer (NOT YET AUTHORIZED)
 

@@ -1,14 +1,14 @@
 # M1 — Single Battery-Query Experiment
 
-Status: **PREPARED FOR ARCHITECT REVIEW. The physical experiment is NOT AUTHORIZED.**
-Nobody (including Dana) runs it until the architect reviews this design and the
-implementation and gives an explicit GO.
+Status: **EXECUTED ONCE ON 2026-10-03 — transport/framing proof SUCCEEDED** (see
+[Results](#results-2026-10-03)). Battery payload semantics are **NOT proven**. No further
+runs, commands or decoding are authorized without a new architect decision.
 
 Implementation: [`ios/SignsOfVital-M1.swiftpm/`](../../ios/SignsOfVital-M1.swiftpm/) (separate
 Swift Playgrounds app; the M0 project stays passive and untouched — ADR-006).
 Experimental and **non-medical**.
 
-## Hypothesis (unproven on H59B)
+## Hypothesis (framing supported by M1; payload meaning unproven)
 
 The H59B answers a single 16-byte battery request written to the UART-style channel with a
 notification on the paired notify characteristic. The framing rules below come from our
@@ -110,14 +110,59 @@ outcome is recorded in the repository.
 - `sh ios/scripts/check_m1_gate.sh` — static guard: exactly one `writeValue`, inside the
   confirm-and-send method with the fixed request, one caller (the confirmation button),
   single `connect`, no prohibited channels/APIs, no logging calls.
-- The app has not been compiled by an agent (no Apple toolchain); first compile is on the iPad.
+- The app has not been compiled by an agent (no Apple toolchain). It **compiled and ran on
+  Dana's iPad on 2026-10-03.**
+
+## Results (2026-10-03)
+
+Run by Dana on the iPad (Swift Playgrounds), app compiled from branch
+`claude/m0-5-m1-battery-prep` (PR #5). Summarized outcome only — **raw response bytes are
+private and deliberately not recorded anywhere in the repository.**
+
+Procedure: Bluetooth permission granted, Bluetooth powered on; Dana manually scanned,
+selected the Bionny 4.0, connected, saw **all eight send preconditions green** (UART service,
+write characteristic, write property, notify characteristic, subscription confirmed,
+connection active, not previously sent, not aborted), tapped **Prepare battery query**, then
+**Send once** exactly once. No automatic send.
+
+| Check | Outcome |
+|---|---|
+| Requests transmitted | Exactly **one** (`0x03` battery request, 16 bytes) |
+| ATT write (`.withResponse`) | **Acknowledged** by the peripheral |
+| Notification after query | Arrived immediately |
+| Length = 16 | **Pass** |
+| Byte 0 = `0x03` | **Pass** |
+| Checksum: sum(bytes 0–14) mod 256 | **Pass** (our independent rule) |
+| Framing vs. hypothesis | **Compatible** |
+| Pairing / authentication prompt | None |
+| Security (ATT) errors | None |
+| Retries | None |
+| `FEE7` / `DE5BF72x` interaction | None |
+
+**Conclusion (architect-authorized):** the M1 transport/framing proof succeeded on this
+H59B (`H59B_V1.0`, firmware `H59B_1.00.00_260402`). The confirmed UART channel accepts our
+independently constructed `0x03` request, the device acknowledges the write, and it returns a
+corresponding 16-byte `0x03` notification that satisfies our checksum rule. This is stronger
+evidence of H59 protocol compatibility than M0 provided — for this one command and frame shape.
+
+**Not established:**
+
+- **Battery value.** The response payload contains a non-zero byte that *could* be a battery
+  level. Its position, meaning and scale are **UNKNOWN**; the value is intentionally not
+  recorded. No decoder or "Battery %" UI exists or is authorized. A separate
+  architect-approved experiment is required before any battery decoding is accepted.
+- **Unsolicited notifications.** Notifications with a *different* command/type byte arrived on
+  `6E400003` both before and after the query without any request from us. Their meaning is
+  **UNKNOWN**; they are not decoded, acted on or recorded.
+- Generalization to any other command, the payload layout of other commands, or other firmware.
 
 ## Remaining unknowns
 
-- Whether H59B honours command `0x03` at all, or requires pairing/authentication first.
-- Whether the checksum and 16-byte framing hold on H59B (H59B ≠ H59_V2.0).
+Resolved by M1 (this device/firmware): H59B honours `0x03` without pairing/authentication;
+16-byte framing and checksum hold for the `0x03` response; `.withResponse` writes are accepted
+on `6E400002`; spontaneous notifications do occur on `6E400003`. Still unknown:
+
 - Response layout: which byte, if any, is the battery level, and its scale.
-- Whether `.withResponse` is accepted by this characteristic on this firmware (advertises
-  both write types per M0).
-- Whether spontaneous notifications exist on `6E400003` before any query.
-- Whether the operator's iPad build behaves as expected (never compiled by an agent).
+- Meaning of the unsolicited notifications (different command/type byte) on `6E400003`.
+- Whether framing/checksum hold for any other command (none authorized).
+- Whether the XCTest suite passes (`swift test` not yet run on a Swift toolchain).
