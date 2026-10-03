@@ -2,7 +2,7 @@
 
 ## Next — M1.1 architect review (current)
 
-- [ ] Architect: review the M1.1 design PR (`claude/m1-1-battery-semantics`,
+- [ ] Architect: review M1.1 design PR #7 (`claude/m1-1-battery-semantics`,
   `docs/protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`) and answer its §15 questions.
   M1.1 is NOT executed; no device command is authorized until a separate explicit GO.
 - [ ] Run `swift test --package-path ios/SignsOfVital-M1Tests` on a Mac/Linux Swift toolchain

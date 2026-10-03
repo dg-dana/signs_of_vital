@@ -72,11 +72,11 @@ GitHub is the single source of truth; no manual copy/paste of Swift code.
 
 Last completed:
 - M1 physical run (2026-10-03), merged via PR #5 (handoff PR #6).
-- M1.1 design + preparation on branch `claude/m1-1-battery-semantics` (PR open for architect
+- M1.1 design + preparation on branch `claude/m1-1-battery-semantics` (PR #7, open for architect
   review): experiment doc, display-only app change, stronger guards, tests.
 
 Current working branch / PR:
-- `claude/m1-1-battery-semantics`, open PR (not merged).
+- `claude/m1-1-battery-semantics`, PR #7 (open, not merged).
 
 Current blocker:
 - Architect review of the M1.1 design, including its open questions (§15: private worksheet,
@@ -84,7 +84,7 @@ Current blocker:
 - `swift test` has not been run (no Swift toolchain for agents); it must pass before any GO.
 
 Next action:
-- Architect reviews the M1.1 PR. Physical execution needs a **separate explicit GO** after review.
+- Architect reviews PR #7 (M1.1). Physical execution needs a **separate explicit GO** after review.
 
 Do NOT:
 - run M1.1, send another battery query, or any other H59 command, without that explicit GO
