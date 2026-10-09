@@ -1,9 +1,12 @@
 # M1.1 — Battery Payload Semantics Experiment
 
-Status: **DESIGN REVIEW APPROVED by the architect (decisions in §15) — NOT EXECUTED.**
-Physical execution is **NOT AUTHORIZED**. The XCTest suite has passed in CI (§13); a final
-architect review and a **separate explicit architect GO** are still required. Until then, no `0x03` (or any other)
-transmission is authorized.
+Status: **DESIGN APPROVED — PARTIALLY EXECUTED: 2 of 8 transmissions used (O1, O2); O3 NOT
+performed and NOT authorized.** No verdict yet (sufficiency in §8 not met). Sanitized progress
+and handoff: [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md). Any further `0x03` (or other)
+transmission needs the §7 preconditions verified and a **new explicit architect GO**.
+
+The design, thresholds and criteria below are unchanged since approval (§15). The XCTest suite
+has passed in CI (§13).
 
 Experimental and **non-medical**. This is **not** M2: no protocol layer, no decoder, no
 "Battery %" feature.
@@ -244,17 +247,28 @@ rejected.
 
 ## 14. Results
 
-**NOT EXECUTED.** No M1.1 transmission has taken place. This section is filled in only after
-an architect GO and execution, using the sanitized format in §10.
+**PARTIALLY EXECUTED (as of 2026-10-09).** Sanitized format per §10; context, validity
+checklist and UNVERIFIED items are in [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md).
+Observations are **provisional** until the architect accepts them as valid.
+
+| Obs | Date | Vendor reference | Candidate index 1 | Flags |
+|---|---|---|---|---|
+| O1 | 2026-10-04 | 100% | 100 | One write ack'd, one framing-compatible `0x03` response, checksum OK; unsolicited non-`0x03` notification seen (not interpreted); reference bracket UNVERIFIED |
+| O2 | 2026-10-05 | A = 100%, B = 100% (difference 0) | 100 | One write ack'd, one framing-compatible `0x03` response, checksum OK; **additional framing-incompatible, checksum-OK notification ~12 s later (not a second transmission; not decoded)** |
+
+Reference-only checkpoint 2026-10-09: vendor app shows 93%. **Not an observation; no query sent.**
 
 | Item | Value |
 |---|---|
-| Transmissions (of max 8) | — |
-| Valid observations | — |
-| Reference spread / distinct levels / upward change / repeat | — |
-| Per-position classification | — |
-| Candidate index | — |
-| Verdict (SUPPORTED / INCONCLUSIVE / REJECTED) | — |
+| Transmissions (of max 8) | **2** (O1, O2) |
+| Valid observations | **at most 2, provisional** (need ≥ 5) |
+| Reference spread / distinct levels / upward change / repeat | spread 0 / 1 / none / O1–O2 repeat consistent (index 1 equal) |
+| Per-position classification | not yet recorded |
+| Candidate index | index 1 observed = 100 in O1 and O2 (not a finding: both at the same reference level) |
+| Verdict (SUPPORTED / INCONCLUSIVE / REJECTED) | **none yet** — sufficiency not met |
+
+Next: O3 only when the vendor app shows roughly 45–70%, all preconditions are verified, and a
+new explicit architect GO is given.
 
 ## 15. Architect decisions (design review, approved)
 
