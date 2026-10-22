@@ -118,10 +118,11 @@ Last completed:
 - 2026-10-22: Revision 1 approved and merged (PR #9, `c69c024`); status follow-up PR #10 (`15f4ccb`).
 - 2026-10-22: M1.1 O3 performed (transmission 3). Sanitized result and V1–V9 check:
   `docs/protocol/M1_1_PROGRESS_HANDOFF.md`. O3 record merged in PR #11 (`4011f59`).
-- 2026-10-22: architect ruled **O3 VALID** (records-based confirmation; all V1–V9 MET).
+- 2026-10-22: architect ruled **O3 VALID** (records-based confirmation; all V1–V9 MET); recorded
+  in PR #12 (merge `5f2393c`).
 
 Current working branch / PR:
-- `docs/o3-valid-acceptance` (docs-only O3 acceptance record; not merged without architect review).
+- None open. Next work starts from `main`.
 
 M1.1 status:
 - Revision 1 in force (ADR-007).

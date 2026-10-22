@@ -2,8 +2,6 @@
 
 ## Next — M1.1 PAUSED (O3 VALID; awaiting O3r readiness assessment; O3r NOT AUTHORIZED)
 
-- [ ] Architect: review the docs-only O3 acceptance PR (`docs/o3-valid-acceptance`). Do not merge
-  without approval.
 - [ ] O3r readiness assessment (operator): no charging since O3 (same discharge cycle), ≥ 30 min
   after O3, fresh vendor Reference A within 58–62%, all §6–§7 / V1–V9 conditions. Then request a
   **new written architect GO specifically for O3r**. Not authorized now; no BLE command. If the band
