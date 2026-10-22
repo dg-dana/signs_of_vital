@@ -1,16 +1,17 @@
 # TODO
 
-## Next — M1.1 PAUSED (O3 VALID; awaiting O3r readiness assessment; O3r NOT AUTHORIZED)
+## Next — M1.1 PAUSED (O3 + O3r VALID; awaiting O4 readiness assessment; O4 NOT AUTHORIZED)
 
-- [ ] Architect: review the docs-only O3 acceptance PR (`docs/o3-valid-acceptance`). Do not merge
-  without approval.
-- [ ] O3r readiness assessment (operator): no charging since O3 (same discharge cycle), ≥ 30 min
-  after O3, fresh vendor Reference A within 58–62%, all §6–§7 / V1–V9 conditions. Then request a
-  **new written architect GO specifically for O3r**. Not authorized now; no BLE command. If the band
-  was charged or Reference A is outside 58–62%, do not proceed: escalate to the architect for a
-  planning decision (§16.6). 3 of 8 transmissions used; 1 of 5 valid counted (O3).
-- [ ] After O3r only, and only under the GO terms the architect sets: O4, O5, O6 per experiment
-  §16.6 (early stop §16.7). Record sanitized results in §14.
+- [ ] Architect: review the docs-only O3r acceptance PR (`claude/o3r-acceptance-docs-jy0iq5`). Do
+  not merge without approval.
+- [ ] O4 readiness assessment (operator): vendor Reference A of 40% or lower (≥ 15 points below
+  O3's 60), reached through normal use without discharging below ~20%; ≥ 30 min after O3r; all
+  §6–§7 / V1–V9 conditions. Then request a **new written architect GO specifically for O4**. Not
+  authorized now; no BLE command. If the range cannot be reached safely, escalate to the architect
+  (§16.6–§16.7). 4 of 8 transmissions used (4 remaining); 2 of 5 valid counted (O3, O3r);
+  same-state repeat satisfied. H1 NOT YET PROVEN.
+- [ ] After O4 only, and only under the GO terms the architect sets: O5, O6 per experiment §16.6
+  (early stop §16.7). Record sanitized results in §14.
 - [ ] Open question (unsolicited UART notifications with a different command/type byte): decide
   whether/when to study them. Do not decode or act on them until authorized.
 - [ ] Open question: `FEE7` service (`FEA1`/`FEC9`/`FEA2`) is not covered by OpenH59 notes; decide

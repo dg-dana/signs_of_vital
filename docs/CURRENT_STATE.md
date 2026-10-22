@@ -19,8 +19,8 @@ Concise technical checkpoint. Experimental research project — wearable reading
   (16-byte framing, command byte echo, checksum rule all held). Not proven for any other command.
 - Battery payload semantics: **NOT proven** (no byte is accepted as battery %). M1.1 is designed
   to test this: [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
-  (design **APPROVED**; **PARTIALLY EXECUTED**: O1, O2, O3 done; **O3 VALID** (1 of 5 valid);
-  **PAUSED**, awaiting O3r readiness assessment; O3r not authorized; progress: [`M1_1_PROGRESS_HANDOFF.md`](protocol/M1_1_PROGRESS_HANDOFF.md);
+  (design **APPROVED**; **PARTIALLY EXECUTED**: O1, O2, O3, O3r done; **O3 and O3r VALID** (2 of 5
+  valid); **PAUSED**, awaiting O4 readiness assessment; O4 not authorized; progress: [`M1_1_PROGRESS_HANDOFF.md`](protocol/M1_1_PROGRESS_HANDOFF.md);
   **Revision 1** in the experiment's §16 is **APPROVED and IN FORCE** (2026-10-22, PR #9); analysis:
   [`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md)).
 - The Bionny measurement protocol is **not decoded**. Unsolicited UART notifications with a
@@ -75,7 +75,20 @@ Concise technical checkpoint. Experimental research project — wearable reading
   sufficiency. The operator confirmed the outstanding items from records; **all V1–V9 are MET**.
   No additional BLE transmission occurred. Valid observations counted: **1 of 5**.
 
-  **M1.1 PAUSED — awaiting O3r readiness assessment. O3r NOT AUTHORIZED. M2+ NOT AUTHORIZED.**
+  (Status after O3, superseded by O3r below: paused awaiting O3r readiness; O3r not authorized.)
+- **M1.1 O3r performed** (transmission 4 of 8; 4 remaining; same app, send path unchanged) under a
+  separate written architect GO:
+  - Reference A = B = 59%.
+  - ATT write acknowledged; exactly one timely framing-compatible `0x03` response, checksum OK.
+  - 1 unrelated notification (U) before the query (not decoded); none after the query; no M, Z or
+    duplicate R; no pairing/security error; no ANOMALY; N8 recorded; vendor app reconnected.
+  - Candidate index 1 = 59.
+
+  **Architect ruling: O3r is VALID** (based on screenshots and operator reports; no additional
+  query during validation). Valid observations counted: **2 of 5**. Same-state repeat satisfied by
+  O3/O3r. The 60 → 59 comparison is consistent with the candidate byte but does not establish H1.
+
+  **M1.1 PAUSED — awaiting O4 readiness assessment. O4 NOT AUTHORIZED. M2+ NOT AUTHORIZED.**
   H1 NOT YET PROVEN. The app is unchanged since O2.
 - M1.1 preparation (display-only, send path unchanged): the M1 app shows `0x03` payload bytes 1–14
   by position, with no hex. The guard was strengthened (fixed `0x03` only, no decoder/percent UI, no
@@ -94,12 +107,13 @@ M0.5 = COMPLETE
 M1 physical experiment = COMPLETE / SUCCESSFUL (2026-10-03)
   Transport + framing hypothesis supported on H59B (0x03 only)
   Battery payload semantics = NOT YET PROVEN
-M1.1 battery payload semantics = PAUSED (awaiting O3r readiness assessment)
-  O1 (2026-10-04) + O2 (2026-10-05) + O3 (2026-10-22) done; 3 of 8 transmissions (5 remaining)
-  Valid observations = 1 of 5 (O3); H1 = NOT YET PROVEN; no verdict
+M1.1 battery payload semantics = PAUSED (awaiting O4 readiness assessment)
+  O1 (2026-10-04) + O2 (2026-10-05) + O3 (2026-10-22) + O3r done; 4 of 8 transmissions (4 remaining)
+  Valid observations = 2 of 5 (O3, O3r); same-state repeat = satisfied (O3/O3r)
+  H1 = NOT YET PROVEN; no verdict
   Revision 1 (experiment §16) = APPROVED, IN FORCE (2026-10-22; PR #9, merge c69c024)
-  O1 = HISTORICAL (not counted); O2 = PROVISIONAL (not counted); O3 = VALID (counted)
-  O3r = NOT authorized; no device command authorized now
+  O1 = HISTORICAL (not counted); O2 = PROVISIONAL (not counted); O3 = VALID (counted); O3r = VALID (counted)
+  O4 = NOT authorized; no device command authorized now
 M2+  = NOT AUTHORIZED
 ```
 
@@ -118,31 +132,35 @@ Last completed:
 - 2026-10-22: Revision 1 approved and merged (PR #9, `c69c024`); status follow-up PR #10 (`15f4ccb`).
 - 2026-10-22: M1.1 O3 performed (transmission 3). Sanitized result and V1–V9 check:
   `docs/protocol/M1_1_PROGRESS_HANDOFF.md`. O3 record merged in PR #11 (`4011f59`).
-- 2026-10-22: architect ruled **O3 VALID** (records-based confirmation; all V1–V9 MET).
+- 2026-10-22: architect ruled **O3 VALID** (records-based confirmation; all V1–V9 MET); merged in
+  PR #12 (`5f2393c`).
+- O3r performed (transmission 4) under a separate written architect GO; architect ruled **O3r
+  VALID**. Same-state repeat satisfied by O3/O3r.
 
 Current working branch / PR:
-- `docs/o3-valid-acceptance` (docs-only O3 acceptance record; not merged without architect review).
+- `claude/o3r-acceptance-docs-jy0iq5` (docs-only O3r acceptance record; not merged without
+  architect review).
 
 M1.1 status:
 - Revision 1 in force (ADR-007).
-- O1 historical, not counted; O2 provisional, not counted; **O3 VALID, counted**.
-- 3 of 8 transmissions used; 5 remaining. Valid observations: **1 of 5**; 4 still needed
-  (O3r, O4, O5, O6) with 1 spare. H1 NOT YET PROVEN.
+- O1 historical, not counted; O2 provisional, not counted; **O3 VALID, counted; O3r VALID, counted**.
+- 4 of 8 transmissions used; 4 remaining. Valid observations: **2 of 5**; 3 still needed
+  (O4, O5, O6) with 1 spare. Same-state repeat satisfied. H1 NOT YET PROVEN.
 
 Current blocker:
-- O3r readiness assessment, then a new written architect GO specifically for O3r.
+- O4 readiness assessment, then a new written architect GO specifically for O4.
 
 Next action:
-- Operator: O3r readiness check — no charging since O3 (same discharge cycle), ≥ 30 min after O3,
-  fresh vendor Reference A within 58–62%, all readiness/validity conditions. Then request a **new
-  written architect GO for O3r**. If the band was charged or Reference A is outside 58–62%, do not
-  proceed: escalate to the architect for a planning decision. O3r is **NOT AUTHORIZED**.
-- New session: read the repository first. Do **not** ask Dana to repeat O1/O2/O3 evidence or
+- Operator: wait, through normal use only, until the vendor reference is **40% or lower** (≥ 15
+  points below O3's 60), without discharging below ~20%. Then an O4 readiness assessment (all
+  readiness/validity conditions) and a request for a **new written architect GO for O4**. O4 is
+  **NOT AUTHORIZED**; no BLE command.
+- New session: read the repository first. Do **not** ask Dana to repeat O1/O2/O3/O3r evidence or
   reconstruct old events from memory. UNVERIFIED items stay unverified.
 - M2+ remains NOT AUTHORIZED.
 
 Do NOT:
-- run O3r or any further M1.1 query (or send another battery query), or any other H59 command, without a new explicit written GO
+- run O4 or any further M1.1 query (or send another battery query), or any other H59 command, without a new explicit written GO
 - claim any response byte is battery % or add a battery decoder/UI
 - decode, interpret or act on the unsolicited UART notifications (including the O1/O2 extra ones);
   Revision 1 records only counts/flags (N8)
