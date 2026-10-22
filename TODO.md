@@ -1,14 +1,14 @@
 # TODO
 
-## Next — M1.1 PAUSED AFTER O3 (awaiting architect review of O3 validity; O3r NOT AUTHORIZED)
+## Next — M1.1 PAUSED (O3 VALID; awaiting O3r readiness assessment; O3r NOT AUTHORIZED)
 
-- [ ] Architect: review the docs-only O3 record PR (`claude/m1-1-o3-results`) and rule on O3's
-  validity. V9 is met; V1, V3 (partly), V4, V6 and V7 are UNVERIFIED. See
-  `docs/protocol/M1_1_PROGRESS_HANDOFF.md` ("O3 validity"). Do not merge without approval.
-- [ ] O3r: readiness check (same discharge cycle as O3, ≥ 30 min after it, reference within ±2 of
-  60, all §6–§7 / V1–V9 preconditions), then a **new explicit written GO**. Not authorized now. If
-  the band is charged or leaves 58–62 first, the architect decides how the repeat is replanned
-  (§16.6). 3 of 8 transmissions used; 0 valid counted.
+- [ ] Architect: review the docs-only O3 acceptance PR (`docs/o3-valid-acceptance`). Do not merge
+  without approval.
+- [ ] O3r readiness assessment (operator): no charging since O3 (same discharge cycle), ≥ 30 min
+  after O3, fresh vendor Reference A within 58–62%, all §6–§7 / V1–V9 conditions. Then request a
+  **new written architect GO specifically for O3r**. Not authorized now; no BLE command. If the band
+  was charged or Reference A is outside 58–62%, do not proceed: escalate to the architect for a
+  planning decision (§16.6). 3 of 8 transmissions used; 1 of 5 valid counted (O3).
 - [ ] After O3r only, and only under the GO terms the architect sets: O4, O5, O6 per experiment
   §16.6 (early stop §16.7). Record sanitized results in §14.
 - [ ] Open question (unsolicited UART notifications with a different command/type byte): decide

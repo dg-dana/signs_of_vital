@@ -1,7 +1,7 @@
 # M1.1 — Progress and Handoff (sanitized)
 
-Checkpoint as of **2026-10-22, after O3**. **M1.1 PAUSED AFTER O3 — awaiting architect review of O3
-validity. O3r NOT AUTHORIZED.** Experimental and **non-medical**. The design, thresholds and
+Checkpoint as of **2026-10-22, after the O3 validity ruling**. **O3 VALID — architect accepted.
+M1.1 PAUSED — awaiting O3r readiness assessment. O3r NOT AUTHORIZED. M2+ NOT AUTHORIZED.** Experimental and **non-medical**. The design, thresholds and
 verdict rules live in [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
 and are **unchanged**; this file only records what has physically happened and what is next.
 
@@ -15,8 +15,9 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 2. **Do not ask Dana to repeat the O1/O2 evidence or to reconstruct old events from memory.** It is
    recorded here. Items marked UNVERIFIED stay unverified and are never assumed to have passed.
 3. Revision 1 (experiment §16) is **approved and in force** (2026-10-22, PR #9). O3 was performed on
-   2026-10-22 and is **provisionally successful, not yet formally VALID** (architect). The next step
-   is the architect's decision on O3's open V1–V9 items, not sending. **O3r is NOT AUTHORIZED**;
+   2026-10-22 and is **VALID — architect accepted** (2026-10-22, records-based confirmation of
+   V1–V9; no further transmission). It is the first observation counted toward sufficiency. The
+   next step is the O3r readiness assessment (below), not sending. **O3r is NOT AUTHORIZED**;
    no query is authorized now.
 4. Do not decode, interpret or study the extra notifications seen in O1/O2.
 
@@ -25,10 +26,12 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 | Item | Value |
 |---|---|
 | Transmissions used | **3 of 8** (O1, O2, O3); **5 remaining** |
-| Valid observations counted toward sufficiency (§8: ≥ 5) | **0**: O1 historical; O2 provisional; O3 provisionally successful, **not yet formally VALID** |
-| O3 | **Performed 2026-10-22** (transmission 3) under a written architect GO. Provisionally successful; V9 met; V1, V3 (partly), V4, V6, V7 unverified (below) |
-| O3r | **NOT authorized** |
+| Valid observations counted toward sufficiency (§8: ≥ 5) | **1 of 5**: O3 VALID. O1 historical, not counted; O2 provisional, not counted |
+| O3 | **VALID — architect accepted** (2026-10-22). Performed 2026-10-22 (transmission 3) under a written architect GO; V1–V9 all MET (below) |
+| O3r | **NOT authorized** — awaiting readiness assessment and a new written GO |
+| H1 | **NOT YET PROVEN** |
 | Verdict | **None.** Sufficiency not met → not yet SUPPORTED / REJECTED / INCONCLUSIVE |
+| M2+ | **NOT authorized** |
 | Battery semantics | **NOT proven** |
 
 ## Historical evidence (sanitized, as reported)
@@ -46,8 +49,9 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
   This is **consistent** with a same-state repeat. It proves nothing about battery semantics:
   both observations are at the same reference level (100%), so a constant byte would look the same.
   Because O1 is not valid (Q5), this pair **cannot** serve as the sufficiency repeat (experiment §16.5).
-- O3 at index 1: 60 vs reference 60, i.e. within the ±5 tolerance at index 1. This is **not a
-  finding**: no verdict is possible before sufficiency (§8, §9), and O3 is not yet VALID.
+- O3 at index 1: 60 vs reference 60, i.e. within the ±5 tolerance at index 1. O3 is VALID and
+  counts, but this is **not a finding** on its own: no verdict is possible before sufficiency
+  (§8, §9), and one observation at one level cannot distinguish battery % from a constant byte.
 - No other payload value is recorded in the repository (experiment §10, architect decision 2).
   Per-position classification (experiment §4) is therefore **not yet recorded**.
 
@@ -102,7 +106,34 @@ UNVERIFIED items are never assumed to have passed. The table below is the histor
 | No pairing prompt / security error / unexpected device behavior (§12) | **UNVERIFIED** (not reported either way) | **UNVERIFIED** |
 | Explicit architect GO before the run (§7) | **UNVERIFIED** in the repository | **UNVERIFIED** in the repository |
 
-## O3 validity (V1–V9, experiment §16.4) — PROVISIONALLY SUCCESSFUL, not yet formally VALID
+## O3 validity (V1–V9, experiment §16.4) — VALID, architect accepted (2026-10-22)
+
+**Architect ruling (2026-10-22, after PR #11):** O3 is **formally VALID** and counts toward H1
+sufficiency. All V1–V9 conditions are **MET**. This is a **records-based confirmation**: the
+operator confirmed the outstanding items to the architect in ChatGPT from existing records. **No
+additional BLE transmission occurred.**
+
+| # | Condition | Final status | Evidence (sanitized) |
+|---|---|---|---|
+| V1 | Exactly one transmission, fresh launch, worksheet row before Send | **MET** | Fresh app launch; numbered O3 worksheet row prepared before Send; one query, no retry |
+| V2 | ATT write acknowledged | **MET** | ATT write acknowledged |
+| V3 | Exactly one timely compatible R; no M, Z, duplicate R or U; N8 recorded | **MET** | Exactly one timely framing-compatible response; no additional notifications or ANOMALY warning; N8 recorded before the app was closed |
+| V4 | No pairing prompt, security error or unexpected device behavior | **MET** | None occurred |
+| V5 | A and B within 15 min, \|A − B\| ≤ 5 | **MET** | Reference A = 60%, B = 60%, within 15 minutes |
+| V6 | Band off the charger ≥ 15 min | **MET** | Off the charger at least 15 minutes |
+| V7 | Vendor app disconnected during the query, reconnected afterwards | **MET** | Disconnected during O3; successfully reconnected afterwards |
+| V8 | ≥ 30 min since the previous M1.1 query | **MET** | More than 30 minutes since O2 (2026-10-05) |
+| V9 | Written architect GO before the run | **MET** | Written architect GO issued in ChatGPT before O3 |
+
+V1–V9 are the protocol validity conditions of experiment §16.4. They are **distinct from the app's
+eight on-screen send-gate checks** (BLE readiness preconditions), which do not establish any V
+item. Sanitized result: Reference A/B 60% / 60%; candidate index 1 = 60; exactly one timely
+framing-compatible response; no protocol abort condition reported.
+
+### Historical record — O3 check as first reported (before the ruling, PR #11)
+
+Kept unchanged as evidence of what the first report did and did not establish. Superseded by the
+ruling above for the items marked UNVERIFIED here.
 
 Evidence source: Dana's sanitized report to the agent (2026-10-22). Only what that report states is
 marked met; nothing is inferred. Per §16.4, any item that is not verified makes the observation
@@ -131,25 +162,23 @@ V9 being met does **not** establish any of V1–V8. They stand as listed above. 
 written authorization must exist before transmission. It does not need to have been committed to
 GitHub first (architect clarification, 2026-10-22).
 
-O3 counts toward the cap. It counts toward sufficiency only once the architect formally accepts
-it as VALID. A one-time, records-based confirmation of the UNVERIFIED items above is possible only
-if the architect asks for it. Missing confirmations are not inferred.
+(End of the historical record. The architect then requested and accepted the records-based
+confirmation above.)
 
-**Budget after O3 (§16.7):** 5 transmissions remain.
+O3 counts toward the cap **and** toward sufficiency.
 
-| If O3 is ruled… | Valid observations still needed | Spare transmissions |
-|---|---|---|
-| VALID | 4 (O3r, O4, O5, O6) | 1 |
-| not VALID | 5 | 0: every remaining observation would need to be VALID; any non-VALID one triggers early stop |
+**Budget after the O3 ruling (§16.7):** 5 transmissions remain. O3 is VALID, so **4 valid
+observations are still needed** (O3r, O4, O5, O6) with **1 spare** transmission. One non-VALID
+observation can be absorbed; a second triggers the early-stop check (§16.7).
 
 ## Remaining plan (Revision 1 — APPROVED, in force since 2026-10-22, PR #9)
 
 **5 transmissions remain** of the 8-transmission lifetime cap (no reset). The plan assumes
-**neither O1 nor O2 counts** (experiment §16.6). O3 has been performed (provisional):
+**neither O1 nor O2 counts** (experiment §16.6). O3 has been performed and is VALID:
 
 | Planned | State |
 |---|---|
-| O3 | Middle, 45–70 (**performed 2026-10-22**, reference 60; provisional) |
+| O3 | Middle, 45–70 (**performed 2026-10-22**, reference 60; **VALID — counted**) |
 | O3r | Same-state repeat of O3: same discharge cycle, ≥ 30 min after O3, reference within ±2 of 60 (§16.5–§16.6). **NOT AUTHORIZED** |
 | O4 | Low: ≤ 40, ≥ 15 below O3 (so ≤ 40 given O3 = 60), not below ~20 |
 | O5 | After a partial recharge: ≥ O4 + 40 and ≥ O3 + 15, i.e. ≥ 75 given O3 = 60 (revised-plan requirement, stronger than the original "≥ 15 above O4") |
@@ -165,21 +194,25 @@ sufficiency, stop and record INCONCLUSIVE.
 
 - [x] Revision 1 approved and merged (PR #9, `c69c024`).
 - [x] Middle-state reference: A = B = 60%.
-- [ ] Every §6–§7 / V1–V9 precondition verified and written down before Send. Partly; see "O3 validity".
+- [x] Every §6–§7 / V1–V9 precondition verified. Partly recorded in the first report; the rest
+  confirmed from records and accepted by the architect (2026-10-22); see "O3 validity".
 - [x] Written architect GO for O3: issued in ChatGPT before O3 (conditional), reaffirmed after the
   app's send preconditions were reported green. Recorded in GitHub afterwards (PR #11).
 
-## Gate for O3r — all must be true before any query
+## Gate for O3r — NOT AUTHORIZED; all must be true before any query
 
-- [ ] The architect has ruled on O3's validity (the UNVERIFIED V1–V9 items above).
-- [ ] O3r conditions hold: same discharge cycle as O3 (no charging since O3), ≥ 30 min after O3, and
-  a Reference A within ±2 of 60.
-- [ ] Every §6–§7 / V1–V9 precondition is verified and written down before Send.
-- [ ] A **new explicit written architect GO** for O3r exists.
+- [x] The architect has ruled on O3's validity: **VALID** (2026-10-22).
+- [ ] No charging since O3 (same discharge cycle).
+- [ ] At least 30 minutes since O3.
+- [ ] A fresh vendor Reference A within **58–62%** (±2 of O3's 60).
+- [ ] All required §6–§7 / V1–V9 readiness and validity conditions verified and written down
+  before Send.
+- [ ] A **new written architect GO issued specifically for O3r**.
 
-Timing risk (not a decision): if the band is charged, or the level leaves 58–62 before an O3r GO,
-the planned O3r can no longer be taken in this cycle. Any change to the plan or its order needs an
-architect decision (§16.6).
+The operator verifies the first four items, then requests the O3r GO. If the band has been charged
+since O3, or Reference A is outside 58–62%, **do not proceed automatically**: escalate to the
+architect for a planning decision (§16.6). Any change to the plan or its order needs an architect
+decision. No BLE command is sent before the GO.
 
 During and after any run: the manual 10-second check and N8 recording (§16.2–§16.3) are done before
 the app is closed. Abort conditions are §12 and §16.2. On any abort: stop, no retry, no workaround,
@@ -187,7 +220,7 @@ report to the architect.
 
 ## Not authorized
 
-Any query or other device command now; O3r before its gate above; decoding unsolicited or extra
+Any query or other device command now; O3r before its gate above (including its own written GO); decoding unsolicited or extra
 notifications; any battery decoder/UI; M2+; Swift changes; `FEE7` writes; `DE5BF72x`
 authentication or writes; automatic retry, polling or fuzzing.
 

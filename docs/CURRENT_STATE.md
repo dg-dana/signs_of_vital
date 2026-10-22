@@ -19,8 +19,8 @@ Concise technical checkpoint. Experimental research project — wearable reading
   (16-byte framing, command byte echo, checksum rule all held). Not proven for any other command.
 - Battery payload semantics: **NOT proven** (no byte is accepted as battery %). M1.1 is designed
   to test this: [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
-  (design **APPROVED**; **PARTIALLY EXECUTED**: O1, O2, O3 done; **PAUSED AFTER O3**, awaiting
-  architect review of O3 validity; O3r not authorized; progress: [`M1_1_PROGRESS_HANDOFF.md`](protocol/M1_1_PROGRESS_HANDOFF.md);
+  (design **APPROVED**; **PARTIALLY EXECUTED**: O1, O2, O3 done; **O3 VALID** (1 of 5 valid);
+  **PAUSED**, awaiting O3r readiness assessment; O3r not authorized; progress: [`M1_1_PROGRESS_HANDOFF.md`](protocol/M1_1_PROGRESS_HANDOFF.md);
   **Revision 1** in the experiment's §16 is **APPROVED and IN FORCE** (2026-10-22, PR #9); analysis:
   [`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md)).
 - The Bionny measurement protocol is **not decoded**. Unsolicited UART notifications with a
@@ -68,13 +68,15 @@ Concise technical checkpoint. Experimental research project — wearable reading
   - No additional notifications in the event log as provided; no retry.
   - Candidate index 1 = 60.
   
-  Architect: **provisionally successful, not yet formally VALID**.
-  - V9 is MET: a written architect GO was issued in ChatGPT before O3 and recorded in GitHub
-    afterwards.
-  - V1, V3 (partly), V4, V6 and V7 remain UNVERIFIED (handoff doc).
-  
-  **M1.1 PAUSED AFTER O3 — awaiting architect review of O3 validity. O3r NOT AUTHORIZED.**
-  The app is unchanged since O2.
+  First recorded (PR #11) as **provisionally successful, not yet formally VALID**: V9 met; V1,
+  V3 (partly), V4, V6 and V7 unverified at that time.
+
+  **Architect ruling (2026-10-22, after PR #11): O3 is formally VALID** and counts toward H1
+  sufficiency. The operator confirmed the outstanding items from records; **all V1–V9 are MET**.
+  No additional BLE transmission occurred. Valid observations counted: **1 of 5**.
+
+  **M1.1 PAUSED — awaiting O3r readiness assessment. O3r NOT AUTHORIZED. M2+ NOT AUTHORIZED.**
+  H1 NOT YET PROVEN. The app is unchanged since O2.
 - M1.1 preparation (display-only, send path unchanged): the M1 app shows `0x03` payload bytes 1–14
   by position, with no hex. The guard was strengthened (fixed `0x03` only, no decoder/percent UI, no
   raw bytes in the log/UI/clipboard). The code as run in M1 is at merge commit `63de169`.
@@ -92,10 +94,12 @@ M0.5 = COMPLETE
 M1 physical experiment = COMPLETE / SUCCESSFUL (2026-10-03)
   Transport + framing hypothesis supported on H59B (0x03 only)
   Battery payload semantics = NOT YET PROVEN
-M1.1 battery payload semantics = PAUSED AFTER O3 (awaiting architect review of O3 validity)
-  O1 (2026-10-04) + O2 (2026-10-05) + O3 (2026-10-22) done; 3 of 8 transmissions; 0 valid counted; no verdict
+M1.1 battery payload semantics = PAUSED (awaiting O3r readiness assessment)
+  O1 (2026-10-04) + O2 (2026-10-05) + O3 (2026-10-22) done; 3 of 8 transmissions (5 remaining)
+  Valid observations = 1 of 5 (O3); H1 = NOT YET PROVEN; no verdict
   Revision 1 (experiment §16) = APPROVED, IN FORCE (2026-10-22; PR #9, merge c69c024)
-  O3 = performed, provisionally successful (not yet VALID); O3r = NOT authorized; no device command authorized now
+  O1 = HISTORICAL (not counted); O2 = PROVISIONAL (not counted); O3 = VALID (counted)
+  O3r = NOT authorized; no device command authorized now
 M2+  = NOT AUTHORIZED
 ```
 
@@ -113,24 +117,26 @@ Last completed:
 - M1 physical run (2026-10-03), PR #5. M1.1 design + preparation, PR #7. O1/O2 handoff, PR #8.
 - 2026-10-22: Revision 1 approved and merged (PR #9, `c69c024`); status follow-up PR #10 (`15f4ccb`).
 - 2026-10-22: M1.1 O3 performed (transmission 3). Sanitized result and V1–V9 check:
-  `docs/protocol/M1_1_PROGRESS_HANDOFF.md`.
+  `docs/protocol/M1_1_PROGRESS_HANDOFF.md`. O3 record merged in PR #11 (`4011f59`).
+- 2026-10-22: architect ruled **O3 VALID** (records-based confirmation; all V1–V9 MET).
 
 Current working branch / PR:
-- `claude/m1-1-o3-results` (docs-only O3 record; not merged without architect review).
+- `docs/o3-valid-acceptance` (docs-only O3 acceptance record; not merged without architect review).
 
 M1.1 status:
 - Revision 1 in force (ADR-007).
-- O1 historical; O2 provisional; O3 provisionally successful, not yet formally VALID. None counted.
-- 3 of 8 transmissions used; 5 remaining. If O3 becomes VALID: 4 valid observations still needed
-  (1 spare). If not: 5 needed (0 spare).
+- O1 historical, not counted; O2 provisional, not counted; **O3 VALID, counted**.
+- 3 of 8 transmissions used; 5 remaining. Valid observations: **1 of 5**; 4 still needed
+  (O3r, O4, O5, O6) with 1 spare. H1 NOT YET PROVEN.
 
 Current blocker:
-- The architect's review of O3 validity (V9 met; V1, V3 partly, V4, V6, V7 UNVERIFIED).
+- O3r readiness assessment, then a new written architect GO specifically for O3r.
 
 Next action:
-- Architect: rule on O3's validity. Then, separately, an O3r readiness check (same discharge cycle,
-  ≥ 30 min after O3, reference within ±2 of 60) and a **new explicit written GO**. O3r is **NOT
-  AUTHORIZED**.
+- Operator: O3r readiness check — no charging since O3 (same discharge cycle), ≥ 30 min after O3,
+  fresh vendor Reference A within 58–62%, all readiness/validity conditions. Then request a **new
+  written architect GO for O3r**. If the band was charged or Reference A is outside 58–62%, do not
+  proceed: escalate to the architect for a planning decision. O3r is **NOT AUTHORIZED**.
 - New session: read the repository first. Do **not** ask Dana to repeat O1/O2/O3 evidence or
   reconstruct old events from memory. UNVERIFIED items stay unverified.
 - M2+ remains NOT AUTHORIZED.
