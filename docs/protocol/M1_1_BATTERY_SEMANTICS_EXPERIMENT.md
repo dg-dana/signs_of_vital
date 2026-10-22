@@ -1,8 +1,9 @@
 # M1.1 — Battery Payload Semantics Experiment
 
-Status: **DESIGN APPROVED — PARTIALLY EXECUTED: 3 of 8 transmissions used (O1, O2, O3) — PAUSED
-(2026-10-22) after the O2 anomaly; O3 performed 2026-10-22 (transmission 3, provisionally successful); O3r NOT authorized.** No verdict yet
-(sufficiency in §8 not met). Sanitized progress and handoff:
+Status: **DESIGN APPROVED — PARTIALLY EXECUTED: 3 of 8 transmissions used (O1, O2, O3); 5
+remaining. M1.1 PAUSED AFTER O3 — awaiting architect review of O3 validity. O3r NOT AUTHORIZED.**
+No verdict yet (sufficiency in §8 not met). The O2 anomaly and the resulting protocol review
+remain documented as historical evidence (§12 note, §16, handoff). Sanitized progress and handoff:
 [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md).
 
 **Revision 1** (§16) is **APPROVED and IN FORCE**. The architect approved it on 2026-10-22, and
@@ -275,7 +276,7 @@ Observations are **provisional** until the architect accepts them as valid.
 |---|---|---|---|---|
 | O1 | 2026-10-04 | 100% | 100 | **HISTORICAL — not valid for H1** (architect Q5). One write ack'd, one framing-compatible `0x03` response, checksum OK; unsolicited non-`0x03` notification seen (not interpreted); Reference B and other conditions undocumented. Transmission counted. |
 | O2 | 2026-10-05 | A = 100%, B = 100% (difference 0) | 100 | **PROVISIONAL — not counted** (architect Q6). One write ack'd, one framing-compatible `0x03` response, checksum OK; additional framing-incompatible, checksum-OK notification ~12 s later (not a second transmission; not decoded; under R2 not itself a duplicate valid response); other validity conditions UNVERIFIED. Transmission counted. |
-| O3 | 2026-10-22 | A = 60%, B = 60% (difference 0) | 60 | **PROVISIONALLY SUCCESSFUL — not yet formally VALID** (architect). Transmission 3. One write ack'd; exactly one framing-compatible `0x03` response, checksum OK, within the window (displayed ≤ 9 s); no additional notifications in the log as provided; no retry. V1 (fresh launch, worksheet row), V3 (log completeness, N8), V4, V6, V7 and V9 (written GO in the repository) are UNVERIFIED. |
+| O3 | 2026-10-22 | A = 60%, B = 60% (difference 0) | 60 | **PROVISIONALLY SUCCESSFUL — not yet formally VALID** (architect). Transmission 3. One write ack'd; exactly one framing-compatible `0x03` response, checksum OK, within the window (displayed ≤ 9 s); no additional notifications in the log as provided; no retry. V9 MET (written architect GO issued in ChatGPT before O3; not previously recorded in GitHub). V1 (fresh launch, worksheet row), V3 (log completeness, N8), V4, V6 and V7 are UNVERIFIED. |
 
 Reference-only checkpoints: 2026-10-09 vendor app shows 93%; later, before O3, 60% (date not recorded).
 **Not observations; no query sent.**

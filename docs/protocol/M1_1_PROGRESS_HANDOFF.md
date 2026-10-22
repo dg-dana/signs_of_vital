@@ -1,6 +1,7 @@
 # M1.1 — Progress and Handoff (sanitized)
 
-Checkpoint as of **2026-10-22, after O3** (M1.1 **PAUSED**; O3r NOT AUTHORIZED). Experimental and **non-medical**. The design, thresholds and
+Checkpoint as of **2026-10-22, after O3**. **M1.1 PAUSED AFTER O3 — awaiting architect review of O3
+validity. O3r NOT AUTHORIZED.** Experimental and **non-medical**. The design, thresholds and
 verdict rules live in [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
 and are **unchanged**; this file only records what has physically happened and what is next.
 
@@ -25,7 +26,7 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 |---|---|
 | Transmissions used | **3 of 8** (O1, O2, O3); **5 remaining** |
 | Valid observations counted toward sufficiency (§8: ≥ 5) | **0**: O1 historical; O2 provisional; O3 provisionally successful, **not yet formally VALID** |
-| O3 | **Performed 2026-10-22** (transmission 3). Provisionally successful; V1–V9 not all verified (below) |
+| O3 | **Performed 2026-10-22** (transmission 3) under a written architect GO. Provisionally successful; V9 met; V1, V3 (partly), V4, V6, V7 unverified (below) |
 | O3r | **NOT authorized** |
 | Verdict | **None.** Sufficiency not met → not yet SUPPORTED / REJECTED / INCONCLUSIVE |
 | Battery semantics | **NOT proven** |
@@ -122,9 +123,13 @@ UNVERIFIABLE (not counted) until the architect decides.
 | V7 | Vendor app disconnected during the query | **UNVERIFIED** | Not stated |
 | V7 | Vendor app reconnected afterwards | **UNVERIFIED** (Reference B was read, but reconnection is not explicitly confirmed) | Not stated |
 | V8 | ≥ 30 min since the previous M1.1 query | **Met** | The repository records the previous query (O2) on 2026-10-05 |
-| V9 | Written architect GO before the run | **UNVERIFIED in the repository** (no written O3 GO is recorded here) | Repository |
+| V9 | Written architect GO before the run | **MET.** Written architect GO: **EXISTS**, issued in ChatGPT before O3 (conditional). The architect reaffirmed authorization after the operator reported the app's eight on-screen send preconditions (BLE readiness), which are not the V1–V8 items. GitHub record: **not previously recorded**; recorded here on 2026-10-22 | Architect confirmation (2026-10-22, PR #11 review) |
 
 Also within plan: the reference 60 is inside the O3 range (45–70, §16.6).
+
+V9 being met does **not** establish any of V1–V8. They stand as listed above. Per §16.4, the
+written authorization must exist before transmission. It does not need to have been committed to
+GitHub first (architect clarification, 2026-10-22).
 
 O3 counts toward the cap. It counts toward sufficiency only once the architect formally accepts
 it as VALID. A one-time, records-based confirmation of the UNVERIFIED items above is possible only
@@ -161,7 +166,8 @@ sufficiency, stop and record INCONCLUSIVE.
 - [x] Revision 1 approved and merged (PR #9, `c69c024`).
 - [x] Middle-state reference: A = B = 60%.
 - [ ] Every §6–§7 / V1–V9 precondition verified and written down before Send. Partly; see "O3 validity".
-- [ ] Written architect GO for O3 recorded in the repository. **UNVERIFIED in the repository.**
+- [x] Written architect GO for O3: issued in ChatGPT before O3 (conditional), reaffirmed after the
+  app's send preconditions were reported green. Recorded in GitHub afterwards (PR #11).
 
 ## Gate for O3r — all must be true before any query
 

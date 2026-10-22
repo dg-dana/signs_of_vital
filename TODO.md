@@ -1,10 +1,10 @@
 # TODO
 
-## Next — M1.1 PAUSED after O3 (O3r NOT AUTHORIZED)
+## Next — M1.1 PAUSED AFTER O3 (awaiting architect review of O3 validity; O3r NOT AUTHORIZED)
 
 - [ ] Architect: review the docs-only O3 record PR (`claude/m1-1-o3-results`) and rule on O3's
-  validity. UNVERIFIED V1–V9 items are listed in `docs/protocol/M1_1_PROGRESS_HANDOFF.md` ("O3
-  validity"). Do not merge without approval.
+  validity. V9 is met; V1, V3 (partly), V4, V6 and V7 are UNVERIFIED. See
+  `docs/protocol/M1_1_PROGRESS_HANDOFF.md` ("O3 validity"). Do not merge without approval.
 - [ ] O3r: readiness check (same discharge cycle as O3, ≥ 30 min after it, reference within ±2 of
   60, all §6–§7 / V1–V9 preconditions), then a **new explicit written GO**. Not authorized now. If
   the band is charged or leaves 58–62 first, the architect decides how the repeat is replanned

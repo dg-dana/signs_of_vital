@@ -19,7 +19,8 @@ Concise technical checkpoint. Experimental research project — wearable reading
   (16-byte framing, command byte echo, checksum rule all held). Not proven for any other command.
 - Battery payload semantics: **NOT proven** (no byte is accepted as battery %). M1.1 is designed
   to test this: [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
-  (design **APPROVED**; **PARTIALLY EXECUTED**: O1, O2, O3 done; **PAUSED**; O3r not authorized; progress: [`M1_1_PROGRESS_HANDOFF.md`](protocol/M1_1_PROGRESS_HANDOFF.md);
+  (design **APPROVED**; **PARTIALLY EXECUTED**: O1, O2, O3 done; **PAUSED AFTER O3**, awaiting
+  architect review of O3 validity; O3r not authorized; progress: [`M1_1_PROGRESS_HANDOFF.md`](protocol/M1_1_PROGRESS_HANDOFF.md);
   **Revision 1** in the experiment's §16 is **APPROVED and IN FORCE** (2026-10-22, PR #9); analysis:
   [`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md)).
 - The Bionny measurement protocol is **not decoded**. Unsolicited UART notifications with a
@@ -67,9 +68,12 @@ Concise technical checkpoint. Experimental research project — wearable reading
   - No additional notifications in the event log as provided; no retry.
   - Candidate index 1 = 60.
   
-  Architect: **provisionally successful, not yet formally VALID**. Several V1–V9 items are
-  UNVERIFIED, including a written O3 GO in the repository (handoff doc). **M1.1 PAUSED; O3r NOT
-  AUTHORIZED.**
+  Architect: **provisionally successful, not yet formally VALID**.
+  - V9 is MET: a written architect GO was issued in ChatGPT before O3 and recorded in GitHub
+    afterwards.
+  - V1, V3 (partly), V4, V6 and V7 remain UNVERIFIED (handoff doc).
+  
+  **M1.1 PAUSED AFTER O3 — awaiting architect review of O3 validity. O3r NOT AUTHORIZED.**
   The app is unchanged since O2.
 - M1.1 preparation (display-only, send path unchanged): the M1 app shows `0x03` payload bytes 1–14
   by position, with no hex. The guard was strengthened (fixed `0x03` only, no decoder/percent UI, no
@@ -88,7 +92,7 @@ M0.5 = COMPLETE
 M1 physical experiment = COMPLETE / SUCCESSFUL (2026-10-03)
   Transport + framing hypothesis supported on H59B (0x03 only)
   Battery payload semantics = NOT YET PROVEN
-M1.1 battery payload semantics = PAUSED (design approved; PR #7 merged)
+M1.1 battery payload semantics = PAUSED AFTER O3 (awaiting architect review of O3 validity)
   O1 (2026-10-04) + O2 (2026-10-05) + O3 (2026-10-22) done; 3 of 8 transmissions; 0 valid counted; no verdict
   Revision 1 (experiment §16) = APPROVED, IN FORCE (2026-10-22; PR #9, merge c69c024)
   O3 = performed, provisionally successful (not yet VALID); O3r = NOT authorized; no device command authorized now
@@ -121,7 +125,7 @@ M1.1 status:
   (1 spare). If not: 5 needed (0 spare).
 
 Current blocker:
-- The architect's ruling on O3's UNVERIFIED V1–V9 items.
+- The architect's review of O3 validity (V9 met; V1, V3 partly, V4, V6, V7 UNVERIFIED).
 
 Next action:
 - Architect: rule on O3's validity. Then, separately, an O3r readiness check (same discharge cycle,
