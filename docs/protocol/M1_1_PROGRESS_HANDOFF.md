@@ -13,8 +13,8 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 1. Read this file, then `docs/CURRENT_STATE.md`, `TODO.md` and the experiment document.
 2. **Do not ask Dana to repeat the O1/O2 evidence or to reconstruct old events from memory.** It is
    recorded here. Items marked UNVERIFIED stay unverified and are never assumed to have passed.
-3. The next step is the architect's **final review** of Revision 1 (experiment §16; PR #9), not
-   sending. O3 then needs a middle-state vendor-app level (roughly 45–70%), all protocol
+3. Revision 1 (experiment §16) is **approved and in force** (2026-10-22, PR #9). That is not a GO.
+   The next step is a separate **readiness check**, not sending. O3 then needs a middle-state vendor-app level (roughly 45–70%), all protocol
    preconditions verified, and a **new explicit written architect GO**. No query is authorized now.
 4. Do not decode, interpret or study the extra notifications seen in O1/O2.
 
@@ -24,7 +24,7 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 |---|---|
 | Transmissions used | **2 of 8** (O1, O2) |
 | Valid observations counted toward sufficiency (§8: ≥ 5) | **0**: O1 historical, O2 provisional, not counted (architect Q5/Q6) |
-| O3 | **NOT performed, NOT authorized** (M1.1 paused; Revision 1 pending final architect review) |
+| O3 | **NOT performed, NOT authorized** (M1.1 paused; Revision 1 approved and in force, but that is not a GO) |
 | Verdict | **None.** Sufficiency not met → not yet SUPPORTED / REJECTED / INCONCLUSIVE |
 | Battery semantics | **NOT proven** |
 
@@ -96,7 +96,7 @@ UNVERIFIED items are never assumed to have passed. The table below is the histor
 | No pairing prompt / security error / unexpected device behavior (§12) | **UNVERIFIED** (not reported either way) | **UNVERIFIED** |
 | Explicit architect GO before the run (§7) | **UNVERIFIED** in the repository | **UNVERIFIED** in the repository |
 
-## Remaining plan (Revision 1 — PROPOSED, pending final architect review)
+## Remaining plan (Revision 1 — APPROVED, in force since 2026-10-22, PR #9)
 
 **6 transmissions remain** of the 8-transmission lifetime cap (no reset). The plan assumes
 **neither O1 nor O2 counts** (experiment §16.6):
@@ -117,7 +117,8 @@ sufficiency, stop and record INCONCLUSIVE.
 
 ## Gate for O3 — all must be true before any query
 
-- [ ] Revision 1 (experiment §16) has received **final architect approval** and is merged.
+- [x] Revision 1 (experiment §16) approved by the architect (2026-10-22) and merged (PR #9, `c69c024`).
+  This does **not** authorize a transmission.
 - [ ] The vendor app shows a middle-state battery level, roughly 45–70%. (Last reported 60%; date
   not recorded; re-check on the day.)
 - [ ] Every precondition in experiment §6–§7 and V1–V9 (§16.4) is verified and written down before

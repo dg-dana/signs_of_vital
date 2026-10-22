@@ -1,12 +1,16 @@
 # M1.1 — Protocol Review and Continuation Proposal (after the O2 anomaly)
 
-Status: **PENDING FINAL ARCHITECT REVIEW.** Documentation only. M1.1 is **PAUSED**. O3 is **NOT
-AUTHORIZED**. No query or other device command is authorized, and nothing here instructs one.
+Status: **CLOSED — Revision 1 APPROVED** by the architect on 2026-10-22 and merged in PR #9 (merge
+commit `c69c024`); ADR-007 ACCEPTED. Documentation only. M1.1 is **PAUSED**. O3 is **NOT
+AUTHORIZED**. Approval of the protocol does **not** authorize any device transmission. No query
+or other device command is authorized, and nothing here instructs one.
 
 Round 1 (2026-10-22): first draft; architect review = **CHANGES REQUESTED**, with rulings Q1–Q10 (§2).
 Round 2 (this revision): the rulings are incorporated. The normative Revision 1 text now lives in
-the experiment document, [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md` §16](M1_1_BATTERY_SEMANTICS_EXPERIMENT.md#16-revision-1--proposed-pending-final-architect-review-not-in-force).
+the experiment document, [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md` §16](M1_1_BATTERY_SEMANTICS_EXPERIMENT.md#16-revision-1--approved-in-force-2026-10-22-pr-9).
 This file holds the analysis and the decision record.
+Round 3 (2026-10-22): final corrections (whole-second rule; O5 revised-plan requirement). The
+architect then **approved Revision 1 for merge**, and it was merged in PR #9.
 
 How to read the labels used in this file:
 
@@ -14,7 +18,7 @@ How to read the labels used in this file:
 |---|---|
 | **HISTORICAL** | Evidence from O1/O2 as reported; not rewritten |
 | **DECIDED** | Architect ruling already made (2026-10-22) |
-| **PROPOSED (Rev 1)** | Rule drafted for Revision 1; in force only after final architect approval |
+| **PROPOSED (Rev 1)** | Rule drafted for Revision 1. Historical label: Revision 1 has been **APPROVED and IN FORCE** since 2026-10-22 (PR #9) |
 | **UNVERIFIED** | Not documented; never assumed to have passed |
 | **NOT AUTHORIZED** | O3 or any query, any Swift/BLE change, decoding of unknown notifications, M2+ |
 
@@ -141,7 +145,7 @@ The developer recommended **A**. **Ruling (Q2): A approved in principle.** O1/O2
 treated conservatively: neither is counted, so the plan matches option B's requirements (5 valid
 observations from the 6 remaining transmissions) while staying within M1.1.
 
-## 7. Revision 1 summary (PROPOSED; normative text in experiment §16)
+## 7. Revision 1 summary (APPROVED, in force; normative text in experiment §16)
 
 ### 7.1 Notification rules: first draft → Revision 1
 
@@ -238,10 +242,10 @@ Limitations and how they are handled (§16.9):
 
 Guards and tests are unchanged.
 
-## 11. Points for final architect review
+## 11. Points for final architect review (resolved 2026-10-22)
 
-The Q1–Q10 rulings are incorporated. These Revision 1 details were drafted by the developer and
-need explicit confirmation:
+*Resolved:* the architect approved Revision 1 **as written** on 2026-10-22 (PR #9). The drafted
+treatment of the points below is therefore what is in force. Kept for the record:
 
 1. **Abort consequence.** §9 (unchanged) makes *any* §12 abort before sufficiency INCONCLUSIVE.
    Revision 1 keeps that, so N2 (missing/late), N3, N4 and N5 each **end M1.1**. The ruling's
