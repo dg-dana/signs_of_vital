@@ -1,15 +1,16 @@
 # TODO
 
-## Next — M1.1 PAUSED (Revision 1 approved and in force; O3 NOT AUTHORIZED)
+## Next — M1.1 PAUSED after O3 (O3r NOT AUTHORIZED)
 
-- [ ] Architect: review the docs-only status follow-up PR (`claude/m1-1-rev1-status`). Do not merge
-  without approval.
-- [ ] O3 readiness check, then a **new explicit written GO** from the architect. Revision 1 approval
-  (PR #9) is not a GO. Readiness means a middle-state reference (45–70%; last reported 60%, date not
-  recorded) and every §6–§7 / V1–V9 precondition verified. 2 of 8 transmissions used; 0 valid
-  counted. Context: `docs/protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md` §16.
-- [ ] After O3 only, and only under the GO terms the architect sets: O3r, O4, O5, O6 per experiment §16.6 (1 spare; early stop
-  §16.7). Record sanitized results in §14.
+- [ ] Architect: review the docs-only O3 record PR (`claude/m1-1-o3-results`) and rule on O3's
+  validity. UNVERIFIED V1–V9 items are listed in `docs/protocol/M1_1_PROGRESS_HANDOFF.md` ("O3
+  validity"). Do not merge without approval.
+- [ ] O3r: readiness check (same discharge cycle as O3, ≥ 30 min after it, reference within ±2 of
+  60, all §6–§7 / V1–V9 preconditions), then a **new explicit written GO**. Not authorized now. If
+  the band is charged or leaves 58–62 first, the architect decides how the repeat is replanned
+  (§16.6). 3 of 8 transmissions used; 0 valid counted.
+- [ ] After O3r only, and only under the GO terms the architect sets: O4, O5, O6 per experiment
+  §16.6 (early stop §16.7). Record sanitized results in §14.
 - [ ] Open question (unsolicited UART notifications with a different command/type byte): decide
   whether/when to study them. Do not decode or act on them until authorized.
 - [ ] Open question: `FEE7` service (`FEA1`/`FEC9`/`FEA2`) is not covered by OpenH59 notes; decide

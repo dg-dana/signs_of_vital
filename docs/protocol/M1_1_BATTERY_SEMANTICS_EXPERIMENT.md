@@ -1,7 +1,7 @@
 # M1.1 — Battery Payload Semantics Experiment
 
-Status: **DESIGN APPROVED — PARTIALLY EXECUTED: 2 of 8 transmissions used (O1, O2) — PAUSED
-(2026-10-22) after the O2 anomaly; O3 NOT performed and NOT authorized.** No verdict yet
+Status: **DESIGN APPROVED — PARTIALLY EXECUTED: 3 of 8 transmissions used (O1, O2, O3) — PAUSED
+(2026-10-22) after the O2 anomaly; O3 performed 2026-10-22 (transmission 3, provisionally successful); O3r NOT authorized.** No verdict yet
 (sufficiency in §8 not met). Sanitized progress and handoff:
 [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md).
 
@@ -267,7 +267,7 @@ rejected.
 
 ## 14. Results
 
-**PARTIALLY EXECUTED (as of 2026-10-09).** Sanitized format per §10; context, validity
+**PARTIALLY EXECUTED (as of 2026-10-22, after O3).** Sanitized format per §10; context, validity
 checklist and UNVERIFIED items are in [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md).
 Observations are **provisional** until the architect accepts them as valid.
 
@@ -275,26 +275,28 @@ Observations are **provisional** until the architect accepts them as valid.
 |---|---|---|---|---|
 | O1 | 2026-10-04 | 100% | 100 | **HISTORICAL — not valid for H1** (architect Q5). One write ack'd, one framing-compatible `0x03` response, checksum OK; unsolicited non-`0x03` notification seen (not interpreted); Reference B and other conditions undocumented. Transmission counted. |
 | O2 | 2026-10-05 | A = 100%, B = 100% (difference 0) | 100 | **PROVISIONAL — not counted** (architect Q6). One write ack'd, one framing-compatible `0x03` response, checksum OK; additional framing-incompatible, checksum-OK notification ~12 s later (not a second transmission; not decoded; under R2 not itself a duplicate valid response); other validity conditions UNVERIFIED. Transmission counted. |
+| O3 | 2026-10-22 | A = 60%, B = 60% (difference 0) | 60 | **PROVISIONALLY SUCCESSFUL — not yet formally VALID** (architect). Transmission 3. One write ack'd; exactly one framing-compatible `0x03` response, checksum OK, within the window (displayed ≤ 9 s); no additional notifications in the log as provided; no retry. V1 (fresh launch, worksheet row), V3 (log completeness, N8), V4, V6, V7 and V9 (written GO in the repository) are UNVERIFIED. |
 
-Reference-only checkpoints: 2026-10-09 vendor app shows 93%; later, 60% (date not recorded).
+Reference-only checkpoints: 2026-10-09 vendor app shows 93%; later, before O3, 60% (date not recorded).
 **Not observations; no query sent.**
 
 Validity status (architect rulings, 2026-10-22): O1 is **historical, not valid for H1**. O2 is
 **provisional and not counted** until its conditions are verified; unknown conditions are not
-assumed to have passed. Both transmissions count toward the cap.
+assumed to have passed. O3 (2026-10-22) is **provisionally successful, not yet formally VALID**;
+see the V1–V9 check in [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md). All three
+transmissions count toward the cap.
 
 | Item | Value |
 |---|---|
-| Transmissions (of max 8) | **2** (O1, O2) |
-| Valid observations counted | **0** (O1 historical; O2 provisional, not counted; need ≥ 5) |
-| Reference spread / distinct levels / upward change / repeat | spread 0 / 1 / none / O1–O2 repeat consistent (index 1 equal) |
+| Transmissions (of max 8) | **3** (O1, O2, O3); 5 remaining |
+| Valid observations counted | **0** (O1 historical; O2 provisional; O3 provisional, not yet VALID; need ≥ 5) |
+| Reference spread / distinct levels / upward change / repeat | among counted observations: none. Among all three (not counted): references 100 / 100 / 60; no upward change; no qualifying repeat (§16.5) |
 | Per-position classification | not yet recorded |
-| Candidate index | index 1 observed = 100 in O1 and O2 (not a finding: both at the same reference level) |
+| Candidate index | index 1 observed = 100 (O1, O2) and 60 (O3); equal to the reference each time. **Not a finding**: no observation is VALID yet and sufficiency is not met |
 | Verdict (SUPPORTED / INCONCLUSIVE / REJECTED) | **none yet** — sufficiency not met |
 
-Next: **paused.** Revision 1 (§16) is approved and in force, but that is not a GO. O3 needs a
-middle-state reference (roughly 45–70%), all preconditions verified (readiness check), and a new
-explicit written architect GO.
+Next: **paused.** The architect rules on O3's open V1–V9 items. **O3r is NOT AUTHORIZED**; it needs
+its own readiness check and a new explicit written GO (handoff, "Gate for O3r").
 
 ## 15. Architect decisions (design review, approved)
 
