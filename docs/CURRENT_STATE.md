@@ -19,8 +19,10 @@ Concise technical checkpoint. Experimental research project — wearable reading
   (16-byte framing, command byte echo, checksum rule all held). Not proven for any other command.
 - Battery payload semantics: **NOT proven** (no byte is accepted as battery %). M1.1 is designed
   to test this: [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
-  (design **APPROVED**; **PARTIALLY EXECUTED**: O1, O2 done, O3 not authorized;
-  progress: [`M1_1_PROGRESS_HANDOFF.md`](protocol/M1_1_PROGRESS_HANDOFF.md)).
+  (design **APPROVED**; **PARTIALLY EXECUTED**: O1, O2 done; **PAUSED** after the O2 anomaly;
+  O3 not authorized; progress: [`M1_1_PROGRESS_HANDOFF.md`](protocol/M1_1_PROGRESS_HANDOFF.md);
+  **Revision 1** in the experiment's §16 is **PENDING FINAL ARCHITECT REVIEW**; analysis:
+  [`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md)).
 - The Bionny measurement protocol is **not decoded**. Unsolicited UART notifications with a
   different command/type byte were seen; their meaning is unknown.
 - GATT evidence levels: [`docs/protocol/GATT_MAP.md`](protocol/GATT_MAP.md).
@@ -46,8 +48,20 @@ Concise technical checkpoint. Experimental research project — wearable reading
   response, checksum OK; candidate payload index 1 = 100 in both, vendor reference 100% (O2 bracket
   A = B = 100). Extra notifications (O1 non-`0x03`; O2 framing-incompatible, checksum-OK, ~12 s after
   the response) were recorded as anomalies and **not decoded**. **2 of 8 transmissions used.**
-  Both are only *provisionally* valid: several protocol conditions are UNVERIFIED (see handoff doc).
+  Architect rulings (2026-10-22): **O1 historical, not valid for H1; O2 provisional, not counted**.
+  Valid observations counted: **0**.
   Battery semantics remain **NOT proven**. 2026-10-09: vendor app shows 93% (reference only, no query).
+  Latest reported reference: 60% (date not recorded; reference only, no query).
+- **2026-10-22 architect rulings (Q1–Q10, PR #9 round 1):**
+  - §12 "framing failure" concerns only the expected `0x03` response. This is a post-hoc
+    clarification (R2); the O1/O2 non-`0x03` notifications are not framing failures.
+  - Option A (continue via Revision 1) approved in principle.
+  - Only VALID observations count.
+  - No Swift changes.
+  - Cap: 8 total, 6 remaining, no reset.
+  
+  **M1.1 PAUSED** until Revision 1 receives final approval, and O3 then needs a separate written GO.
+  The app is unchanged since O2.
 - M1.1 preparation (display-only, send path unchanged): the M1 app shows `0x03` payload bytes 1–14
   by position, with no hex. The guard was strengthened (fixed `0x03` only, no decoder/percent UI, no
   raw bytes in the log/UI/clipboard). The code as run in M1 is at merge commit `63de169`.
@@ -65,8 +79,9 @@ M0.5 = COMPLETE
 M1 physical experiment = COMPLETE / SUCCESSFUL (2026-10-03)
   Transport + framing hypothesis supported on H59B (0x03 only)
   Battery payload semantics = NOT YET PROVEN
-M1.1 battery payload semantics = IN PROGRESS (design approved; PR #7 merged)
-  O1 (2026-10-04) + O2 (2026-10-05) done; 2 of 8 transmissions; no verdict
+M1.1 battery payload semantics = PAUSED (design approved; PR #7 merged)
+  O1 (2026-10-04) + O2 (2026-10-05) done; 2 of 8 transmissions; 0 valid counted; no verdict
+  Revision 1 (experiment §16) = PENDING FINAL ARCHITECT REVIEW (PR #9)
   O3 = NOT performed, NOT authorized; no device command authorized now
 M2+  = NOT AUTHORIZED
 ```
@@ -82,27 +97,31 @@ GitHub is the single source of truth; no manual copy/paste of Swift code.
 ## Handoff
 
 Last completed:
-- M1 physical run (2026-10-03), PR #5. M1.1 design + preparation, PR #7 (merged).
-- M1.1 O1 and O2 physical observations (sanitized in `docs/protocol/M1_1_PROGRESS_HANDOFF.md`).
+- M1 physical run (2026-10-03), PR #5. M1.1 design + preparation, PR #7. O1/O2 handoff, PR #8.
+- 2026-10-22: protocol review after the O2 anomaly. The architect ruled on Q1–Q10 (CHANGES
+  REQUESTED), and Revision 1 was drafted in experiment §16 (docs only).
 
 Current working branch / PR:
-- `claude/m1-1-o1-o2-handoff` (docs-only handoff PR; not merged without approval).
+- `claude/m1-1-protocol-review`, PR #9 (docs only; **PENDING FINAL ARCHITECT REVIEW**; not merged
+  without approval).
 
 Current blocker:
-- Waiting for the vendor app to show a **middle-state battery level (roughly 45–70%)**; it showed
-  93% on 2026-10-09. No technical blocker.
+- Final architect review of Revision 1, including the points in proposal §11 (abort consequence of
+  a late response, the ≤ 9 s displayed threshold, Z handling, the repeat pairing rule, the O2 path,
+  plan order).
 
 Next action:
-- When the middle state is reached: verify every precondition in experiment §6–§7, and the architect
-  rules on the open O2 extra-notification question, then give a **new explicit GO** for O3.
-- New session: read the repository first; do **not** ask Dana to repeat O1/O2 evidence. Ask only
-  for items the handoff doc marks UNVERIFIED, if the architect wants them resolved.
+- Architect: final review of PR #9. After approval and merge, O3 additionally needs a middle-state
+  reference (45–70%), every §6–§7 / V1–V9 precondition verified, and a **new explicit written GO**.
+- New session: read the repository first. Do **not** ask Dana to repeat O1/O2 evidence or
+  reconstruct old events from memory. UNVERIFIED items stay unverified.
 - M2+ remains NOT AUTHORIZED.
 
 Do NOT:
 - run O3 or any further M1.1 query (or send another battery query), or any other H59 command, without that explicit GO
 - claim any response byte is battery % or add a battery decoder/UI
-- decode, act on or record the unsolicited UART notifications (including the O1/O2 extra ones)
+- decode, interpret or act on the unsolicited UART notifications (including the O1/O2 extra ones);
+  Revision 1 would record only counts/flags (N8)
 - start M2+ (protocol layer, HR/BP/SpO2/HRV/stress/sleep/steps)
 - retry automatically, fuzz, or brute-force packets
 - write to `FEE7` (`FEA1`/`FEC9`/`FEA2`) or authenticate/write on `DE5BF72x`

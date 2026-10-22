@@ -1,15 +1,15 @@
 # TODO
 
-## Next — M1.1 O3 (current)
+## Next — M1.1 PAUSED (Revision 1 pending final architect review)
 
-- [ ] Wait for the vendor app to show a middle-state battery level (roughly 45–70%; 93% on
-  2026-10-09). Then verify all preconditions (experiment §6–§7), get the architect's ruling on the O2
-  extra-notification question, and obtain a **new explicit architect GO** before O3. Until then no
-  query is authorized. 2 of 8 transmissions used; context: `docs/protocol/M1_1_PROGRESS_HANDOFF.md`.
-- [ ] Architect: review the handoff PR and decide whether O1/O2 are accepted as valid (several
-  conditions are UNVERIFIED in the handoff doc).
-- [ ] After O3 GO only: O4 (low), O5 (after partial recharge) per experiment §8; record sanitized
-  results in its §14.
+- [ ] Architect: final review of PR #9 (`claude/m1-1-protocol-review`). Approve or amend Revision 1
+  (`docs/protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md` §16) and answer the points in
+  `docs/protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md` §11. Do not merge without approval.
+- [ ] O3 only after Revision 1 is approved and merged, a middle-state reference (45–70%; last
+  reported 60%, date not recorded), every §6–§7 / V1–V9 precondition verified, and a **new explicit
+  written GO**. 2 of 8 transmissions used; 0 valid counted.
+- [ ] After O3 only, and only under the GO terms the architect sets: O3r, O4, O5, O6 per experiment §16.6 (1 spare; early stop
+  §16.7). Record sanitized results in §14.
 - [ ] Open question (unsolicited UART notifications with a different command/type byte): decide
   whether/when to study them. Do not decode or act on them until authorized.
 - [ ] Open question: `FEE7` service (`FEA1`/`FEC9`/`FEA2`) is not covered by OpenH59 notes; decide
