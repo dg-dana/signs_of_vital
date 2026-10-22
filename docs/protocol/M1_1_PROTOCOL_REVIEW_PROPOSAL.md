@@ -151,7 +151,7 @@ labels not recorded before the app closed).
 
 | Case | First draft | Revision 1 (§16.2) |
 |---|---|---|
-| Valid response | One framing-compatible `0x03` within 10 s | **N1** Exactly one R within the window; "within" = displayed log difference **≤ 9 s** (the log shows whole seconds) |
+| Valid response | One framing-compatible `0x03` within 10 s | **N1** Exactly one R within the window; "within" = displayed log difference **≤ 9 s**. Conservative: the log shows whole seconds, so this does not prove the precise elapsed time |
 | Missing / late | Folded into N5 | **N2** Explicit: no R within the window (including an R that arrives late) → observation fails; §12 "no response within 10 s" applies |
 | Malformed `0x03` | N3 | **N3** Any M after the query → §12 abort |
 | Duplicate | N5 (banner) | **N4** More than one R at any time, banner or not → §12 abort |
@@ -201,6 +201,14 @@ Original requirement → how the plan meets it:
 | Same-state repeat | O3/O3r |
 | H1, ±5, cap | Unchanged |
 
+**O5 is stronger than the original target.** The original O5 target was "≥ 15 above O4". The
+revised plan requires **O5 ≥ O4 + 40 and O5 ≥ O3 + 15** (§16.6), so that the unchanged spread and
+level thresholds can be met without O1/O2. These are revised-plan requirements, not new thresholds.
+
+**All states are opportunistic.** They are reached through normal use and normal charging. There
+is no forced discharge, no going below about 20%, and no unsafe charging. If a state is not reached
+safely, the early-stop rule applies.
+
 **Margin: 1 spare.** Two non-VALID observations, or any §12 abort, end M1.1 as INCONCLUSIVE
 (§16.7, §9). The plan is feasible but fragile; that is the honest consequence of not counting
 O1/O2.
@@ -240,13 +248,16 @@ need explicit confirmation:
    wording "a missing or late valid response *fails the observation*" could be read as
    observation-level only. Making it observation-level would be a change to §12/§9, not a
    clarification. The developer recommends keeping the original, stricter consequence. Confirm.
-2. **≤ 9 s displayed threshold** (§16.2). It is conservative because the log shows whole seconds.
-   A real 9.5 s response displayed as "10 s" would end M1.1. Confirm, or rule otherwise.
+2. **≤ 9 s displayed threshold** (§16.2). It is conservative because the log records whole
+   seconds. It does not prove the precise elapsed time. A real 9.5 s response displayed as "10 s"
+   would be treated as late and would end M1.1. *(Clarified per the final architect corrections.)*
 3. **Z before the query → do not send in that launch** (N5). Confirm.
 4. **"Every qualifying pair"** in the same-state repeat (§16.5). Confirm.
 5. **O2 path.** The developer proposes no request to Dana. O2 stays provisional and unused unless
    records-based verification is offered. Confirm.
 6. **Fixed default order** (O3 → O3r → O4 → O5 → O6); any reordering needs an architect decision.
    Confirm.
+   *(The O5 ≥ O4 + 40 and ≥ O3 + 15 requirement, and the opportunistic, no-forced-discharge
+   approach, are documented per the final architect corrections, §16.6.)*
 7. **Final approval of Revision 1 as a whole** (experiment §16). After that, O3 still needs a
    separate written GO.

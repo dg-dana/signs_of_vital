@@ -106,12 +106,13 @@ UNVERIFIED items are never assumed to have passed. The table below is the histor
 | O3 | Middle, 45–70 |
 | O3r | Same-state repeat of O3 |
 | O4 | Low: ≤ 40, ≥ 15 below O3, not below ~20 |
-| O5 | After a partial recharge: ≥ O4 + 40 and ≥ O3 + 15 |
+| O5 | After a partial recharge: ≥ O4 + 40 and ≥ O3 + 15 (revised-plan requirement, stronger than the original "≥ 15 above O4") |
 | O6 | Any state |
 | — | 1 spare |
 
 H1, the ±5 tolerance and the thresholds are unchanged. The replacement same-state repeat (§16.5) is
-an explicit Revision 1 change. Early stop (§16.7): if the remaining transmissions cannot reach
+an explicit Revision 1 change, as is the stronger O5 requirement. All states are reached
+opportunistically through normal use and charging: no forced discharge, no unsafe charging. Early stop (§16.7): if the remaining transmissions cannot reach
 sufficiency, stop and record INCONCLUSIVE.
 
 ## Gate for O3 — all must be true before any query

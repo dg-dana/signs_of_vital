@@ -356,10 +356,18 @@ Each notification is classified **only** from labels the app already shows, noth
 | **U** — unrelated non-`0x03` | `byte0 ≠ 0x03` (any length, any checksum result) |
 | **Z** — unclassifiable | no byte-0 label (length 0), **or** any notification whose labels were not read and recorded before the app was closed |
 
-**Response window:** from the `SENDING` log line to 10 s after it. The log shows whole seconds,
-so an R is **within the window only if** its displayed time minus the `SENDING` time is
-**≤ 9 s**. A displayed difference of 10 s or more is **not** shown to be within the window and is
-treated as late.
+**Response window:** from the `SENDING` log line to 10 s after it. The app's event log records
+**whole seconds only**, so the displayed difference between two log lines is **not** the precise
+elapsed time. A displayed difference *d* means a real elapsed time somewhere between *d* − 1 and
+*d* + 1 seconds (exclusive). The rule is therefore deliberately **conservative**:
+
+- displayed **≤ 9 s** → the R is accepted as within the window, because the real elapsed time
+  must be under 10 s;
+- displayed **10 s or more** → **not** shown to be within the window, and treated as late (N2),
+  even though the real time may have been under 10 s.
+
+This rule does not measure or prove the exact latency. It only avoids accepting a response that
+might have been late. A timely response could be rejected at the boundary; that cost is accepted.
 
 - **N1 — Required:** exactly one R, within the window.
 - **N2 — Missing or late:** no R within the window, even if an R arrives later, or U/M/Z arrive →
@@ -401,7 +409,8 @@ not evidence of a timely response.** So after Send, the operator, without closin
 1. Finds the `SENDING single battery query …` line in the event log (newest first) and its time.
 2. Finds the `NOTIFICATION after query: …` line whose summary says "framing COMPATIBLE", and its
    time.
-3. Computes the displayed difference: ≤ 9 s is within the window; anything else is late (N2).
+3. Computes the displayed difference: ≤ 9 s is within the window; anything else is late (N2). This
+   is a conservative whole-second check, not a precise latency measurement (§16.2).
 4. Classifies every other `NOTIFICATION` line as M, U or Z from its labels (N3, N5, N6).
 5. Checks the ANOMALY banner and the count of R (N4).
 6. Writes the N8 fields into the private worksheet, then disconnects and closes the app.
@@ -464,7 +473,7 @@ Six transmissions remain (T3–T8). Five must yield VALID observations. One is s
 | **O3** | Middle: 45–70 | Level 1 |
 | **O3r** | Same discharge cycle as O3, ≥ 30 min later, reference within ±2 of O3 | Same-state repeat (§16.5) |
 | **O4** | Low: ≤ 40 **and** ≥ 15 below O3. Not deliberately run below ~20 | Level 2; lower anchor |
-| **O5** | After a partial recharge: ≥ O4 + 40 **and** ≥ O3 + 15 (e.g. O3 = 60, O4 = 30 → O5 ≥ 75) | Upward change; spread ≥ 40; level 3 |
+| **O5** | After a partial recharge: **≥ O4 + 40 and ≥ O3 + 15** (e.g. O3 = 60, O4 = 30 → O5 ≥ 75). Revised-plan requirement; see the note below | Upward change; spread ≥ 40; level 3 |
 | **O6** | Any state, ≥ 30 min after O5 (preferably after some discharge, to add a direction pair) | Fifth valid observation |
 | spare | — | Replaces one observation that is INVALID without a §12 abort (for example, a V5 bracket mismatch) |
 
@@ -477,9 +486,31 @@ How this meets each original requirement (§8):
 - Same-state repeat: O3/O3r.
 - H1, the ±5 tolerance and the 8-transmission cap: unchanged.
 
+**O5 requirement (explicit Revision 1 change, stronger than the original target).**
+- The original §8 target for O5 was only "after a partial recharge, ≥ 15 points above O4".
+- Revision 1 requires **O5 ≥ O4 + 40 and O5 ≥ O3 + 15**. These are requirements of the **revised
+  observation plan**, not new sufficiency thresholds. They follow from the unchanged §8 thresholds
+  once O1 and O2 cannot supply the high end:
+  - O5 − O4 ≥ 40 gives the reference spread;
+  - O5 ≥ O3 + 15 gives a third level ≥ 15 from the others.
+- The original O5 condition (≥ 15 above O4) is implied by the stricter one.
+- If O5's reference does not meet both requirements, the observation still counts toward the cap.
+  Whether sufficiency remains reachable is then decided by the early-stop rule (§16.7).
+
+**Opportunistic, not forced.**
+- Every state is reached through the band's **normal use and normal charging** with its own
+  charger.
+- No forced or accelerated discharge.
+- No running the battery below about 20%.
+- No unusual, repeated or unsafe charging to hit a number.
+- Observations are taken only when the vendor app's reference happens to be in the required range.
+- If a state is not reached in normal use (for example, the mid range passes during review, or a
+  recharge does not reach O5's level), wait for a later normal cycle.
+- If a required state cannot be reached safely, apply §16.7: stop and record INCONCLUSIVE.
+
 Default order only. If the reference is outside 45–70 when a GO is given, wait for the next
-discharge through the middle range (recharging normally). Never stress the band to reach a state.
-Any reordering needs an architect decision.
+discharge through the middle range (recharging normally). Any reordering needs an architect
+decision.
 
 ### 16.7 Early stop (architect Q8)
 

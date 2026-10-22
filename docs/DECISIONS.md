@@ -125,12 +125,15 @@ must reach sufficiency without O1/O2 (5 valid observations from 6 transmissions)
 **Decision (proposed, not in force):** Adopt Revision 1 (`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`
 §16), which contains:
 - the R2 clarification;
-- classes R/M/U/Z and rules N1–N8 (exactly one valid `0x03` response within a displayed ≤ 9 s;
+- classes R/M/U/Z and rules N1–N8 (exactly one valid `0x03` response within a displayed ≤ 9 s. This is a conservative whole-second
+  check, not a precise elapsed time;
   missing/late, malformed, duplicate or unclassifiable → fail/abort; unrelated non-`0x03` → ignored);
 - a manual 10-second check;
 - V1–V9, where only VALID counts;
 - a replacement same-state repeat (an explicit change to §9.6);
-- a conservative plan O3, O3r, O4, O5, O6 with 1 spare transmission;
+- a conservative plan O3, O3r, O4, O5, O6 with 1 spare transmission. O5 ≥ O4 + 40 and ≥ O3 + 15
+  are revised-plan requirements, stronger than the original O5 target. All states are reached
+  opportunistically (normal use and charging only);
 - early stop.
 
 H1, the tolerance, the thresholds and the cap are unchanged.
