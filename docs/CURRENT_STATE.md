@@ -19,8 +19,10 @@ Concise technical checkpoint. Experimental research project — wearable reading
   (16-byte framing, command byte echo, checksum rule all held). Not proven for any other command.
 - Battery payload semantics: **NOT proven** (no byte is accepted as battery %). M1.1 is designed
   to test this: [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
-  (design **APPROVED**; **PARTIALLY EXECUTED**: O1, O2 done, O3 not authorized;
-  progress: [`M1_1_PROGRESS_HANDOFF.md`](protocol/M1_1_PROGRESS_HANDOFF.md)).
+  (design **APPROVED**; **PARTIALLY EXECUTED**: O1, O2 done; **PAUSED** after the O2 anomaly;
+  O3 not authorized; progress: [`M1_1_PROGRESS_HANDOFF.md`](protocol/M1_1_PROGRESS_HANDOFF.md);
+  continuation proposal **PENDING ARCHITECT REVIEW**:
+  [`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md)).
 - The Bionny measurement protocol is **not decoded**. Unsolicited UART notifications with a
   different command/type byte were seen; their meaning is unknown.
 - GATT evidence levels: [`docs/protocol/GATT_MAP.md`](protocol/GATT_MAP.md).
@@ -48,6 +50,11 @@ Concise technical checkpoint. Experimental research project — wearable reading
   the response) were recorded as anomalies and **not decoded**. **2 of 8 transmissions used.**
   Both are only *provisionally* valid: several protocol conditions are UNVERIFIED (see handoff doc).
   Battery semantics remain **NOT proven**. 2026-10-09: vendor app shows 93% (reference only, no query).
+  Latest reported reference: 60% (date not recorded; reference only, no query).
+- **2026-10-22 architect assessment:** the O2 extra notification is not a second framing-compatible
+  `0x03` response, but it raises an unresolved §12 framing-failure question; O2 is not accepted as
+  fully valid; O1 has unverified validity items. **M1.1 PAUSED.** The app is unchanged since O2, and the
+  proposal finds it sufficient (no code changes proposed).
 - M1.1 preparation (display-only, send path unchanged): the M1 app shows `0x03` payload bytes 1–14
   by position, with no hex. The guard was strengthened (fixed `0x03` only, no decoder/percent UI, no
   raw bytes in the log/UI/clipboard). The code as run in M1 is at merge commit `63de169`.
@@ -65,8 +72,9 @@ M0.5 = COMPLETE
 M1 physical experiment = COMPLETE / SUCCESSFUL (2026-10-03)
   Transport + framing hypothesis supported on H59B (0x03 only)
   Battery payload semantics = NOT YET PROVEN
-M1.1 battery payload semantics = IN PROGRESS (design approved; PR #7 merged)
+M1.1 battery payload semantics = PAUSED (design approved; PR #7 merged)
   O1 (2026-10-04) + O2 (2026-10-05) done; 2 of 8 transmissions; no verdict
+  O2 anomaly → continuation proposal PENDING ARCHITECT REVIEW
   O3 = NOT performed, NOT authorized; no device command authorized now
 M2+  = NOT AUTHORIZED
 ```
@@ -82,19 +90,20 @@ GitHub is the single source of truth; no manual copy/paste of Swift code.
 ## Handoff
 
 Last completed:
-- M1 physical run (2026-10-03), PR #5. M1.1 design + preparation, PR #7 (merged).
-- M1.1 O1 and O2 physical observations (sanitized in `docs/protocol/M1_1_PROGRESS_HANDOFF.md`).
+- M1 physical run (2026-10-03), PR #5. M1.1 design + preparation, PR #7. O1/O2 handoff, PR #8.
+- 2026-10-22: protocol review after the O2 anomaly (docs only): architect assessment recorded and
+  continuation proposal written ([`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md)).
 
 Current working branch / PR:
-- `claude/m1-1-o1-o2-handoff` (docs-only handoff PR; not merged without approval).
+- `claude/m1-1-protocol-review` (docs-only; PENDING ARCHITECT REVIEW; not merged without approval).
 
 Current blocker:
-- Waiting for the vendor app to show a **middle-state battery level (roughly 45–70%)**; it showed
-  93% on 2026-10-09. No technical blocker.
+- Architect rulings Q1–Q10 in the proposal (§11): the §12 reading, the continuation option, the
+  notification/validity rules and the O1/O2 validity. Battery level is not the blocker (last 60%).
 
 Next action:
-- When the middle state is reached: verify every precondition in experiment §6–§7, and the architect
-  rules on the open O2 extra-notification question, then give a **new explicit GO** for O3.
+- Architect reviews the proposal. Then: update the experiment doc per the ruling, and only after that
+  and a **new explicit written GO**, O3 with every §6–§7 precondition verified.
 - New session: read the repository first; do **not** ask Dana to repeat O1/O2 evidence. Ask only
   for items the handoff doc marks UNVERIFIED, if the architect wants them resolved.
 - M2+ remains NOT AUTHORIZED.

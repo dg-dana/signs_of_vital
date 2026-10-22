@@ -1,9 +1,13 @@
 # M1.1 — Battery Payload Semantics Experiment
 
-Status: **DESIGN APPROVED — PARTIALLY EXECUTED: 2 of 8 transmissions used (O1, O2); O3 NOT
-performed and NOT authorized.** No verdict yet (sufficiency in §8 not met). Sanitized progress
-and handoff: [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md). Any further `0x03` (or other)
-transmission needs the §7 preconditions verified and a **new explicit architect GO**.
+Status: **DESIGN APPROVED — PARTIALLY EXECUTED: 2 of 8 transmissions used (O1, O2) — PAUSED
+(2026-10-22) after the O2 anomaly; O3 NOT performed and NOT authorized.** No verdict yet
+(sufficiency in §8 not met). Sanitized progress and handoff:
+[`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md). The open §12 question and a continuation
+proposal (**PENDING ARCHITECT REVIEW, not in force**) are in
+[`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](M1_1_PROTOCOL_REVIEW_PROPOSAL.md). Any further `0x03` (or
+other) transmission needs the architect's rulings on that proposal, the §7 preconditions verified
+and a **new explicit architect GO**.
 
 The design, thresholds and criteria below are unchanged since approval (§15). The XCTest suite
 has passed in CI (§13).
@@ -256,7 +260,12 @@ Observations are **provisional** until the architect accepts them as valid.
 | O1 | 2026-10-04 | 100% | 100 | One write ack'd, one framing-compatible `0x03` response, checksum OK; unsolicited non-`0x03` notification seen (not interpreted); reference bracket UNVERIFIED |
 | O2 | 2026-10-05 | A = 100%, B = 100% (difference 0) | 100 | One write ack'd, one framing-compatible `0x03` response, checksum OK; **additional framing-incompatible, checksum-OK notification ~12 s later (not a second transmission; not decoded)** |
 
-Reference-only checkpoint 2026-10-09: vendor app shows 93%. **Not an observation; no query sent.**
+Reference-only checkpoints: 2026-10-09 vendor app shows 93%; later, 60% (date not recorded).
+**Not observations; no query sent.**
+
+Validity status (architect, 2026-10-22): O2 **not accepted as fully valid** (open §12
+framing-failure question about the extra notification, plus UNVERIFIED preconditions); O1 has
+**UNVERIFIED** validity requirements. Neither is counted as valid yet.
 
 | Item | Value |
 |---|---|
@@ -267,8 +276,9 @@ Reference-only checkpoint 2026-10-09: vendor app shows 93%. **Not an observation
 | Candidate index | index 1 observed = 100 in O1 and O2 (not a finding: both at the same reference level) |
 | Verdict (SUPPORTED / INCONCLUSIVE / REJECTED) | **none yet** — sufficiency not met |
 
-Next: O3 only when the vendor app shows roughly 45–70%, all preconditions are verified, and a
-new explicit architect GO is given.
+Next: **paused.** O3 only after the architect rules on
+[`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](M1_1_PROTOCOL_REVIEW_PROPOSAL.md), the vendor app shows roughly
+45–70%, all preconditions are verified, and a new explicit architect GO is given.
 
 ## 15. Architect decisions (design review, approved)
 

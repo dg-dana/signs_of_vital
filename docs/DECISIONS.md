@@ -83,3 +83,35 @@ Use this structure:
 **Alternatives considered:** Adding the write to the M0 project (weakens the passive guarantee); write-without-response (no ATT feedback on errors).
 
 **Consequences:** Implementation is prepared only; the physical run needs explicit architect GO. Any additional command, channel or retry needs a new architect decision.
+
+## 2026-10-22 — M1.1 paused after the O2 anomaly (architect assessment)
+
+**Decision:** M1.1 is paused and O3 is NOT AUTHORIZED. The O2 extra notification (framing-incompatible,
+checksum-OK, ~12 s after the response) does not establish a second framing-compatible `0x03` response,
+and the ANOMALY banner counts only those. It does raise an unresolved §12 framing-failure question, so
+O2 is not accepted as fully valid. O1 also has unverified validity requirements. Its payload is not to
+be decoded.
+
+**Reason:** The pre-registered abort rule (§12) does not say whether a non-response notification is a
+"framing failure"; that must be settled explicitly before any further transmission.
+
+**Consequences:** No transmission until the architect rules on
+`docs/protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md` and gives a new written GO. H1, tolerance,
+thresholds and the 8-transmission cap are unchanged.
+
+## ADR-007 (PROPOSED — PENDING ARCHITECT REVIEW) — M1.1 continuation after the O2 anomaly
+
+**Decision (proposed, not in force):** Read §12 "framing failure" as applying to the response to our
+query (R2). Continue M1.1 under a Revision 1 that adds notification-handling rules (N1–N7) and an
+observation-validity checklist (V1–V9, unverifiable = invalid), with no app changes.
+
+**Reason:** §7 already anticipates non-`0x03` notifications and says not to act on them; the other §12
+items all concern the query's response. Keeps the remaining 6 transmissions under unchanged criteria.
+
+**Alternatives considered:** B: strict reading (R1), close M1.1 as INCONCLUSIVE and pre-register a
+continuation with the same criteria and the 6 remaining transmissions (O1/O2 not used); C: treat O2 as
+an observation-level invalid; D: stop without continuation. Full trade-offs and the ten open questions:
+`docs/protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md`.
+
+**Consequences:** If accepted, the clarification is post-hoc and must apply to O1 and O2 alike. If
+O1 or O2 is invalid, §9.6's "O2 vs O1" repeat needs a separately approved substitute.

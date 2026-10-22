@@ -4,7 +4,7 @@
 
 Signs of Vital is an experimental iOS research project to read data from a
 Bionny 4.0 (H59B) health armband over Bluetooth LE. Readings are not medically
-validated. Current stage: M0 and M1 complete; M1.1 (battery payload semantics) designed, not executed (see `docs/CURRENT_STATE.md`).
+validated. Current stage: M0 and M1 complete; M1.1 (battery payload semantics) partially executed (O1, O2) and paused (see `docs/CURRENT_STATE.md`).
 
 ## Main components
 

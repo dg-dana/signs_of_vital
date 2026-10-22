@@ -1,6 +1,6 @@
 # M1.1 — Progress and Handoff (sanitized)
 
-Checkpoint as of **2026-10-09**. Experimental and **non-medical**. The design, thresholds and
+Checkpoint as of **2026-10-22** (M1.1 **PAUSED**). Experimental and **non-medical**. The design, thresholds and
 verdict rules live in [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
 and are **unchanged**; this file only records what has physically happened and what is next.
 
@@ -13,9 +13,10 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 1. Read this file, then `docs/CURRENT_STATE.md`, `TODO.md` and the experiment document.
 2. **Do not ask Dana to repeat the O1/O2 evidence.** It is recorded here. Ask only for the items
    marked UNVERIFIED if the architect says they matter.
-3. The next step is **waiting**, not sending: O3 needs a vendor-app battery level in the middle
-   state (roughly 45–70%), all protocol preconditions verified, and a **new explicit architect
-   GO**. No query is authorized now.
+3. The next step is **the architect's review** of
+   [`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](M1_1_PROTOCOL_REVIEW_PROPOSAL.md) (PENDING), not sending.
+   O3 then needs a middle-state vendor-app level (roughly 45–70%), all protocol preconditions
+   verified, and a **new explicit architect GO**. No query is authorized now.
 4. Do not decode, interpret or study the extra notifications seen in O1/O2.
 
 ## Status
@@ -24,7 +25,7 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 |---|---|
 | Transmissions used | **2 of 8** (O1, O2) |
 | Valid observations toward sufficiency (§8: ≥ 5) | at most 2, **provisional** (see validity below) |
-| O3 | **NOT performed, NOT authorized** |
+| O3 | **NOT performed, NOT authorized** (M1.1 paused pending architect review) |
 | Verdict | **None.** Sufficiency not met → not yet SUPPORTED / REJECTED / INCONCLUSIVE |
 | Battery semantics | **NOT proven** |
 
@@ -35,6 +36,7 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 | O1 | 2026-10-04 | 100% (single reading) | One explicitly confirmed `0x03` query sent; ATT write acknowledged; one framing-compatible 16-byte response, checksum OK. **Candidate index 1 = 100.** An unsolicited non-`0x03` notification was also observed (not interpreted). |
 | O2 | 2026-10-05 | A = 100%, B = 100% | One query sent at approx. 18:35 (time zone not recorded); acknowledged; one framing-compatible 16-byte response, checksum OK. **Candidate index 1 = 100.** See "O2 extra notification". |
 | — | 2026-10-09 | 93% | **Reference-only checkpoint. Not O3. No query was sent.** |
+| — | not recorded | 60% | **Reference-only (latest reported). Not O3. No query was sent.** |
 
 - O2 reference bracket difference: **0 points**.
 - O1 vs O2 at index 1: identical (difference 0, within the ≤ 2 same-state-repeat criterion).
@@ -55,12 +57,23 @@ recorded as an anomaly and **was not decoded**. The following are **UNVERIFIED**
   to a query". It is not a framing-compatible `0x03` response as reported, so it was not
   treated as one, but **that call belongs to the architect**; the agent does not make it.
 
-The O1 unsolicited non-`0x03` notification is likewise recorded only as having occurred.
+The O1 unsolicited non-`0x03` notification is likewise recorded only as having occurred
+(before or after the O1 query: **UNVERIFIED**).
+
+The app was closed after O2 and nothing is persisted, so the screen cannot be re-checked.
+
+**Architect assessment (2026-10-22):** the extra notification does not establish a second
+framing-compatible `0x03` response (the ANOMALY banner counts only those), but it raises an
+unresolved §12 framing-failure question; **O2 cannot currently be accepted as fully valid**, and
+O1 has outstanding unverified validity requirements. What the app's checks imply about the
+labels (code reading, no payload), the two readings of §12 and the continuation options are in
+[`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](M1_1_PROTOCOL_REVIEW_PROPOSAL.md) §2–§5 (PENDING).
 
 ## Validity check against the protocol (O1 and O2)
 
-Status: **provisionally usable, not confirmed valid.** Neither observation is labelled valid
-until the architect accepts it.
+Status: **not accepted as valid** (architect, 2026-10-22). Neither observation is labelled valid
+until the architect accepts it. Note: §6 requires both Reference A and B; O1 has a single reported
+reading, so unless a B reading is confirmed O1 fails §6 as written (proposal §7, Q5).
 
 | Condition (experiment §) | O1 | O2 |
 |---|---|---|
@@ -80,17 +93,19 @@ until the architect accepts it.
 
 ## Remaining plan (design unchanged)
 
-Per experiment §8: **6 transmissions remain** under the cap. Still required for sufficiency:
+Per experiment §8: **6 transmissions remain** under the cap. Whether they suffice depends on
+O1/O2 validity (3 to 1 spare transmissions; proposal §8). Still required for sufficiency:
 O3 (middle, roughly 45–70), O4 (low, ≤ 40), O5 (after a partial recharge, ≥ 15 points above
 O4) — which also supplies the ≥ 40-point reference spread and ≥ 3 distinct levels. All
 thresholds and criteria are as pre-registered and may not change.
 
 ## Gate for O3 — all must be true before any query
 
-- [ ] The vendor app shows a middle-state battery level, roughly 45–70%. (Currently 93%: not met.)
+- [ ] The vendor app shows a middle-state battery level, roughly 45–70%. (Last reported 60%; re-check on the day.)
 - [ ] Every precondition in experiment §6–§7 is verified and written down: off charger ≥ 15 min,
   vendor app disconnected, ≥ 30 min since the previous query, numbered worksheet row, Reference A taken.
-- [ ] The open O2 anomaly question above has been ruled on by the architect.
+- [ ] The architect has ruled on the protocol-review proposal (Q1–Q10), including the O2 anomaly
+  under §12 and O1/O2 validity, and any resulting revision is merged.
 - [ ] A **new explicit architect GO** for O3 exists in writing.
 
 Abort conditions are experiment §12, unchanged. On any abort: stop, no retry, no workaround,

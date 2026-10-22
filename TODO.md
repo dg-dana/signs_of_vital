@@ -1,13 +1,17 @@
 # TODO
 
-## Next — M1.1 O3 (current)
+## Next — M1.1 PAUSED (pending architect review)
 
-- [ ] Wait for the vendor app to show a middle-state battery level (roughly 45–70%; 93% on
-  2026-10-09). Then verify all preconditions (experiment §6–§7), get the architect's ruling on the O2
-  extra-notification question, and obtain a **new explicit architect GO** before O3. Until then no
-  query is authorized. 2 of 8 transmissions used; context: `docs/protocol/M1_1_PROGRESS_HANDOFF.md`.
-- [ ] Architect: review the handoff PR and decide whether O1/O2 are accepted as valid (several
-  conditions are UNVERIFIED in the handoff doc).
+- [ ] Architect: review the protocol-review PR (`claude/m1-1-protocol-review`) and answer Q1–Q10 in
+  `docs/protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md` §11 (§12 reading, continuation option, notification
+  and validity rules, O1/O2 validity). Do not merge without approval.
+- [ ] Dana (only if the architect asks): give yes / no / don't know for the O1/O2 items marked
+  UNVERIFIED in `docs/protocol/M1_1_PROGRESS_HANDOFF.md`, and whether the O2 extra notification's
+  labels were exactly "checksum OK" / "framing NOT compatible". No worksheet contents, no screenshots.
+- [ ] After the architect's rulings: update the experiment doc (Revision 1, or close as INCONCLUSIVE
+  and pre-register a continuation, per the chosen option).
+- [ ] O3 only after those rulings, the §6–§7 preconditions, a middle-state reference (45–70%; last
+  reported 60%, date not recorded) and a **new explicit written GO**. 2 of 8 transmissions used.
 - [ ] After O3 GO only: O4 (low), O5 (after partial recharge) per experiment §8; record sanitized
   results in its §14.
 - [ ] Open question (unsolicited UART notifications with a different command/type byte): decide
