@@ -1,8 +1,9 @@
 # M1.1 — Battery Payload Semantics Experiment
 
 Status: **DESIGN APPROVED — PARTIALLY EXECUTED: 3 of 8 transmissions used (O1, O2, O3); 5
-remaining. M1.1 PAUSED AFTER O3 — awaiting architect review of O3 validity. O3r NOT AUTHORIZED.**
-No verdict yet (sufficiency in §8 not met). The O2 anomaly and the resulting protocol review
+remaining. O3 VALID (architect accepted 2026-10-22); 1 of 5 valid observations. M1.1 PAUSED —
+awaiting O3r readiness assessment. O3r NOT AUTHORIZED.** H1 not yet proven; no verdict yet
+(sufficiency in §8 not met). The O2 anomaly and the resulting protocol review
 remain documented as historical evidence (§12 note, §16, handoff). Sanitized progress and handoff:
 [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md).
 
@@ -268,36 +269,39 @@ rejected.
 
 ## 14. Results
 
-**PARTIALLY EXECUTED (as of 2026-10-22, after O3).** Sanitized format per §10; context, validity
+**PARTIALLY EXECUTED (as of 2026-10-22, after the O3 validity ruling).** Sanitized format per §10; context, validity
 checklist and UNVERIFIED items are in [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md).
-Observations are **provisional** until the architect accepts them as valid.
+Observations are **provisional** until the architect accepts them as valid. O3 has been accepted.
 
 | Obs | Date | Vendor reference | Candidate index 1 | Flags |
 |---|---|---|---|---|
 | O1 | 2026-10-04 | 100% | 100 | **HISTORICAL — not valid for H1** (architect Q5). One write ack'd, one framing-compatible `0x03` response, checksum OK; unsolicited non-`0x03` notification seen (not interpreted); Reference B and other conditions undocumented. Transmission counted. |
 | O2 | 2026-10-05 | A = 100%, B = 100% (difference 0) | 100 | **PROVISIONAL — not counted** (architect Q6). One write ack'd, one framing-compatible `0x03` response, checksum OK; additional framing-incompatible, checksum-OK notification ~12 s later (not a second transmission; not decoded; under R2 not itself a duplicate valid response); other validity conditions UNVERIFIED. Transmission counted. |
-| O3 | 2026-10-22 | A = 60%, B = 60% (difference 0) | 60 | **PROVISIONALLY SUCCESSFUL — not yet formally VALID** (architect). Transmission 3. One write ack'd; exactly one framing-compatible `0x03` response, checksum OK, within the window (displayed ≤ 9 s); no additional notifications in the log as provided; no retry. V9 MET (written architect GO issued in ChatGPT before O3; not previously recorded in GitHub). V1 (fresh launch, worksheet row), V3 (log completeness, N8), V4, V6 and V7 are UNVERIFIED. |
+| O3 | 2026-10-22 | A = 60%, B = 60% (difference 0) | 60 | **VALID — counted** (architect accepted 2026-10-22; records-based confirmation, V1–V9 all MET, no additional transmission). As first reported: **provisionally successful — not yet formally VALID**. Transmission 3. One write ack'd; exactly one framing-compatible `0x03` response, checksum OK, within the window (displayed ≤ 9 s); no additional notifications in the log as provided; no retry. V9 MET (written architect GO issued in ChatGPT before O3; not previously recorded in GitHub). V1 (fresh launch, worksheet row), V3 (log completeness, N8), V4, V6 and V7 are UNVERIFIED. |
 
 Reference-only checkpoints: 2026-10-09 vendor app shows 93%; later, before O3, 60% (date not recorded).
 **Not observations; no query sent.**
 
 Validity status (architect rulings, 2026-10-22): O1 is **historical, not valid for H1**. O2 is
 **provisional and not counted** until its conditions are verified; unknown conditions are not
-assumed to have passed. O3 (2026-10-22) is **provisionally successful, not yet formally VALID**;
-see the V1–V9 check in [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md). All three
-transmissions count toward the cap.
+assumed to have passed. O3 (2026-10-22) was first recorded as provisionally successful; after a
+records-based confirmation of V1–V9 the architect ruled it **VALID** (2026-10-22). See the V1–V9
+check in [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md). All three transmissions count
+toward the cap; only O3 counts toward sufficiency.
 
 | Item | Value |
 |---|---|
 | Transmissions (of max 8) | **3** (O1, O2, O3); 5 remaining |
-| Valid observations counted | **0** (O1 historical; O2 provisional; O3 provisional, not yet VALID; need ≥ 5) |
-| Reference spread / distinct levels / upward change / repeat | among counted observations: none. Among all three (not counted): references 100 / 100 / 60; no upward change; no qualifying repeat (§16.5) |
+| Valid observations counted | **1 of 5** (O3 VALID; O1 historical and O2 provisional, not counted) |
+| Reference spread / distinct levels / upward change / repeat | among counted observations (O3 only): one level (60); spread 0; no upward change; no repeat. Among all three (not counted): references 100 / 100 / 60; no upward change; no qualifying repeat (§16.5) |
 | Per-position classification | not yet recorded |
-| Candidate index | index 1 observed = 100 (O1, O2) and 60 (O3); equal to the reference each time. **Not a finding**: no observation is VALID yet and sufficiency is not met |
+| Candidate index | index 1 observed = 100 (O1, O2) and 60 (O3); equal to the reference each time. **Not a finding**: only one VALID observation and sufficiency is not met; H1 NOT YET PROVEN |
 | Verdict (SUPPORTED / INCONCLUSIVE / REJECTED) | **none yet** — sufficiency not met |
 
-Next: **paused.** The architect rules on O3's open V1–V9 items. **O3r is NOT AUTHORIZED**; it needs
-its own readiness check and a new explicit written GO (handoff, "Gate for O3r").
+Next: **paused — awaiting O3r readiness assessment.** **O3r is NOT AUTHORIZED**; it needs its own
+readiness check (no charging since O3, ≥ 30 min after O3, fresh Reference A within 58–62%, all
+readiness/validity conditions) and a new written architect GO specifically for O3r (handoff, "Gate
+for O3r"). M2+ NOT AUTHORIZED.
 
 ## 15. Architect decisions (design review, approved)
 
