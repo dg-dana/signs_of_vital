@@ -5,12 +5,13 @@ Status: **DESIGN APPROVED — PARTIALLY EXECUTED: 2 of 8 transmissions used (O1,
 (sufficiency in §8 not met). Sanitized progress and handoff:
 [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md).
 
-**Revision 1** (§16) is **PROPOSED — PENDING FINAL ARCHITECT REVIEW** and **not in force**. It
-follows the architect's rulings of 2026-10-22 on
+**Revision 1** (§16) is **APPROVED and IN FORCE**. The architect approved it on 2026-10-22, and
+it was merged in PR #9 (merge commit `c69c024`). It follows the architect's rulings on
 [`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](M1_1_PROTOCOL_REVIEW_PROPOSAL.md). Sections 1–15 are the
-original approved text, kept as the historical record; where Revision 1 would change or clarify
-them, a dated note points to §16. Any further `0x03` (or other) transmission needs final approval
-of Revision 1, the §7 preconditions verified **and** a **new explicit written architect GO**.
+original approved text, kept as the historical record. Where Revision 1 changes or clarifies them,
+a dated note points to §16. Approval of the protocol does **not** authorize any device
+transmission. Any further `0x03` (or other) transmission needs a separate readiness check (the §7
+and §16.4 preconditions verified) **and** a **new explicit written architect GO**.
 
 The design, thresholds and criteria below are unchanged since approval (§15). The XCTest suite
 has passed in CI (§13).
@@ -141,7 +142,7 @@ Sufficiency (all of these, decided now): at least **5 valid** observations; refe
 **≥ 40 points**; at least **3 distinct levels ≥ 15 points apart**; at least **one upward
 change** (O5) and at least **one same-state repeat** (O2).
 
-> *Revision 1 note (PROPOSED, not in force):* the thresholds above are unchanged. The plan table
+> *Revision 1 note (in force since 2026-10-22, PR #9):* the thresholds above are unchanged. The plan table
 > and the O1/O2-specific repeat are replaced for the remaining transmissions by §16.5–§16.6,
 > which assume neither O1 nor O2 is valid.
 
@@ -165,7 +166,7 @@ Tolerance: an observation **agrees** with H1 at index `i` if
 5. at index `i`, the direction of change matches the reference for every pair of valid
    observations whose reference differs by ≥ 10 points, including the upward change (O5);
 6. at index `i`, the same-state repeat (O2) differs from O1 by ≤ 2;
-   *(Revision 1, PROPOSED: wording replaced by §16.5. This is an explicit change, not a
+   *(Revision 1, in force since 2026-10-22: wording replaced by §16.5. This is an explicit change, not a
    clarification.)*
 7. no other varying byte also satisfies 3–6.
 
@@ -291,8 +292,9 @@ assumed to have passed. Both transmissions count toward the cap.
 | Candidate index | index 1 observed = 100 in O1 and O2 (not a finding: both at the same reference level) |
 | Verdict (SUPPORTED / INCONCLUSIVE / REJECTED) | **none yet** — sufficiency not met |
 
-Next: **paused.** O3 only after final approval of Revision 1 (§16), a middle-state reference
-(roughly 45–70%), all preconditions verified, and a new explicit written architect GO.
+Next: **paused.** Revision 1 (§16) is approved and in force, but that is not a GO. O3 needs a
+middle-state reference (roughly 45–70%), all preconditions verified (readiness check), and a new
+explicit written architect GO.
 
 ## 15. Architect decisions (design review, approved)
 
@@ -314,12 +316,16 @@ M1.1; changing any of them needs a new architect decision before further observa
 XCTest pre-GO condition: **met** (20 tests, 0 failures in CI, §13). Remaining before any
 physical execution: the architect's final review and an explicit GO.
 
-## 16. Revision 1 — PROPOSED, PENDING FINAL ARCHITECT REVIEW (not in force)
+## 16. Revision 1 — APPROVED, IN FORCE (2026-10-22, PR #9)
 
 Origin: the protocol review after the O2 anomaly
 ([`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](M1_1_PROTOCOL_REVIEW_PROPOSAL.md)) and the architect's
-rulings Q1–Q10 of 2026-10-22 (recorded there and in `docs/DECISIONS.md`). Revision 1 takes effect
-only after final architect approval. Even then, O3 also needs a new explicit written GO.
+rulings Q1–Q10 of 2026-10-22 (recorded there and in `docs/DECISIONS.md`).
+
+**Approval:** the architect approved Revision 1 as written on 2026-10-22. It was merged in PR #9
+(merge commit `c69c024`) and has been in force since then. Approval of the protocol does **not**
+authorize any device transmission. O3 still needs a separate readiness check and a new explicit
+written GO, and any later observation is taken only under the GO terms the architect sets.
 
 **Unchanged by Revision 1:** H1 (§1). The request, channel, send path and app (§5, §11). The ±5
 tolerance (§9). The sufficiency thresholds (§8): ≥ 5 valid observations, reference spread

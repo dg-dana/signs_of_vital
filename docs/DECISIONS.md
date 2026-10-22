@@ -120,14 +120,15 @@ weakly documented observations, protects the experiment's integrity.
 **Consequences:** Documentation revisions only; O3 is still NOT AUTHORIZED. The remaining plan
 must reach sufficiency without O1/O2 (5 valid observations from 6 transmissions).
 
-## ADR-007 (PROPOSED — PENDING FINAL ARCHITECT REVIEW) — M1.1 Revision 1
+## ADR-007 (ACCEPTED 2026-10-22) — M1.1 Revision 1
 
-**Decision (proposed, not in force):** Adopt Revision 1 (`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`
-§16), which contains:
+**Decision:** Revision 1 (`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md` §16) is adopted. The architect
+approved it on 2026-10-22, it was merged in PR #9 (merge commit `c69c024`), and it is in force.
+It contains:
 - the R2 clarification;
-- classes R/M/U/Z and rules N1–N8 (exactly one valid `0x03` response within a displayed ≤ 9 s. This is a conservative whole-second
-  check, not a precise elapsed time;
-  missing/late, malformed, duplicate or unclassifiable → fail/abort; unrelated non-`0x03` → ignored);
+- classes R/M/U/Z and rules N1–N8: exactly one valid `0x03` response within a displayed ≤ 9 s (a
+  conservative whole-second check, not a precise elapsed time); missing/late, malformed, duplicate
+  or unclassifiable → fail/abort; unrelated non-`0x03` → ignored;
 - a manual 10-second check;
 - V1–V9, where only VALID counts;
 - a replacement same-state repeat (an explicit change to §9.6);
@@ -145,5 +146,5 @@ treat O2 as an observation-level invalid (C); stop (D). See
 `docs/protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md`.
 
 **Consequences:** One spare transmission. Any §12 abort (including a late response) ends M1.1 as
-INCONCLUSIVE under the unchanged §9, pending confirmation (proposal §11). O3 needs final approval
-plus a separate written GO.
+INCONCLUSIVE under the unchanged §9 (approved as written). Approval of the protocol does not
+authorize any transmission: O3 needs a separate readiness check and a new written GO.

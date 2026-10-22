@@ -1,13 +1,13 @@
 # TODO
 
-## Next — M1.1 PAUSED (Revision 1 pending final architect review)
+## Next — M1.1 PAUSED (Revision 1 approved and in force; O3 NOT AUTHORIZED)
 
-- [ ] Architect: final review of PR #9 (`claude/m1-1-protocol-review`). Approve or amend Revision 1
-  (`docs/protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md` §16) and answer the points in
-  `docs/protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md` §11. Do not merge without approval.
-- [ ] O3 only after Revision 1 is approved and merged, a middle-state reference (45–70%; last
-  reported 60%, date not recorded), every §6–§7 / V1–V9 precondition verified, and a **new explicit
-  written GO**. 2 of 8 transmissions used; 0 valid counted.
+- [ ] Architect: review the docs-only status follow-up PR (`claude/m1-1-rev1-status`). Do not merge
+  without approval.
+- [ ] O3 readiness check, then a **new explicit written GO** from the architect. Revision 1 approval
+  (PR #9) is not a GO. Readiness means a middle-state reference (45–70%; last reported 60%, date not
+  recorded) and every §6–§7 / V1–V9 precondition verified. 2 of 8 transmissions used; 0 valid
+  counted. Context: `docs/protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md` §16.
 - [ ] After O3 only, and only under the GO terms the architect sets: O3r, O4, O5, O6 per experiment §16.6 (1 spare; early stop
   §16.7). Record sanitized results in §14.
 - [ ] Open question (unsolicited UART notifications with a different command/type byte): decide

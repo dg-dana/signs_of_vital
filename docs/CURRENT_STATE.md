@@ -21,7 +21,7 @@ Concise technical checkpoint. Experimental research project — wearable reading
   to test this: [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
   (design **APPROVED**; **PARTIALLY EXECUTED**: O1, O2 done; **PAUSED** after the O2 anomaly;
   O3 not authorized; progress: [`M1_1_PROGRESS_HANDOFF.md`](protocol/M1_1_PROGRESS_HANDOFF.md);
-  **Revision 1** in the experiment's §16 is **PENDING FINAL ARCHITECT REVIEW**; analysis:
+  **Revision 1** in the experiment's §16 is **APPROVED and IN FORCE** (2026-10-22, PR #9); analysis:
   [`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md)).
 - The Bionny measurement protocol is **not decoded**. Unsolicited UART notifications with a
   different command/type byte were seen; their meaning is unknown.
@@ -60,7 +60,8 @@ Concise technical checkpoint. Experimental research project — wearable reading
   - No Swift changes.
   - Cap: 8 total, 6 remaining, no reset.
   
-  **M1.1 PAUSED** until Revision 1 receives final approval, and O3 then needs a separate written GO.
+  Revision 1 was approved by the architect on 2026-10-22 and merged in PR #9 (`c69c024`).
+  **M1.1 PAUSED.** Protocol approval is not a GO: O3 needs a separate readiness check and written GO.
   The app is unchanged since O2.
 - M1.1 preparation (display-only, send path unchanged): the M1 app shows `0x03` payload bytes 1–14
   by position, with no hex. The guard was strengthened (fixed `0x03` only, no decoder/percent UI, no
@@ -81,7 +82,7 @@ M1 physical experiment = COMPLETE / SUCCESSFUL (2026-10-03)
   Battery payload semantics = NOT YET PROVEN
 M1.1 battery payload semantics = PAUSED (design approved; PR #7 merged)
   O1 (2026-10-04) + O2 (2026-10-05) done; 2 of 8 transmissions; 0 valid counted; no verdict
-  Revision 1 (experiment §16) = PENDING FINAL ARCHITECT REVIEW (PR #9)
+  Revision 1 (experiment §16) = APPROVED, IN FORCE (2026-10-22; PR #9, merge c69c024)
   O3 = NOT performed, NOT authorized; no device command authorized now
 M2+  = NOT AUTHORIZED
 ```
@@ -98,21 +99,24 @@ GitHub is the single source of truth; no manual copy/paste of Swift code.
 
 Last completed:
 - M1 physical run (2026-10-03), PR #5. M1.1 design + preparation, PR #7. O1/O2 handoff, PR #8.
-- 2026-10-22: protocol review after the O2 anomaly. The architect ruled on Q1–Q10 (CHANGES
-  REQUESTED), and Revision 1 was drafted in experiment §16 (docs only).
+- 2026-10-22: protocol review after the O2 anomaly. The architect ruled on Q1–Q10 and approved
+  **Revision 1** (experiment §16), merged in PR #9 (`c69c024`). ADR-007 accepted.
 
 Current working branch / PR:
-- `claude/m1-1-protocol-review`, PR #9 (docs only; **PENDING FINAL ARCHITECT REVIEW**; not merged
-  without approval).
+- `claude/m1-1-rev1-status` (docs-only status follow-up; not merged without architect review).
+
+M1.1 status:
+- Revision 1 approved and in force.
+- O1 historical, not counted. O2 provisional, not counted.
+- 2 of 8 transmissions used; 6 remaining; 0 valid counted.
 
 Current blocker:
-- Final architect review of Revision 1, including the points in proposal §11 (abort consequence of
-  a late response, the ≤ 9 s displayed threshold, Z handling, the repeat pairing rule, the O2 path,
-  plan order).
+- None technical. O3 is **NOT AUTHORIZED**, pending a separate readiness check and a written GO.
 
 Next action:
-- Architect: final review of PR #9. After approval and merge, O3 additionally needs a middle-state
-  reference (45–70%), every §6–§7 / V1–V9 precondition verified, and a **new explicit written GO**.
+- Readiness check for O3: a middle-state reference (45–70%; last reported 60%, date not recorded)
+  and every §6–§7 / V1–V9 precondition. Then the architect decides on a **new explicit written GO**.
+  Protocol approval alone does not authorize a transmission.
 - New session: read the repository first. Do **not** ask Dana to repeat O1/O2 evidence or
   reconstruct old events from memory. UNVERIFIED items stay unverified.
 - M2+ remains NOT AUTHORIZED.
@@ -121,7 +125,7 @@ Do NOT:
 - run O3 or any further M1.1 query (or send another battery query), or any other H59 command, without that explicit GO
 - claim any response byte is battery % or add a battery decoder/UI
 - decode, interpret or act on the unsolicited UART notifications (including the O1/O2 extra ones);
-  Revision 1 would record only counts/flags (N8)
+  Revision 1 records only counts/flags (N8)
 - start M2+ (protocol layer, HR/BP/SpO2/HRV/stress/sleep/steps)
 - retry automatically, fuzz, or brute-force packets
 - write to `FEE7` (`FEA1`/`FEC9`/`FEA2`) or authenticate/write on `DE5BF72x`
