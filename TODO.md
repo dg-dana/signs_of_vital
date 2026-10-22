@@ -1,19 +1,15 @@
 # TODO
 
-## Next — M1.1 PAUSED (pending architect review)
+## Next — M1.1 PAUSED (Revision 1 pending final architect review)
 
-- [ ] Architect: review the protocol-review PR (`claude/m1-1-protocol-review`) and answer Q1–Q10 in
-  `docs/protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md` §11 (§12 reading, continuation option, notification
-  and validity rules, O1/O2 validity). Do not merge without approval.
-- [ ] Dana (only if the architect asks): give yes / no / don't know for the O1/O2 items marked
-  UNVERIFIED in `docs/protocol/M1_1_PROGRESS_HANDOFF.md`, and whether the O2 extra notification's
-  labels were exactly "checksum OK" / "framing NOT compatible". No worksheet contents, no screenshots.
-- [ ] After the architect's rulings: update the experiment doc (Revision 1, or close as INCONCLUSIVE
-  and pre-register a continuation, per the chosen option).
-- [ ] O3 only after those rulings, the §6–§7 preconditions, a middle-state reference (45–70%; last
-  reported 60%, date not recorded) and a **new explicit written GO**. 2 of 8 transmissions used.
-- [ ] After O3 GO only: O4 (low), O5 (after partial recharge) per experiment §8; record sanitized
-  results in its §14.
+- [ ] Architect: final review of PR #9 (`claude/m1-1-protocol-review`). Approve or amend Revision 1
+  (`docs/protocol/M1_1_BATTERY_SEMANTICS_EXPERIMENT.md` §16) and answer the points in
+  `docs/protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md` §11. Do not merge without approval.
+- [ ] O3 only after Revision 1 is approved and merged, a middle-state reference (45–70%; last
+  reported 60%, date not recorded), every §6–§7 / V1–V9 precondition verified, and a **new explicit
+  written GO**. 2 of 8 transmissions used; 0 valid counted.
+- [ ] After O3 only, and only under the GO terms the architect sets: O3r, O4, O5, O6 per experiment §16.6 (1 spare; early stop
+  §16.7). Record sanitized results in §14.
 - [ ] Open question (unsolicited UART notifications with a different command/type byte): decide
   whether/when to study them. Do not decode or act on them until authorized.
 - [ ] Open question: `FEE7` service (`FEA1`/`FEC9`/`FEA2`) is not covered by OpenH59 notes; decide

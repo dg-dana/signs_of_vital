@@ -11,12 +11,11 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 ## For a new session (read this first)
 
 1. Read this file, then `docs/CURRENT_STATE.md`, `TODO.md` and the experiment document.
-2. **Do not ask Dana to repeat the O1/O2 evidence.** It is recorded here. Ask only for the items
-   marked UNVERIFIED if the architect says they matter.
-3. The next step is **the architect's review** of
-   [`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](M1_1_PROTOCOL_REVIEW_PROPOSAL.md) (PENDING), not sending.
-   O3 then needs a middle-state vendor-app level (roughly 45–70%), all protocol preconditions
-   verified, and a **new explicit architect GO**. No query is authorized now.
+2. **Do not ask Dana to repeat the O1/O2 evidence or to reconstruct old events from memory.** It is
+   recorded here. Items marked UNVERIFIED stay unverified and are never assumed to have passed.
+3. The next step is the architect's **final review** of Revision 1 (experiment §16; PR #9), not
+   sending. O3 then needs a middle-state vendor-app level (roughly 45–70%), all protocol
+   preconditions verified, and a **new explicit written architect GO**. No query is authorized now.
 4. Do not decode, interpret or study the extra notifications seen in O1/O2.
 
 ## Status
@@ -24,12 +23,12 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 | Item | Value |
 |---|---|
 | Transmissions used | **2 of 8** (O1, O2) |
-| Valid observations toward sufficiency (§8: ≥ 5) | at most 2, **provisional** (see validity below) |
-| O3 | **NOT performed, NOT authorized** (M1.1 paused pending architect review) |
+| Valid observations counted toward sufficiency (§8: ≥ 5) | **0**: O1 historical, O2 provisional, not counted (architect Q5/Q6) |
+| O3 | **NOT performed, NOT authorized** (M1.1 paused; Revision 1 pending final architect review) |
 | Verdict | **None.** Sufficiency not met → not yet SUPPORTED / REJECTED / INCONCLUSIVE |
 | Battery semantics | **NOT proven** |
 
-## Confirmed physical history (sanitized)
+## Historical evidence (sanitized, as reported)
 
 | Obs | Date | Vendor reference | Result |
 |---|---|---|---|
@@ -42,6 +41,7 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 - O1 vs O2 at index 1: identical (difference 0, within the ≤ 2 same-state-repeat criterion).
   This is **consistent** with a same-state repeat. It proves nothing about battery semantics:
   both observations are at the same reference level (100%), so a constant byte would look the same.
+  Because O1 is not valid (Q5), this pair **cannot** serve as the sufficiency repeat (experiment §16.5).
 - No other payload value is recorded in the repository (experiment §10, architect decision 2).
   Per-position classification (experiment §4) is therefore **not yet recorded**.
 
@@ -51,29 +51,34 @@ About 12 seconds after the O2 response, an additional notification arrived that 
 **framing-incompatible but checksum-OK**. It was **not a second transmission** by us. It is
 recorded as an anomaly and **was not decoded**. The following are **UNVERIFIED**:
 
-- whether its command byte was `0x03` (framing-incompatible may mean wrong length or wrong command);
-- whether the app's ANOMALY banner appeared;
-- whether it counts under the experiment's §12 abort condition "more than one `0x03` response
-  to a query". It is not a framing-compatible `0x03` response as reported, so it was not
-  treated as one, but **that call belongs to the architect**; the agent does not make it.
+- the exact on-screen labels. If they were "checksum OK" and "framing NOT compatible" verbatim,
+  the app's code implies byte 0 ≠ `0x03` (proposal §3.2). This is not a decoding;
+- whether the app's ANOMALY banner appeared (by code, it should not have).
+
+Whether it falls under §12 is **resolved by the architect** (below): it does not.
 
 The O1 unsolicited non-`0x03` notification is likewise recorded only as having occurred
 (before or after the O1 query: **UNVERIFIED**).
 
 The app was closed after O2 and nothing is persisted, so the screen cannot be re-checked.
 
-**Architect assessment (2026-10-22):** the extra notification does not establish a second
-framing-compatible `0x03` response (the ANOMALY banner counts only those), but it raises an
-unresolved §12 framing-failure question; **O2 cannot currently be accepted as fully valid**, and
-O1 has outstanding unverified validity requirements. What the app's checks imply about the
-labels (code reading, no payload), the two readings of §12 and the continuation options are in
-[`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](M1_1_PROTOCOL_REVIEW_PROPOSAL.md) §2–§5 (PENDING).
+**Architect decisions (2026-10-22):**
+- The extra notification does not establish a second framing-compatible `0x03` response.
+- §12 "framing failure" is read as concerning the expected `0x03` response only (R2). This is a
+  **post-hoc clarification**, applied equally to O1 and O2, so neither extra non-`0x03`
+  notification is a framing failure.
+- No unknown notification is decoded or given meaning.
+- Analysis: [`M1_1_PROTOCOL_REVIEW_PROPOSAL.md`](M1_1_PROTOCOL_REVIEW_PROPOSAL.md) §3–§4.
 
-## Validity check against the protocol (O1 and O2)
+## Validity of O1 and O2 (architect decisions Q5/Q6)
 
-Status: **not accepted as valid** (architect, 2026-10-22). Neither observation is labelled valid
-until the architect accepts it. Note: §6 requires both Reference A and B; O1 has a single reported
-reading, so unless a B reading is confirmed O1 fails §6 as written (proposal §7, Q5).
+- **O1 — HISTORICAL, not valid for H1.** Reference B and other required conditions are
+  undocumented. Its transmission counts.
+- **O2 — PROVISIONAL, not counted.** The items below are UNVERIFIED. It counts only if they are
+  verified from existing records and the architect accepts it. Dana is not asked to reconstruct
+  them from memory, and the remaining plan does not rely on O2.
+
+UNVERIFIED items are never assumed to have passed. The table below is the historical checklist.
 
 | Condition (experiment §) | O1 | O2 |
 |---|---|---|
@@ -91,25 +96,37 @@ reading, so unless a B reading is confirmed O1 fails §6 as written (proposal §
 | No pairing prompt / security error / unexpected device behavior (§12) | **UNVERIFIED** (not reported either way) | **UNVERIFIED** |
 | Explicit architect GO before the run (§7) | **UNVERIFIED** in the repository | **UNVERIFIED** in the repository |
 
-## Remaining plan (design unchanged)
+## Remaining plan (Revision 1 — PROPOSED, pending final architect review)
 
-Per experiment §8: **6 transmissions remain** under the cap. Whether they suffice depends on
-O1/O2 validity (3 to 1 spare transmissions; proposal §8). Still required for sufficiency:
-O3 (middle, roughly 45–70), O4 (low, ≤ 40), O5 (after a partial recharge, ≥ 15 points above
-O4) — which also supplies the ≥ 40-point reference spread and ≥ 3 distinct levels. All
-thresholds and criteria are as pre-registered and may not change.
+**6 transmissions remain** of the 8-transmission lifetime cap (no reset). The plan assumes
+**neither O1 nor O2 counts** (experiment §16.6):
+
+| Planned | State |
+|---|---|
+| O3 | Middle, 45–70 |
+| O3r | Same-state repeat of O3 |
+| O4 | Low: ≤ 40, ≥ 15 below O3, not below ~20 |
+| O5 | After a partial recharge: ≥ O4 + 40 and ≥ O3 + 15 |
+| O6 | Any state |
+| — | 1 spare |
+
+H1, the ±5 tolerance and the thresholds are unchanged. The replacement same-state repeat (§16.5) is
+an explicit Revision 1 change. Early stop (§16.7): if the remaining transmissions cannot reach
+sufficiency, stop and record INCONCLUSIVE.
 
 ## Gate for O3 — all must be true before any query
 
-- [ ] The vendor app shows a middle-state battery level, roughly 45–70%. (Last reported 60%; re-check on the day.)
-- [ ] Every precondition in experiment §6–§7 is verified and written down: off charger ≥ 15 min,
-  vendor app disconnected, ≥ 30 min since the previous query, numbered worksheet row, Reference A taken.
-- [ ] The architect has ruled on the protocol-review proposal (Q1–Q10), including the O2 anomaly
-  under §12 and O1/O2 validity, and any resulting revision is merged.
+- [ ] Revision 1 (experiment §16) has received **final architect approval** and is merged.
+- [ ] The vendor app shows a middle-state battery level, roughly 45–70%. (Last reported 60%; date
+  not recorded; re-check on the day.)
+- [ ] Every precondition in experiment §6–§7 and V1–V9 (§16.4) is verified and written down before
+  Send: off charger ≥ 15 min, vendor app disconnected, ≥ 30 min since the previous query, numbered
+  worksheet row, Reference A taken.
 - [ ] A **new explicit architect GO** for O3 exists in writing.
 
-Abort conditions are experiment §12, unchanged. On any abort: stop, no retry, no workaround,
-report to the architect.
+During and after the run: the manual 10-second check and N8 recording (§16.2–§16.3) are done
+before the app is closed. Abort conditions are §12 and §16.2. On any abort: stop, no retry, no
+workaround, report to the architect.
 
 ## Not authorized
 

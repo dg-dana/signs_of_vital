@@ -1,20 +1,32 @@
 # M1.1 — Protocol Review and Continuation Proposal (after the O2 anomaly)
 
-Status: **PENDING ARCHITECT REVIEW.** Documentation only; nothing in this file is in force.
-M1.1 is **PAUSED**. O3 is **NOT AUTHORIZED**. No query or other device command is authorized.
+Status: **PENDING FINAL ARCHITECT REVIEW.** Documentation only. M1.1 is **PAUSED**. O3 is **NOT
+AUTHORIZED**. No query or other device command is authorized, and nothing here instructs one.
 
-The pre-registered hypothesis (experiment §1), tolerance (§9), sufficiency thresholds (§8) and
-transmission cap (§8) in [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
-are **unchanged** by this document. Every item below that would change how the experiment runs,
-or how its rules are read, is marked **[DECISION]**. It takes effect only after an explicit,
-written architect decision.
+Round 1 (2026-10-22): first draft; architect review = **CHANGES REQUESTED**, with rulings Q1–Q10 (§2).
+Round 2 (this revision): the rulings are incorporated. The normative Revision 1 text now lives in
+the experiment document, [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md` §16](M1_1_BATTERY_SEMANTICS_EXPERIMENT.md#16-revision-1--proposed-pending-final-architect-review-not-in-force).
+This file holds the analysis and the decision record.
 
-Prepared 2026-10-22 by Claude Code (developer) at the architect's request. Inputs: the repository
-at `main` `dc7e1d4` (docs and the M1 app source). No raw frames, screenshots, payload values beyond
-those already committed, or private-worksheet contents were seen. The unsolicited notification's
-payload was **not** decoded or investigated.
+How to read the labels used in this file:
 
-## 1. Architect assessment (as given, 2026-10-22)
+| Label | Meaning |
+|---|---|
+| **HISTORICAL** | Evidence from O1/O2 as reported; not rewritten |
+| **DECIDED** | Architect ruling already made (2026-10-22) |
+| **PROPOSED (Rev 1)** | Rule drafted for Revision 1; in force only after final architect approval |
+| **UNVERIFIED** | Not documented; never assumed to have passed |
+| **NOT AUTHORIZED** | O3 or any query, any Swift/BLE change, decoding of unknown notifications, M2+ |
+
+H1 (experiment §1), the ±5 tolerance (§9), the sufficiency thresholds (§8) and the 8-transmission
+cap (§8) are **unchanged**. The one change to a pre-registered criterion, the same-state repeat
+(§16.5), is identified explicitly as a change.
+
+Prepared by Claude Code (developer). Inputs: the repository (docs and the M1 app source). No raw
+frames, screenshots, payload values beyond those already committed, or private-worksheet contents
+were seen. The unsolicited notifications were **not** decoded or investigated.
+
+## 1. Architect assessment (DECIDED, as given, 2026-10-22)
 
 - The O2 extra notification does **not** establish a second framing-compatible `0x03` response.
 - The app's ANOMALY banner counts only framing-compatible `0x03` responses.
@@ -23,9 +35,26 @@ payload was **not** decoded or investigated.
 - **O1 also has outstanding unverified validity requirements.**
 - M1.1 is on hold; O3 is not authorized; the payload of the extra notification is not to be decoded.
 
-## 2. The O2 anomaly and what is still uncertain
+## 2. Architect rulings on the first draft (DECIDED, 2026-10-22)
 
-### 2.1 What is recorded (unchanged evidence)
+| Q | Ruling | Where incorporated |
+|---|---|---|
+| Q1 | **R2 approved.** §12 "framing failure" concerns the expected `0x03` response, not unrelated non-`0x03` notifications | Experiment §12 note, §16.1 |
+| Q2 | **Option A approved in principle.** Continue through a documented Revision 1, subject to final review | Experiment §16 |
+| Q3 | **Conditional.** Revise N1–N7 to handle malformed, missing, duplicate and late responses explicitly | Experiment §16.2–§16.3 |
+| Q4 | **Approved.** V1–V9; UNVERIFIABLE observations do not count toward sufficiency | Experiment §16.4 |
+| Q5 | **O1 not accepted as valid.** Retained as historical evidence; its transmission counts | Experiment §14, §16.4 |
+| Q6 | **O2 not yet accepted.** Its extra notification is not itself a duplicate valid response under R2, but other conditions are unverified | Experiment §14, §16.4 |
+| Q7 | **Approved for Revision 1.** A later same-state repeat may replace the O1/O2-specific repeat, if approved before further observations | Experiment §16.5 |
+| Q8 | **Approved.** Early stop when the remaining transmissions cannot meet sufficiency | Experiment §16.7 |
+| Q9 | **Approved.** No Swift changes; limitations handled procedurally | Experiment §16.3, §16.9 |
+| Q10 | **Confirmed.** 8 transmissions in total, 2 used, 6 remaining, no reset | Experiment §16 (unchanged list) |
+
+These rulings authorize documentation revisions only, not O3.
+
+## 3. The O2 anomaly and what is still uncertain
+
+### 3.1 What is recorded (HISTORICAL)
 
 O2 (2026-10-05): one explicitly confirmed `0x03` query; ATT write acknowledged; one
 framing-compatible 16-byte response, checksum OK; candidate index 1 = 100; vendor reference
@@ -33,7 +62,7 @@ A = B = 100%. About **12 s after that response**, one further notification arriv
 reported as **framing-incompatible, checksum-OK**. It was not a second transmission by us. The
 app was then closed; nothing is persisted, so the screen cannot be re-checked.
 
-### 2.2 What the app's own checks imply (code reading only; no payload examined)
+### 3.2 What the app's own checks imply (code reading only; no payload examined)
 
 These follow from `ios/SignsOfVital-M1.swiftpm/BatteryFrame.swift` (`ResponseObservation`) and
 `BatteryProbeModel.swift`. They hold **only if** the report used the app's on-screen labels
@@ -52,15 +81,18 @@ These follow from `ios/SignsOfVital-M1.swiftpm/BatteryFrame.swift` (`ResponseObs
 
 Nothing here says what the notification means. It is not interpreted.
 
-### 2.3 Still unresolved
+### 3.3 Still unresolved
 
-- Whether the report used the app's labels verbatim (and so whether 2.2 applies).
-- Whether the ANOMALY banner appeared (2.2.4 says it should not have).
+UNVERIFIED, and not to be reconstructed from memory:
+
+- Whether the report used the app's labels verbatim (and so whether 3.2 applies).
+- Whether the ANOMALY banner appeared (3.2.4 says it should not have).
 - Whether the O1 unsolicited non-`0x03` notification arrived before or after the O1 query.
-- Whether either event falls under §12 "framing failure". **Architect's call** (§3).
 - The O1/O2 precondition items marked UNVERIFIED in [`M1_1_PROGRESS_HANDOFF.md`](M1_1_PROGRESS_HANDOFF.md).
 
-## 3. Does §12 require terminating M1.1?
+Resolved by the architect: neither event is a §12 framing failure under R2 (Q1).
+
+## 4. Does §12 require terminating M1.1? (resolved: Q1 = R2)
 
 §12 lists, without scoping, "a write error, no response within 10 s, **a framing failure**, or
 more than one `0x03` response to a query". §9 makes "any abort (§12) before sufficiency"
@@ -82,9 +114,12 @@ So it must be settled by an explicit, recorded architect ruling, not by the deve
 - The stakes are bounded. O2's index-1 value equals O1's at the same reference level, so O2 carries
   little evidential weight for H1. Its role is the same-state repeat and the valid-observation count (§8).
 
-**Answer:** §12 requires termination **only under R1**. Under R2, it does not. **[DECISION Q1]**
+**Answer:** §12 requires termination **only under R1**. Under R2, it does not.
 
-## 4. Is a separately approved continuation permissible?
+**Ruling (Q1):** R2. It is recorded in experiment §16.1 as a **post-hoc clarification** adopted
+after the O2 anomaly. The original §12 wording is preserved, with a dated note.
+
+## 5. Is a separately approved continuation permissible?
 
 Yes. The document provides for it. §9: "Any change needs a new document revision approved before
 further observations." §8: "no extension without a new architect decision." §15: changes need a
@@ -92,7 +127,7 @@ new architect decision before further observations. A continuation is legitimate
 down, approved **before** the next transmission, and does not quietly alter H1, the tolerance,
 the thresholds or the cap.
 
-## 5. Continuation alternatives
+## 6. Continuation alternatives (resolved: Q2 = A in principle)
 
 | Option | What it means | For | Against |
 |---|---|---|---|
@@ -102,136 +137,116 @@ the thresholds or the cap.
 | **C. Keep M1.1 open; treat O2 as an observation-level invalid** | §12 is read as "stop this observation" rather than "stop the experiment". O2 counted, not used. | Simple. | This is itself a reinterpretation of §12 (an experiment-level stop becomes observation-level). Needs the same explicit ruling as A, without A's clarity. |
 | **D. Stop; no continuation** | M1.1 INCONCLUSIVE; battery semantics parked. | No further device interaction. | Leaves the M1.1 question open; the 6-transmission budget goes unused. |
 
-**Recommendation:** **A**. If the architect prefers R1, use **B** (shared cap of 8, O1/O2 not
-used for H1), not B′. **[DECISION Q2]**
+The developer recommended **A**. **Ruling (Q2): A approved in principle.** O1/O2 are nonetheless
+treated conservatively: neither is counted, so the plan matches option B's requirements (5 valid
+observations from the 6 remaining transmissions) while staying within M1.1.
 
-## 6. Proposed handling of notifications during an observation [DECISION Q3]
+## 7. Revision 1 summary (PROPOSED; normative text in experiment §16)
 
-These rules use only labels the existing app already shows: "After query" / "Unsolicited (before
-query)", length, "byte0 = 0x03" / "byte0 ≠ 0x03", "checksum OK/MISMATCH", "framing COMPATIBLE/NOT
-compatible", log timestamps. Nothing is decoded.
+### 7.1 Notification rules: first draft → Revision 1
 
-- **N1 — Response window:** from the write (log `SENDING`) to 10 s after it. Unchanged from §12.
-- **N2 — The response:** exactly one framing-compatible `0x03` notification after the query, within
-  the window. Unchanged.
-- **N3 — Framing failure (§12 abort):** any notification after the query with byte 0 = `0x03` but
-  length ≠ 16 or a checksum mismatch, **or** an empty notification after the query (byte 0
-  unknown; treated conservatively).
-- **N4 — Non-`0x03` notification:** any notification with byte 0 ≠ `0x03`, at any time. **Not** a
-  framing failure. Not decoded, not transcribed beyond N6, not acted on. It does not by itself
-  invalidate the observation.
-- **N5 — Existing anomalies, unchanged:** more than one framing-compatible `0x03` (ANOMALY banner),
-  or no framing-compatible `0x03` within the window (even if a non-`0x03` one arrived), → §12 abort.
-- **N6 — Recording, before closing the app:** the operator writes into the private worksheet only
-  the count of non-`0x03` notifications per timing class (before query / within window / after
-  window) and whether any N3/N5 condition occurred. No bytes. This adds fields to the §10
-  worksheet and so needs approval. The committed record gets the same counts as validity flags.
-- **N7 — Applies retroactively to O1 and O2 alike.**
+Notifications are classified only by the app's existing labels: **R** (valid `0x03` response),
+**M** (malformed `0x03`), **U** (unrelated non-`0x03`), **Z** (unclassifiable: no byte-0 label, or
+labels not recorded before the app closed).
 
-Under N4, the O2 extra notification would be a non-`0x03` notification after the window, **if**
-2.2 holds. That depends on Dana confirming the labels.
-
-## 7. How observation validity should be assessed [DECISION Q4–Q6]
-
-Each observation is checked against:
-
-| # | Condition | Source in experiment |
+| Case | First draft | Revision 1 (§16.2) |
 |---|---|---|
-| V1 | Exactly one transmission, fresh launch, numbered worksheet row first | §5, §7, §8 |
-| V2 | ATT write acknowledged | §7 |
-| V3 | Exactly one framing-compatible `0x03` response within 10 s; no N3/N5 condition | §7, §9.2, §12, N1–N5 |
-| V4 | No pairing prompt, security error or unexpected device behavior | §12 |
-| V5 | Reference A and B within 15 min, \|A−B\| ≤ 5 | §6 |
-| V6 | Band off charger ≥ 15 min | §7 |
-| V7 | Vendor app disconnected during the query, reconnected afterwards | §6 steps 2 and 4 |
-| V8 | ≥ 30 min since the previous M1.1 query | §7 |
-| V9 | Written architect GO existed before the run | §7 |
+| Valid response | One framing-compatible `0x03` within 10 s | **N1** Exactly one R within the window; "within" = displayed log difference **≤ 9 s** (the log shows whole seconds) |
+| Missing / late | Folded into N5 | **N2** Explicit: no R within the window (including an R that arrives late) → observation fails; §12 "no response within 10 s" applies |
+| Malformed `0x03` | N3 | **N3** Any M after the query → §12 abort |
+| Duplicate | N5 (banner) | **N4** More than one R at any time, banner or not → §12 abort |
+| Empty / unclassifiable | Empty after the query → framing failure | **N5** Any Z after the query → §12 abort. A Z before the query → do not send in that launch. Never assumed harmless |
+| Unrelated non-`0x03` | N4 | **N6** Not decoded, interpreted or acted on; never substitutes for the R |
+| Security / pairing / unexpected behavior | Implicit (§12) | **N7** Listed explicitly, unchanged |
+| Recording | N6 | **N8** Fixed field list, written before closing the app; flags and counts only are committed |
+| Retroactivity | N7 "applies to O1 and O2" | R2 applies to O1/O2 (Q1). N5 applies only to observations taken after approval; O1/O2 are governed by Q5/Q6 |
 
-Outcomes: **VALID** (all verified), **INVALID** (any failed; counted toward the cap, not used for
-H1), **UNVERIFIABLE**. Proposed: **UNVERIFIABLE is treated as INVALID** for H1 (conservative).
+### 7.2 Manual 10-second check
 
-Verification without exposing private data: Dana gives a written **yes / no / don't know** per
-item, from memory or the private worksheet (which records date/hour, references A/B, minutes off
-charger and framing-check yes/no). No worksheet contents are committed.
+The app's 10-s timer only checks whether *any* notification arrived after the query, so a
+U/M/Z suppresses its warning. Experiment §16.3 defines the manual check: compare the `SENDING`
+and "framing COMPATIBLE" log times, classify every other notification, and record N8 before
+closing the app. No app change.
 
-Specific notes:
+### 7.3 Validity policy
 
-- **O1:** the handoff records a *single* reference reading. §6 requires both A and B. Unless Dana
-  confirms a B reading existed, O1 fails V5 and is **INVALID as the rule is written**, not merely
-  unverified. **[DECISION Q5]**
-- **O2:** V5 (15-minute window), V6, V7, V9 and V3 (as governed by the §3 ruling) are open.
-  **[DECISION Q6]**
+V1–V9 (§16.4). Only VALID counts; unknown is never assumed to have passed.
 
-## 8. Can the remaining 6 transmissions meet the original sufficiency requirement?
+- **O1:** HISTORICAL, not valid for H1.
+- **O2:** PROVISIONAL, not counted. It can count only if verified from existing records and
+  accepted by the architect; Dana is not asked to reconstruct events from memory.
 
-Requirement (§8, unchanged): ≥ 5 valid; reference spread ≥ 40; ≥ 3 distinct levels ≥ 15 apart;
-≥ 1 upward change; ≥ 1 same-state repeat. §9.6 names the repeat specifically as "O2 vs O1".
+### 7.4 Same-state repeat (explicit change)
 
-| Scenario | Valid observations still needed | Spare transmissions | Feasible? |
-|---|---|---|---|
-| S1: O1 and O2 valid | 3 (O3 mid, O4 low, O5 recharge) | 3 | Yes. Spread from 100 to ≤ 40 is ≥ 60. |
-| S2: O1 invalid, O2 valid | 4 (O3, a new same-state repeat, O4, O5) | 2 | Yes, **but** §9.6 cannot be met as worded without a substitute repeat **[DECISION Q7]** |
-| S3: O1 valid, O2 invalid | 4 (as S2; or repeat O1's state after recharge) | 2 | Yes, with the same §9.6 decision |
-| S4: both invalid (or option B) | 5 (incl. a new repeat; e.g. mid ~60, low ~20–25, recharge to ≥ 75 for spread ≥ 40 and 3 levels ≥ 15 apart) | 1 | Marginal: one more invalid observation ends in INCONCLUSIVE |
+§16.5 replaces the O1/O2-specific repeat. The replacement is any VALID pair in the same discharge
+cycle, ≥ 30 min apart, with references within ±2. Every qualifying pair must agree within 2 at
+index `i`.
 
-Timing: the latest vendor-app reference reported to the architect is **60%** (date not recorded in
-the repository; UNVERIFIED). That is inside the O3 range today, but it may leave the range during
-review. If it does, the plan is unchanged: recharge and wait for the next discharge through the
-middle range. Do not run the band down deliberately (§8).
+## 8. Feasibility of the remaining 6 transmissions
 
-**Proposed early-stop rule [DECISION Q8]:** if, at any point, the remaining transmissions are fewer
-than the valid observations still needed, stop and declare INCONCLUSIVE rather than spend more
-transmissions. This only reduces device interaction.
+Planned conservatively for **neither O1 nor O2 counting** (§16.6):
+
+| | O3 | O3r | O4 | O5 | O6 | spare |
+|---|---|---|---|---|---|---|
+| State | 45–70 | O3 ±2, same cycle, ≥ 30 min later | ≤ 40 and ≥ 15 below O3 (not below ~20) | after partial recharge, ≥ O4 + 40 and ≥ O3 + 15 | any, ≥ 30 min after O5 | — |
+
+Original requirement → how the plan meets it:
+
+| Requirement | Met by |
+|---|---|
+| ≥ 5 valid | O3, O3r, O4, O5, O6 |
+| Spread ≥ 40 | O5 − O4 |
+| 3 levels pairwise ≥ 15 apart | O4 < O3 < O5 |
+| Upward change | O4 → O5 |
+| Same-state repeat | O3/O3r |
+| H1, ±5, cap | Unchanged |
+
+**Margin: 1 spare.** Two non-VALID observations, or any §12 abort, end M1.1 as INCONCLUSIVE
+(§16.7, §9). The plan is feasible but fragile; that is the honest consequence of not counting
+O1/O2.
+
+Timing: the latest reported vendor reference is 60% (date not recorded; reference only). If the
+level is outside 45–70 when a GO is given, wait for the next discharge cycle. Do not stress the
+band.
 
 ## 9. If the evidence remains insufficient
 
-Unchanged from §8/§9: when the cap is reached (or the early-stop rule fires) without sufficiency,
-the verdict is **INCONCLUSIVE**. There is no extension. Sanitized results are recorded (§10).
-Battery semantics stay **NOT proven**. Any pattern seen (other scale, coarse levels, etc.) is
-recorded only as a new hypothesis. Any further attempt is a **new, separately pre-registered
-experiment** with its own cap and a new architect GO. An INCONCLUSIVE M1.1 does not authorize M2.
+INCONCLUSIVE, with no extension and no budget reset (§16.8). Battery semantics stay NOT proven.
+Any further attempt is a new pre-registered experiment. M2 is not authorized.
 
 ## 10. Implementation implications
 
-**The existing M1 app is sufficient for options A, B and C without code changes.** It already
-shows, per notification, the after-query flag, length, byte 0 = / ≠ `0x03`, checksum result and
-framing compatibility. The event log timestamps (to the second) `SENDING`, the write ack and each
-notification. The ANOMALY banner covers N5.
+No Swift changes (Q9). The app already shows every label the rules need: after-query flag,
+length, byte 0 = / ≠ `0x03`, checksum, framing compatibility, and log times to the second.
 
-Limitations, handled procedurally:
+Limitations and how they are handled (§16.9):
 
-| # | Limitation (code) | Procedural mitigation |
-|---|---|---|
-| L1 | Nothing is persisted; closing the app loses the screen (this is how O2's details were lost) | N6: write the counts/flags into the worksheet **before** closing the app |
-| L2 | The 10-s "no notification" log line is suppressed by *any* after-query notification, including a non-`0x03` one | Operator checks that the framing-compatible `0x03` response is timestamped ≤ 10 s after `SENDING` |
-| L3 | The ANOMALY banner does not flag N3 (a malformed `0x03`) | Operator checks the labels of every after-query notification |
-| L4 | "After query" is not window-based | Operator classifies timing from log timestamps (N6) |
+| Limitation | Handled by |
+|---|---|
+| No persistence | N8 |
+| Timer not response-specific | §16.3 |
+| Banner ignores M/Z | §16.3 |
+| "After query" not window-based | §16.3 |
 
-Possible code changes (**not recommended now**; would need separate authorization): a display-only
-window classification and an N3 warning. No new BLE behavior. Trade-off: O3+ would run on a
-different build than O1/O2, and the static guard, tests and CI would need updating. Procedural
-handling is enough. **[DECISION Q9]**
+Guards and tests are unchanged.
 
-No new Bluetooth behavior, persistence, logging, decoders or transmission paths are proposed.
+## 11. Points for final architect review
 
-## 11. Questions requiring architect decision
+The Q1–Q10 rulings are incorporated. These Revision 1 details were drafted by the developer and
+need explicit confirmation:
 
-1. **Q1** — §12 reading: R1 (strict, M1.1 terminates as INCONCLUSIVE) or R2 (scoped to the response)?
-2. **Q2** — Continuation option: A, B, B′, C or D?
-3. **Q3** — Adopt notification rules N1–N7 as Revision 1, including N3's conservative handling of
-   empty notifications and N6's added worksheet fields?
-4. **Q4** — Adopt the V1–V9 validity checklist, with UNVERIFIABLE treated as INVALID, verified by
-   Dana's yes/no/don't-know statements?
-5. **Q5** — O1: VALID or INVALID, given a single reference reading (§6 requires A and B)?
-6. **Q6** — O2: VALID or INVALID, after Q1 and Dana's answers on V3/V5/V6/V7/V9?
-7. **Q7** — If O1 or O2 is invalid: may a later same-state repeat substitute for §9.6's "O2 vs O1"
-   (same ±2 reference band, ≥ 30 min apart, same discharge cycle)? This changes the wording of a
-   pre-registered criterion.
-8. **Q8** — Adopt the early-stop rule (§8 above)?
-9. **Q9** — Confirm that no app changes are made and that L1–L4 are handled procedurally?
-10. **Q10** — If option B: confirm the shared cap (6 remaining, 8 in total) and that O1/O2 are not
-    used for H1.
-
-Unchanged regardless of the answers: H1, the ±5 tolerance, the §8 sufficiency thresholds and the
-8-transmission cap. O3 still needs the §6–§7 preconditions **and** a new, explicit, written GO
-after these decisions.
+1. **Abort consequence.** §9 (unchanged) makes *any* §12 abort before sufficiency INCONCLUSIVE.
+   Revision 1 keeps that, so N2 (missing/late), N3, N4 and N5 each **end M1.1**. The ruling's
+   wording "a missing or late valid response *fails the observation*" could be read as
+   observation-level only. Making it observation-level would be a change to §12/§9, not a
+   clarification. The developer recommends keeping the original, stricter consequence. Confirm.
+2. **≤ 9 s displayed threshold** (§16.2). It is conservative because the log shows whole seconds.
+   A real 9.5 s response displayed as "10 s" would end M1.1. Confirm, or rule otherwise.
+3. **Z before the query → do not send in that launch** (N5). Confirm.
+4. **"Every qualifying pair"** in the same-state repeat (§16.5). Confirm.
+5. **O2 path.** The developer proposes no request to Dana. O2 stays provisional and unused unless
+   records-based verification is offered. Confirm.
+6. **Fixed default order** (O3 → O3r → O4 → O5 → O6); any reordering needs an architect decision.
+   Confirm.
+7. **Final approval of Revision 1 as a whole** (experiment §16). After that, O3 still needs a
+   separate written GO.

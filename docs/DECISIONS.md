@@ -99,19 +99,48 @@ be decoded.
 `docs/protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md` and gives a new written GO. H1, tolerance,
 thresholds and the 8-transmission cap are unchanged.
 
-## ADR-007 (PROPOSED — PENDING ARCHITECT REVIEW) — M1.1 continuation after the O2 anomaly
+## 2026-10-22 — Architect rulings Q1–Q10 on the M1.1 protocol review (PR #9, round 1)
 
-**Decision (proposed, not in force):** Read §12 "framing failure" as applying to the response to our
-query (R2). Continue M1.1 under a Revision 1 that adds notification-handling rules (N1–N7) and an
-observation-validity checklist (V1–V9, unverifiable = invalid), with no app changes.
+**Decision:**
+- §12 "framing failure" concerns the expected `0x03` response, not unrelated non-`0x03`
+  notifications (R2). This is a post-hoc clarification, applied equally to O1 and O2.
+- Continue M1.1 via a documented Revision 1 (option A, in principle), subject to final review.
+- Notification rules must cover malformed, missing, duplicate and late responses.
+- Validity checklist V1–V9 adopted; UNVERIFIABLE observations do not count.
+- O1 is historical, not valid for H1. O2 is provisional and not counted until verified.
+- A later same-state repeat may replace the O1/O2-specific one, approved before further
+  observations.
+- An early-stop rule is added.
+- No Swift changes.
+- The cap stays 8 (2 used, 6 remaining, no reset).
 
-**Reason:** §7 already anticipates non-`0x03` notifications and says not to act on them; the other §12
-items all concern the query's response. Keeps the remaining 6 transmissions under unchanged criteria.
+**Reason:** The pre-registered §12 wording was ambiguous. Resolving it explicitly, and not counting
+weakly documented observations, protects the experiment's integrity.
 
-**Alternatives considered:** B: strict reading (R1), close M1.1 as INCONCLUSIVE and pre-register a
-continuation with the same criteria and the 6 remaining transmissions (O1/O2 not used); C: treat O2 as
-an observation-level invalid; D: stop without continuation. Full trade-offs and the ten open questions:
+**Consequences:** Documentation revisions only; O3 is still NOT AUTHORIZED. The remaining plan
+must reach sufficiency without O1/O2 (5 valid observations from 6 transmissions).
+
+## ADR-007 (PROPOSED — PENDING FINAL ARCHITECT REVIEW) — M1.1 Revision 1
+
+**Decision (proposed, not in force):** Adopt Revision 1 (`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`
+§16), which contains:
+- the R2 clarification;
+- classes R/M/U/Z and rules N1–N8 (exactly one valid `0x03` response within a displayed ≤ 9 s;
+  missing/late, malformed, duplicate or unclassifiable → fail/abort; unrelated non-`0x03` → ignored);
+- a manual 10-second check;
+- V1–V9, where only VALID counts;
+- a replacement same-state repeat (an explicit change to §9.6);
+- a conservative plan O3, O3r, O4, O5, O6 with 1 spare transmission;
+- early stop.
+
+H1, the tolerance, the thresholds and the cap are unchanged.
+
+**Reason:** Implements the Q1–Q10 rulings without app changes and without counting O1/O2.
+
+**Alternatives considered:** Close M1.1 as INCONCLUSIVE and pre-register a new experiment (B);
+treat O2 as an observation-level invalid (C); stop (D). See
 `docs/protocol/M1_1_PROTOCOL_REVIEW_PROPOSAL.md`.
 
-**Consequences:** If accepted, the clarification is post-hoc and must apply to O1 and O2 alike. If
-O1 or O2 is invalid, §9.6's "O2 vs O1" repeat needs a separately approved substitute.
+**Consequences:** One spare transmission. Any §12 abort (including a late response) ends M1.1 as
+INCONCLUSIVE under the unchanged §9, pending confirmation (proposal §11). O3 needs final approval
+plus a separate written GO.
