@@ -1,6 +1,7 @@
 # M1.1 — Progress and Handoff (sanitized)
 
-Checkpoint as of **2026-10-22** (M1.1 **PAUSED**). Experimental and **non-medical**. The design, thresholds and
+Checkpoint as of **2026-10-22, after O3**. **M1.1 PAUSED AFTER O3 — awaiting architect review of O3
+validity. O3r NOT AUTHORIZED.** Experimental and **non-medical**. The design, thresholds and
 verdict rules live in [`M1_1_BATTERY_SEMANTICS_EXPERIMENT.md`](M1_1_BATTERY_SEMANTICS_EXPERIMENT.md)
 and are **unchanged**; this file only records what has physically happened and what is next.
 
@@ -13,18 +14,20 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 1. Read this file, then `docs/CURRENT_STATE.md`, `TODO.md` and the experiment document.
 2. **Do not ask Dana to repeat the O1/O2 evidence or to reconstruct old events from memory.** It is
    recorded here. Items marked UNVERIFIED stay unverified and are never assumed to have passed.
-3. Revision 1 (experiment §16) is **approved and in force** (2026-10-22, PR #9). That is not a GO.
-   The next step is a separate **readiness check**, not sending. O3 then needs a middle-state vendor-app level (roughly 45–70%), all protocol
-   preconditions verified, and a **new explicit written architect GO**. No query is authorized now.
+3. Revision 1 (experiment §16) is **approved and in force** (2026-10-22, PR #9). O3 was performed on
+   2026-10-22 and is **provisionally successful, not yet formally VALID** (architect). The next step
+   is the architect's decision on O3's open V1–V9 items, not sending. **O3r is NOT AUTHORIZED**;
+   no query is authorized now.
 4. Do not decode, interpret or study the extra notifications seen in O1/O2.
 
 ## Status
 
 | Item | Value |
 |---|---|
-| Transmissions used | **2 of 8** (O1, O2) |
-| Valid observations counted toward sufficiency (§8: ≥ 5) | **0**: O1 historical, O2 provisional, not counted (architect Q5/Q6) |
-| O3 | **NOT performed, NOT authorized** (M1.1 paused; Revision 1 approved and in force, but that is not a GO) |
+| Transmissions used | **3 of 8** (O1, O2, O3); **5 remaining** |
+| Valid observations counted toward sufficiency (§8: ≥ 5) | **0**: O1 historical; O2 provisional; O3 provisionally successful, **not yet formally VALID** |
+| O3 | **Performed 2026-10-22** (transmission 3) under a written architect GO. Provisionally successful; V9 met; V1, V3 (partly), V4, V6, V7 unverified (below) |
+| O3r | **NOT authorized** |
 | Verdict | **None.** Sufficiency not met → not yet SUPPORTED / REJECTED / INCONCLUSIVE |
 | Battery semantics | **NOT proven** |
 
@@ -35,13 +38,16 @@ private worksheet were seen by any agent. Items the repository cannot confirm ar
 | O1 | 2026-10-04 | 100% (single reading) | One explicitly confirmed `0x03` query sent; ATT write acknowledged; one framing-compatible 16-byte response, checksum OK. **Candidate index 1 = 100.** An unsolicited non-`0x03` notification was also observed (not interpreted). |
 | O2 | 2026-10-05 | A = 100%, B = 100% | One query sent at approx. 18:35 (time zone not recorded); acknowledged; one framing-compatible 16-byte response, checksum OK. **Candidate index 1 = 100.** See "O2 extra notification". |
 | — | 2026-10-09 | 93% | **Reference-only checkpoint. Not O3. No query was sent.** |
-| — | not recorded | 60% | **Reference-only (latest reported). Not O3. No query was sent.** |
+| — | not recorded | 60% | **Reference-only (reported before O3). Not an observation. No query was sent.** |
+| O3 | 2026-10-22 | A = 60%, B = 60% | Transmission 3 of 8. One query; ATT write acknowledged; exactly one framing-compatible 16-byte `0x03` response, checksum OK; response within the window (displayed difference ≤ 9 s, §16.2); no additional notifications in the event log as provided; no retry. **Candidate index 1 = 60.** See "O3 validity". |
 
 - O2 reference bracket difference: **0 points**.
 - O1 vs O2 at index 1: identical (difference 0, within the ≤ 2 same-state-repeat criterion).
   This is **consistent** with a same-state repeat. It proves nothing about battery semantics:
   both observations are at the same reference level (100%), so a constant byte would look the same.
   Because O1 is not valid (Q5), this pair **cannot** serve as the sufficiency repeat (experiment §16.5).
+- O3 at index 1: 60 vs reference 60, i.e. within the ±5 tolerance at index 1. This is **not a
+  finding**: no verdict is possible before sufficiency (§8, §9), and O3 is not yet VALID.
 - No other payload value is recorded in the repository (experiment §10, architect decision 2).
   Per-position classification (experiment §4) is therefore **not yet recorded**.
 
@@ -96,17 +102,57 @@ UNVERIFIED items are never assumed to have passed. The table below is the histor
 | No pairing prompt / security error / unexpected device behavior (§12) | **UNVERIFIED** (not reported either way) | **UNVERIFIED** |
 | Explicit architect GO before the run (§7) | **UNVERIFIED** in the repository | **UNVERIFIED** in the repository |
 
+## O3 validity (V1–V9, experiment §16.4) — PROVISIONALLY SUCCESSFUL, not yet formally VALID
+
+Evidence source: Dana's sanitized report to the agent (2026-10-22). Only what that report states is
+marked met; nothing is inferred. Per §16.4, any item that is not verified makes the observation
+UNVERIFIABLE (not counted) until the architect decides.
+
+| # | Condition | O3 status | Basis |
+|---|---|---|---|
+| V1 | Exactly one transmission | Reported **yes** (transmission 3; no retry) | Report |
+| V1 | Fresh app launch | **UNVERIFIED** | Not stated |
+| V1 | Numbered worksheet row written before Send | **UNVERIFIED** | Not stated |
+| V2 | ATT write acknowledged | Reported **yes** | Report |
+| V3 | Exactly one R within the window (N1) | Reported **yes**: one framing-compatible 16-byte `0x03`, checksum OK; displayed difference ≤ 9 s | Report |
+| V3 | No M, Z, duplicate R or U (N2–N6) | **Partly verified**: no additional notification in the event log *as provided*. Whether that log was complete, and the observations panel / ANOMALY banner state, are **UNVERIFIED** | Report |
+| V3 | N8 fields written to the worksheet before the app was closed | **UNVERIFIED** | Not stated |
+| V4 | No pairing prompt, security error or unexpected device behavior | **UNVERIFIED** | Not stated either way |
+| V5 | A and B within 15 min, \|A − B\| ≤ 5 | **Met**: A = 60, B = 60 (difference 0); bracket within 15 min reported | Report |
+| V6 | Band off the charger ≥ 15 min | **UNVERIFIED** | Not stated |
+| V7 | Vendor app disconnected during the query | **UNVERIFIED** | Not stated |
+| V7 | Vendor app reconnected afterwards | **UNVERIFIED** (Reference B was read, but reconnection is not explicitly confirmed) | Not stated |
+| V8 | ≥ 30 min since the previous M1.1 query | **Met** | The repository records the previous query (O2) on 2026-10-05 |
+| V9 | Written architect GO before the run | **MET.** Written architect GO: **EXISTS**, issued in ChatGPT before O3 (conditional). The architect reaffirmed authorization after the operator reported the app's eight on-screen send preconditions (BLE readiness), which are not the V1–V8 items. GitHub record: **not previously recorded**; recorded here on 2026-10-22 | Architect confirmation (2026-10-22, PR #11 review) |
+
+Also within plan: the reference 60 is inside the O3 range (45–70, §16.6).
+
+V9 being met does **not** establish any of V1–V8. They stand as listed above. Per §16.4, the
+written authorization must exist before transmission. It does not need to have been committed to
+GitHub first (architect clarification, 2026-10-22).
+
+O3 counts toward the cap. It counts toward sufficiency only once the architect formally accepts
+it as VALID. A one-time, records-based confirmation of the UNVERIFIED items above is possible only
+if the architect asks for it. Missing confirmations are not inferred.
+
+**Budget after O3 (§16.7):** 5 transmissions remain.
+
+| If O3 is ruled… | Valid observations still needed | Spare transmissions |
+|---|---|---|
+| VALID | 4 (O3r, O4, O5, O6) | 1 |
+| not VALID | 5 | 0: every remaining observation would need to be VALID; any non-VALID one triggers early stop |
+
 ## Remaining plan (Revision 1 — APPROVED, in force since 2026-10-22, PR #9)
 
-**6 transmissions remain** of the 8-transmission lifetime cap (no reset). The plan assumes
-**neither O1 nor O2 counts** (experiment §16.6):
+**5 transmissions remain** of the 8-transmission lifetime cap (no reset). The plan assumes
+**neither O1 nor O2 counts** (experiment §16.6). O3 has been performed (provisional):
 
 | Planned | State |
 |---|---|
-| O3 | Middle, 45–70 |
-| O3r | Same-state repeat of O3 |
-| O4 | Low: ≤ 40, ≥ 15 below O3, not below ~20 |
-| O5 | After a partial recharge: ≥ O4 + 40 and ≥ O3 + 15 (revised-plan requirement, stronger than the original "≥ 15 above O4") |
+| O3 | Middle, 45–70 (**performed 2026-10-22**, reference 60; provisional) |
+| O3r | Same-state repeat of O3: same discharge cycle, ≥ 30 min after O3, reference within ±2 of 60 (§16.5–§16.6). **NOT AUTHORIZED** |
+| O4 | Low: ≤ 40, ≥ 15 below O3 (so ≤ 40 given O3 = 60), not below ~20 |
+| O5 | After a partial recharge: ≥ O4 + 40 and ≥ O3 + 15, i.e. ≥ 75 given O3 = 60 (revised-plan requirement, stronger than the original "≥ 15 above O4") |
 | O6 | Any state |
 | — | 1 spare |
 
@@ -115,29 +161,38 @@ an explicit Revision 1 change, as is the stronger O5 requirement. All states are
 opportunistically through normal use and charging: no forced discharge, no unsafe charging. Early stop (§16.7): if the remaining transmissions cannot reach
 sufficiency, stop and record INCONCLUSIVE.
 
-## Gate for O3 — all must be true before any query
+## Gate for O3 (historical — O3 performed 2026-10-22)
 
-- [x] Revision 1 (experiment §16) approved by the architect (2026-10-22) and merged (PR #9, `c69c024`).
-  This does **not** authorize a transmission.
-- [ ] The vendor app shows a middle-state battery level, roughly 45–70%. (Last reported 60%; date
-  not recorded; re-check on the day.)
-- [ ] Every precondition in experiment §6–§7 and V1–V9 (§16.4) is verified and written down before
-  Send: off charger ≥ 15 min, vendor app disconnected, ≥ 30 min since the previous query, numbered
-  worksheet row, Reference A taken.
-- [ ] A **new explicit architect GO** for O3 exists in writing.
+- [x] Revision 1 approved and merged (PR #9, `c69c024`).
+- [x] Middle-state reference: A = B = 60%.
+- [ ] Every §6–§7 / V1–V9 precondition verified and written down before Send. Partly; see "O3 validity".
+- [x] Written architect GO for O3: issued in ChatGPT before O3 (conditional), reaffirmed after the
+  app's send preconditions were reported green. Recorded in GitHub afterwards (PR #11).
 
-During and after the run: the manual 10-second check and N8 recording (§16.2–§16.3) are done
-before the app is closed. Abort conditions are §12 and §16.2. On any abort: stop, no retry, no
-workaround, report to the architect.
+## Gate for O3r — all must be true before any query
+
+- [ ] The architect has ruled on O3's validity (the UNVERIFIED V1–V9 items above).
+- [ ] O3r conditions hold: same discharge cycle as O3 (no charging since O3), ≥ 30 min after O3, and
+  a Reference A within ±2 of 60.
+- [ ] Every §6–§7 / V1–V9 precondition is verified and written down before Send.
+- [ ] A **new explicit written architect GO** for O3r exists.
+
+Timing risk (not a decision): if the band is charged, or the level leaves 58–62 before an O3r GO,
+the planned O3r can no longer be taken in this cycle. Any change to the plan or its order needs an
+architect decision (§16.6).
+
+During and after any run: the manual 10-second check and N8 recording (§16.2–§16.3) are done before
+the app is closed. Abort conditions are §12 and §16.2. On any abort: stop, no retry, no workaround,
+report to the architect.
 
 ## Not authorized
 
-Any query or other device command now; O3 before the gate above; decoding unsolicited or extra
+Any query or other device command now; O3r before its gate above; decoding unsolicited or extra
 notifications; any battery decoder/UI; M2+; Swift changes; `FEE7` writes; `DE5BF72x`
 authentication or writes; automatic retry, polling or fuzzing.
 
 ## Privacy
 
-No raw frames, payload values other than index 1 = 100 for O1/O2, screenshots, peripheral
+No raw frames, payload values other than index 1 (100 for O1/O2, 60 for O3), O3 latency values, screenshots, peripheral
 identifiers, account data or health measurements are recorded here. The private worksheet stays
 off-repository (experiment §10).
